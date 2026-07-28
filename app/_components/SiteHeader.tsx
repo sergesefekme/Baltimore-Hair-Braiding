@@ -94,7 +94,10 @@ export function SiteHeader() {
                   <Link
                     href={link.href}
                     aria-current={active ? "page" : undefined}
-                    className="relative flex h-16 items-center text-body-sm text-ink transition-colors duration-150 ease-sweep hover:text-accent"
+                    // text-body rather than text-body-sm: three short labels
+                    // occupy 243px of a 1152px header, so the larger step costs
+                    // nothing and 15px is mean for the primary navigation.
+                    className="relative flex h-16 items-center text-body text-ink transition-colors duration-150 ease-sweep hover:text-accent"
                   >
                     {link.label}
                     {/* The only active-state treatment in the system. */}
