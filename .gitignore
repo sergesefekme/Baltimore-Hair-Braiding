@@ -39,3 +39,9 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+.gstack/
+
+# claude code — machine-local permission grants, full of absolute paths from
+# whichever machine happened to approve them. The shared project config
+# (settings.json, agents/) is committed; this file is not.
+.claude/settings.local.json
