@@ -10,7 +10,48 @@ const LINKS = [
   { href: "/", label: "Home" },
   { href: "/menu", label: "Styles & prices" },
   { href: "/about", label: "About" },
+  { href: "/location", label: "Location" },
 ];
+
+/**
+ * The braid mark, beside the wordmark.
+ *
+ * `<picture>` rather than two images toggled with `dark:`, because this project's
+ * `dark:` variant keys off a `data-theme` attribute (globals.css §23) that
+ * nothing currently sets — it would never fire, and the dark-theme file would be
+ * dead weight. The colour tokens flip on `prefers-color-scheme`, and a media
+ * `<source>` is the one image mechanism that follows the same signal, with no
+ * JavaScript and no flash on first paint.
+ *
+ * Two files rather than one recoloured with CSS because this is three-colour
+ * brand art whose darkest strand sits at 1.33:1 against the dark ground — left
+ * alone it drops out and the braid reads as two strands instead of three.
+ *
+ * width/height are the artwork's intrinsic ratio (192×397), so the box is
+ * reserved before the SVG arrives and the wordmark never jumps sideways.
+ */
+function BraidMark() {
+  return (
+    <picture>
+      <source
+        srcSet="/logo/mirabelle-mark-dark.svg"
+        media="(prefers-color-scheme: dark)"
+      />
+      {/* A plain <img>, not next/image: Image cannot render inside
+          <picture>/<source>, and there is nothing for the optimiser to do to a
+          10KB vector served at one fixed size. */}
+      <img
+        src="/logo/mirabelle-mark.svg"
+        alt=""
+        width={192}
+        height={397}
+        // 40px on phones, 44px from sm up — inside the 40-48px band, and never
+        // taller than the 64px header's 44px tap-target row.
+        className="h-10 w-auto sm:h-11"
+      />
+    </picture>
+  );
+}
 
 export function SiteHeader() {
   const pathname = usePathname();
@@ -76,9 +117,15 @@ export function SiteHeader() {
           href="/"
           // min-h-11 for the tap target; the header is already 64px tall so
           // this costs no layout.
-          className="inline-flex min-h-11 items-center text-h4 font-display text-ink"
-          aria-label="Mirabelle, home"
+          className="inline-flex min-h-11 items-center gap-2.5 text-h4 font-display text-ink"
+          // Carries the full brand name, so the requested "Mirabelle Hair
+          // Braiding logo" wording lands on the link itself. The images below
+          // are alt="" rather than repeating it: an aria-label already names
+          // this link, and a described image beside a visible wordmark makes
+          // screen readers announce the brand twice.
+          aria-label="Mirabelle Hair Braiding, home"
         >
+          <BraidMark />
           Mirabelle
         </Link>
 
@@ -94,9 +141,10 @@ export function SiteHeader() {
                   <Link
                     href={link.href}
                     aria-current={active ? "page" : undefined}
-                    // text-body rather than text-body-sm: three short labels
-                    // occupy 243px of a 1152px header, so the larger step costs
-                    // nothing and 15px is mean for the primary navigation.
+                    // text-body rather than text-body-sm: even at four labels
+                    // this leaves most of a 1152px header empty, so the larger
+                    // step costs nothing and 15px is mean for the primary
+                    // navigation.
                     className="relative flex h-16 items-center text-body text-ink transition-colors duration-150 ease-sweep hover:text-accent"
                   >
                     {link.label}
@@ -151,7 +199,13 @@ export function SiteHeader() {
           className="fixed inset-0 z-50 flex flex-col bg-ground p-6 md:hidden"
         >
           <div className="flex h-16 items-center justify-between">
-            <span className="text-h4 font-display text-ink">Mirabelle</span>
+            {/* Matches the header it replaces while open. Not a link — you are
+                already looking at the menu, and the sheet's own Home entry
+                covers going there. */}
+            <span className="inline-flex items-center gap-2.5 text-h4 font-display text-ink">
+              <BraidMark />
+              Mirabelle
+            </span>
             <button
               type="button"
               onClick={() => setMenuOpen(false)}
