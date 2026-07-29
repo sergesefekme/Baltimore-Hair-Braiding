@@ -2,8 +2,10 @@ import Link from "next/link";
 import {
   STUDIO_ADDRESS_LINES,
   STUDIO_MAPS_HREF,
-  STUDIO_PHONE,
-  STUDIO_PHONE_HREF,
+  STUDIO_PHONE_MOBILE,
+  STUDIO_PHONE_MOBILE_HREF,
+  STUDIO_PHONE_OFFICE,
+  STUDIO_PHONE_OFFICE_HREF,
 } from "../_lib/studio";
 import { Container } from "./Container";
 import { Parting } from "./Parting";
@@ -47,13 +49,30 @@ export function SiteFooter() {
                 ))}
               </a>
 
-              <a
-                href={STUDIO_PHONE_HREF}
-                className="mt-1 inline-flex min-h-11 items-center text-body-sm text-accent underline underline-offset-4"
-                data-numeric=""
-              >
-                {STUDIO_PHONE}
-              </a>
+              {/* Two numbers now, so each needs saying which is which — an
+                  unlabelled pair just makes people guess. A grid rather than
+                  two flex rows so the numbers line up in a column despite the
+                  labels being different widths. Labels sit outside the links, so
+                  only the number itself is underlined and tappable. */}
+              <span className="mt-1 grid grid-cols-[auto_1fr] items-center gap-x-3">
+                <span className="text-caption text-ink-muted">Office</span>
+                <a
+                  href={STUDIO_PHONE_OFFICE_HREF}
+                  className="inline-flex min-h-11 items-center text-body-sm text-accent underline underline-offset-4"
+                  data-numeric=""
+                >
+                  {STUDIO_PHONE_OFFICE}
+                </a>
+
+                <span className="text-caption text-ink-muted">Mobile</span>
+                <a
+                  href={STUDIO_PHONE_MOBILE_HREF}
+                  className="inline-flex min-h-11 items-center text-body-sm text-accent underline underline-offset-4"
+                  data-numeric=""
+                >
+                  {STUDIO_PHONE_MOBILE}
+                </a>
+              </span>
             </address>
           </div>
 
@@ -80,6 +99,7 @@ export function SiteFooter() {
               {[
                 { href: "/menu", label: "Styles & prices" },
                 { href: "/about", label: "About" },
+                { href: "/location", label: "Location" },
               ].map((link) => (
                 <li key={link.href}>
                   <Link
