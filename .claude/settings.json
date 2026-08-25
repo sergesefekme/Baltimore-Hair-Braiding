@@ -1,9 +1,0 @@
-{
-  "enabledPlugins": {
-    "vercel@claude-plugins-official": true,
-    "stripe@claude-plugins-official": true,
-    "sanity@claude-plugins-official": true,
-    "chrome-devtools-mcp@claude-plugins-official": true,
-    "typescript-lsp@claude-plugins-official": true
-  }
-}
