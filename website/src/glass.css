@@ -1,0 +1,103 @@
+/* =========================================================
+   Glass panels, buttons and chips
+   Tinted warm (espresso) rather than neutral grey, so the
+   glass reads as part of the brand kit's warm-dark world.
+   ========================================================= */
+
+.glass {
+  position: relative;
+  overflow: hidden;
+  background: rgba(26, 19, 16, 0.52);
+  border: 1px solid color-mix(in srgb, var(--line) 75%, transparent);
+  backdrop-filter: blur(22px) saturate(1.18);
+  -webkit-backdrop-filter: blur(22px) saturate(1.18);
+  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.38);
+}
+
+.glass::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    135deg,
+    rgba(246, 239, 231, 0.06),
+    transparent 38%,
+    rgba(var(--accent-rgb), 0.05)
+  );
+  pointer-events: none;
+}
+
+.glass > * {
+  position: relative;
+  z-index: 2;
+}
+
+/* ---------------- Buttons ---------------- */
+
+.glass-btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.85rem 1.6rem;
+  min-height: 46px;
+  border-radius: 2px;
+  border: 1px solid color-mix(in srgb, var(--line) 85%, transparent);
+  background: rgba(26, 19, 16, 0.55);
+  backdrop-filter: blur(18px) saturate(1.15);
+  -webkit-backdrop-filter: blur(18px) saturate(1.15);
+  color: var(--text);
+  font-family: var(--font);
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  line-height: 1;
+  cursor: pointer;
+  transition: transform 0.4s var(--ease), border-color 0.4s var(--ease),
+    background 0.4s var(--ease), box-shadow 0.4s var(--ease);
+}
+
+.glass-btn:hover {
+  transform: translateY(-2px);
+  border-color: var(--gilt-deep);
+  background: rgba(36, 26, 22, 0.7);
+}
+
+.glass-btn:active {
+  transform: translateY(0);
+}
+
+/* Primary — gilt fill with Deep Noir text.
+   Brand kit §6 hard rule: never white text on gold. */
+.glass-btn--primary {
+  background: linear-gradient(
+    135deg,
+    var(--gilt),
+    color-mix(in srgb, var(--gilt) 70%, #ffffff 20%)
+  );
+  border-color: transparent;
+  color: var(--bg);
+  box-shadow: 0 10px 34px rgba(var(--accent-rgb), 0.22);
+}
+
+.glass-btn--primary:hover {
+  background: linear-gradient(135deg, var(--gilt-soft), var(--gilt));
+  border-color: transparent;
+  box-shadow: 0 16px 44px rgba(var(--accent-rgb), 0.34);
+}
+
+.glass-btn--lg {
+  padding: 1.05rem 2.1rem;
+  min-height: 54px;
+  font-size: 0.9rem;
+}
+
+.nav__cta {
+  padding: 0.7rem 1.3rem;
+  /* 44px, not 42: this is the most-tapped control on the site and it sits in
+     a thumb-hostile top corner. Matches .nav__menu and .nav__call beside it. */
+  min-height: 44px;
+  font-size: 0.78rem;
+}
