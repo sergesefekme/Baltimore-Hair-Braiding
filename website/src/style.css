@@ -1,0 +1,2555 @@
+/* =========================================================
+   MIRABELLE.B — base layout, typography, sections
+   All tokens derived from copy/brand-kit.md (Sections 6 & 7)
+   ========================================================= */
+
+:root {
+  /* --- Core darks (brand kit §6) --- */
+  --noir: #100b09;
+  --espresso: #1a1310;
+  --umber: #241a16;
+  --mahogany: #3b241d;
+  --cocoa: #4e332a;
+
+  /* --- Lights --- */
+  --ivory: #f6efe7;
+  --sand: #d6c4b2;
+  --taupe: #9a8778;
+
+  /* --- Accents --- */
+  --gilt: #d2a24c;
+  --gilt-deep: #a87c33;
+  --gilt-soft: #e8c888;
+  --henna: #a85436;
+
+  /* --- Skill-standard aliases --- */
+  --bg: var(--noir);
+  --surface: var(--espresso);
+  --surface-2: var(--umber);
+  --text: var(--ivory);
+  --muted: var(--sand);
+  --accent: var(--gilt);
+  --accent-2: var(--henna);
+  --line: var(--mahogany);
+  --accent-rgb: 210, 162, 76;
+
+  /* --- Typography (brand kit §7) --- */
+  --font: "Manrope", system-ui, -apple-system, sans-serif;
+  --font-head: "Fraunces", Georgia, "Times New Roman", serif;
+  --font-quote: "Cormorant Garamond", Georgia, serif;
+
+  /* --- Layout --- */
+  --pad-x: clamp(1.25rem, 5vw, 6rem);
+  /* Full-bleed. Was 1240px, which parked every section in a centred column
+     and left wide monitors with big empty gutters either side of the video.
+     100% rather than `none` because .workflow__head uses this inside
+     width: min(var(--maxw), 100%), and min(none, 100%) is invalid.
+     Line length is still controlled — the text elements carry their own
+     ch-based measures (60ch, 62ch, 54ch, 26ch), so nothing runs long. */
+  --maxw: 100%;
+  --ease: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* ---------------- Reset ---------------- */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: auto; /* Lenis owns scrolling */
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--muted);
+  font-family: var(--font);
+  font-size: 1rem;
+  line-height: 1.75;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+ul,
+ol {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+::selection {
+  background: var(--gilt);
+  color: var(--noir);
+}
+
+:focus-visible {
+  outline: 2px solid var(--gilt);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+/* ---------------- Background layers ---------------- */
+
+.bg-video {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.mobile-poster {
+  display: none;
+}
+
+/* Readability scrim.
+   Kept deliberately light: the work in the video IS the product, so a
+   client has to be able to see it. Brand kit §11 — "moody but never
+   murky." Text legibility is bought back by .bg-tint::after below, which
+   darkens only the side the copy sits on. */
+.bg-tint {
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background:
+    radial-gradient(
+      130% 85% at 50% 42%,
+      rgba(16, 11, 9, 0) 0%,
+      rgba(16, 11, 9, 0.1) 58%,
+      rgba(16, 11, 9, 0.32) 100%
+    ),
+    linear-gradient(
+      to bottom,
+      rgba(16, 11, 9, 0.46) 0%,
+      rgba(16, 11, 9, 0.06) 22%,
+      rgba(16, 11, 9, 0.06) 74%,
+      rgba(16, 11, 9, 0.52) 100%
+    );
+}
+
+/* Scroll-driven dim, opacity set from main.js.
+   The hero earns a clear view of the footage. Every section after it is
+   dense text over a fixed background that never changes, and the current
+   clip is bright and busy on the right — exactly where the cards and body
+   copy sit. This fades the background back once the hero has done its job,
+   which buys legibility and stops the same frame competing with content for
+   the entire page. */
+.bg-tint::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgb(16, 11, 9);
+  opacity: var(--scrim-boost, 0);
+  transition: opacity 120ms linear;
+  pointer-events: none;
+}
+
+/* Copy on this site is left-aligned almost everywhere, so the scrim is
+   directional — heavy under the text column, clear over the imagery. */
+.bg-tint::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  /* Lightened from 0.6/0.34 — the left edge was reading as a black wall
+     rather than a scrim. Enough remains to seat the copy without killing
+     the room light behind it. */
+  background: linear-gradient(
+    95deg,
+    rgba(16, 11, 9, 0.38) 0%,
+    rgba(16, 11, 9, 0.2) 34%,
+    rgba(16, 11, 9, 0.04) 60%,
+    rgba(16, 11, 9, 0) 76%
+  );
+}
+
+/* Slow breathing gilt bloom — brand kit §11 "Gilt shimmer" */
+.motion-glow {
+  position: fixed;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  background: radial-gradient(
+    70% 70% at 50% 22%,
+    rgba(var(--accent-rgb), 0.14) 0%,
+    rgba(16, 11, 9, 0) 70%
+  );
+  opacity: 0.65;
+  animation: bloom 10s ease-in-out infinite;
+}
+
+@keyframes bloom {
+  0%,
+  100% {
+    opacity: 0.45;
+  }
+  50% {
+    opacity: 0.8;
+  }
+}
+
+/* ---------------- Typography ---------------- */
+
+.nav__logo,
+.hero__title,
+.section-head,
+.mat-card h3,
+.workflow-card h3,
+.dim h3,
+.spec__value,
+.buy__title,
+.buy__amount,
+.footer__big {
+  font-family: var(--font-head);
+  font-variation-settings: "SOFT" 40, "WONK" 1;
+  color: var(--text);
+}
+
+.section-head {
+  font-size: clamp(1.75rem, 3.4vw, 2.6rem);
+  font-weight: 600;
+  letter-spacing: -0.015em;
+  line-height: 1.15;
+  margin: 0 0 1.1rem;
+}
+
+.eyebrow {
+  font-family: var(--font);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--gilt);
+  margin: 0 0 1.1rem;
+}
+
+.lede {
+  font-size: 1.125rem;
+  line-height: 1.7;
+  color: var(--muted);
+  max-width: 62ch;
+  margin: 0 0 2rem;
+}
+
+.pullquote {
+  font-family: var(--font-quote);
+  font-style: italic;
+  font-weight: 300;
+  font-size: clamp(1.4rem, 2.6vw, 1.9rem);
+  line-height: 1.35;
+  color: var(--gilt-soft);
+  margin: 2.4rem 0 0;
+  padding-left: 1.2rem;
+  border-left: 1px solid var(--gilt-deep);
+}
+
+/* ---------------- Nav ---------------- */
+
+.nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 60;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  padding: 1.1rem var(--pad-x);
+  transition: background 0.5s var(--ease), backdrop-filter 0.5s var(--ease),
+    border-color 0.5s var(--ease);
+  border-bottom: 1px solid transparent;
+}
+
+.nav.is-stuck {
+  background: rgba(26, 19, 16, 0.72);
+  backdrop-filter: blur(18px) saturate(1.15);
+  -webkit-backdrop-filter: blur(18px) saturate(1.15);
+  border-bottom-color: rgba(59, 36, 29, 0.8);
+}
+
+.nav__logo {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  /* The wordmark is 28px of ink; the extra height is tap area only. The Book
+     button beside it is already 44, so the header does not grow. */
+  min-height: 44px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text);
+  white-space: nowrap;
+}
+
+/* "The Bead" — an M drawn as two strands that stop short of each other and
+   are joined by a gilt bead. Read fast it is the M of Mirabelle; read slowly
+   it is two lengths of hair closed with a cuff, and the bead is the dot the
+   name is built around. Drawn on a 100×100 grid, same construction rules as
+   the old Halo mark: round caps, no tapering, legible at 16px. */
+.mark {
+  width: 28px;
+  height: 28px;
+  flex: none;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.mark--sm {
+  width: 22px;
+  height: 22px;
+}
+
+/* Solid, not stroked: at 16px a ringed dot fills in anyway, and a filled
+   bead is the one part of the mark that must survive that size. */
+.mark__bead {
+  fill: var(--gilt);
+  stroke: none;
+}
+
+/* The dot is the brand element — it carries the gilt on its own, so the
+   wordmark needs no divider and no second colour. */
+.nav__dot,
+.footer__dot {
+  color: var(--gilt);
+  font-weight: 700;
+  /* Both lockups are tracked at 0.14em, which strands a period in open air.
+     Pull it back toward the letters either side. */
+  margin: 0 -0.06em 0 -0.08em;
+}
+
+.nav__links {
+  display: flex;
+  gap: 2rem;
+  font-size: 0.875rem;
+  color: var(--muted);
+}
+
+.nav__links a {
+  position: relative;
+  padding-bottom: 2px;
+  transition: color 0.3s var(--ease);
+}
+
+.nav__links a::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 0;
+  height: 1px;
+  background: var(--gilt);
+  transition: width 0.4s var(--ease);
+}
+
+.nav__links a:hover {
+  color: var(--text);
+}
+
+.nav__links a:hover::after {
+  width: 100%;
+}
+
+.nav__actions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.nav__call {
+  display: none;
+  /* 44px is the minimum comfortable tap target; it was 42. */
+  width: 44px;
+  height: 44px;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--line);
+  border-radius: 50%;
+  color: var(--gilt);
+}
+
+.nav__call svg {
+  width: 18px;
+  height: 18px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* ---------------- Mobile menu ---------------- */
+/* The inline .nav__links vanish below 1024px. This is their replacement, so
+   the two must switch at exactly the same width or the page has either two
+   navigations or none. */
+
+.nav__menu {
+  display: none;
+  width: 44px;
+  height: 44px;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 5px;
+  padding: 0;
+  border: 1px solid var(--line);
+  border-radius: 2px;
+  background: rgba(26, 19, 16, 0.55);
+  cursor: pointer;
+}
+
+.nav__menu-bar {
+  display: block;
+  width: 17px;
+  height: 1.5px;
+  background: var(--text);
+  transition: transform 300ms var(--ease), opacity 200ms var(--ease);
+}
+
+/* Two bars, not three: they rotate into an X, and a third would need hiding
+   mid-animation for no gain. */
+.nav__menu[aria-expanded="true"] .nav__menu-bar:first-child {
+  transform: translateY(3.25px) rotate(45deg);
+}
+
+.nav__menu[aria-expanded="true"] .nav__menu-bar:last-child {
+  transform: translateY(-3.25px) rotate(-45deg);
+}
+
+.navmenu {
+  position: fixed;
+  inset: 0;
+  z-index: 55; /* under .nav (60) so the close button stays reachable */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 2.5rem;
+  padding: 6rem var(--pad-x) 3rem;
+  background: color-mix(in srgb, var(--noir) 96%, transparent);
+  backdrop-filter: blur(20px) saturate(1.1);
+  -webkit-backdrop-filter: blur(20px) saturate(1.1);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+/* [hidden] alone loses to display:flex above. */
+.navmenu[hidden] {
+  display: none;
+}
+
+.navmenu__links {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.navmenu__links a {
+  font-family: var(--font-head);
+  font-size: clamp(1.6rem, 7vw, 2.4rem);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--text);
+  /* Generous vertical padding is what makes these comfortable 44px+ targets
+     without inventing a bigger type size. */
+  padding: 0.55rem 0;
+  border-bottom: 1px solid color-mix(in srgb, var(--line) 55%, transparent);
+}
+
+.navmenu__links a:last-child {
+  border-bottom: 0;
+}
+
+.navmenu__foot {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1rem;
+}
+
+.navmenu__call {
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  font-size: 0.95rem;
+  letter-spacing: 0.04em;
+  color: var(--gilt);
+}
+
+/* Stops the page scrolling behind the overlay. Lenis is paused in JS to match;
+   without both, the body still drifts on iOS. */
+body.is-menu-open {
+  overflow: hidden;
+}
+
+@media (max-width: 1024px) {
+  .nav__menu {
+    display: inline-flex;
+  }
+}
+
+/* ---------------- Page & sections ---------------- */
+
+#page {
+  position: relative;
+  z-index: 10;
+}
+
+.section {
+  position: relative;
+  padding: 16vh var(--pad-x);
+  max-width: var(--maxw);
+  margin: 0 auto;
+}
+
+/* ---------------- Hero ---------------- */
+
+.hero {
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding-top: 22vh;
+  padding-bottom: 8vh;
+}
+
+/* ---------------- Scroll-expand hero ----------------
+   The hero image starts as a small card and grows to fill the frame as the
+   section is scrolled through, splitting the wordmark at its dot on the way
+   out. ScrollTrigger pins .hero__pin and drives every value from progress —
+   see setupHeroExpand() in main.js. Nothing here animates on its own: the
+   sizes below are only the p=0 resting state.
+
+   .section caps width and pads; the pin has to be edge to edge, so this
+   variant opts out of both and the copy carries its own padding. */
+.hero--expand {
+  max-width: none;
+  min-height: 0;
+  padding: 0;
+  display: block;
+}
+
+.hero__pin {
+  position: relative;
+  width: 100%;
+  height: 100svh;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.hero__bed {
+  position: absolute;
+  inset: 0;
+  background: url("/img/crowned-by-hand-hero.webp") center / cover no-repeat;
+  /* Scaled past the frame so the blur has material to sample at the edges
+     instead of smearing the backdrop into them. */
+  transform: scale(1.15);
+  filter: blur(30px) saturate(0.85);
+}
+
+.hero__bed::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(16, 11, 9, 0.74);
+}
+
+.hero__card {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin: 0;
+  width: 300px;
+  height: 400px;
+  transform: translate(-50%, -50%);
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: 0 30px 90px rgba(0, 0, 0, 0.55);
+  /* width/height are rewritten every scroll frame; radius and shadow only
+     at the ends. Promoting the layer keeps the growth from restyling the
+     whole page on each tick. */
+  will-change: width, height;
+}
+
+.hero__card img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  /* Resting crop; setupHeroExpand rewrites object-position and scale per
+     frame. The aspect swings from 3:4 to full frame, so the crop point has to
+     travel with it — hold the hands, not the empty left third. */
+  object-position: 50% 50%;
+  /* The zoom is anchored on the hands rather than the middle of the frame,
+     which is where the empty wood and the sconce are. */
+  transform-origin: 50% 56%;
+  will-change: transform;
+}
+
+.hero__veil {
+  position: absolute;
+  inset: 0;
+  background: rgb(16, 11, 9);
+  opacity: 0.6;
+}
+
+.hero__split {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  margin: 0;
+  font-family: var(--font-head);
+  font-variation-settings: "SOFT" 40, "WONK" 1;
+  color: var(--text);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.06em;
+  font-size: clamp(2.4rem, 7vw, 5.6rem);
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  pointer-events: none;
+  text-shadow: 0 2px 30px rgba(16, 11, 9, 0.85);
+}
+
+.hero__word {
+  display: block;
+  white-space: nowrap;
+  will-change: transform;
+}
+
+.hero__meta {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 9vh;
+  z-index: 2;
+  margin: 0;
+  display: flex;
+  justify-content: center;
+  gap: 2.5rem;
+  font-family: inherit;
+  font-size: 0.8rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--gilt-soft);
+  pointer-events: none;
+}
+
+.hero__meta span {
+  will-change: transform;
+}
+
+.hero__scrim {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  opacity: 0;
+  background: linear-gradient(
+    95deg,
+    rgba(16, 11, 9, 0.88) 0%,
+    rgba(16, 11, 9, 0.66) 30%,
+    rgba(16, 11, 9, 0.22) 58%,
+    rgba(16, 11, 9, 0) 78%
+  );
+}
+
+/* Static mode drops .hero__split and .hero__reveal out of positioning, which
+   also drops them out of the z-order — the scrim would then paint over the
+   type it exists to seat. Put the scrim under both again. */
+.hero--static .hero__scrim {
+  opacity: 1;
+  z-index: 1;
+}
+
+.hero--static .hero__split,
+.hero--static .hero__reveal {
+  position: relative;
+  z-index: 2;
+}
+
+.hero__reveal {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 0 var(--pad-x);
+  opacity: 0;
+}
+
+/* No pins on touch or reduced-motion — the section settles into an ordinary
+   full-bleed hero instead, with the wordmark back in the copy column. */
+.hero--static .hero__bed,
+.hero--static .hero__meta {
+  display: none;
+}
+
+.hero--static .hero__card {
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  transform: none;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+.hero--static .hero__veil {
+  opacity: 0.5;
+}
+
+.hero--static .hero__card img {
+  /* A 1.77:1 photograph inside a ~0.46:1 phone viewport already shows only
+     about a quarter of its width; the old scale(1.28) cut that to a fifth and
+     landed on a single knuckle. Drop most of the zoom and aim the crop at the
+     working hands (~66% across) instead of the middle, which is unlit room. */
+  object-position: 66% 48%;
+  transform: scale(1.05);
+  filter: brightness(1.1) saturate(1.1);
+}
+
+.hero--static .hero__split {
+  display: block;
+  inset: auto;
+  padding: 0 var(--pad-x);
+  margin-bottom: 0.4em;
+}
+
+.hero--static .hero__word {
+  display: inline;
+}
+
+
+.hero--static .hero__pin {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.hero--static .hero__reveal {
+  inset: auto;
+  opacity: 1;
+}
+
+.hero__inner {
+  max-width: 60ch;
+  position: relative;
+}
+
+/* Localised ground for the hero copy.
+   Only earns its place when the hero art puts something behind the text — it
+   was added for a video whose subject sat centre-frame. The current hero
+   (crowned-by-hand) is composed with an empty left 40% at luma 16, so the
+   ground is mostly redundant there; kept at a light weight to seat the type
+   against the sconce glow that does bleed into the copy column, and so a
+   future hero swap does not silently lose all separation. */
+.hero__inner::before {
+  content: "";
+  position: absolute;
+  inset: -2.5em -6em -2em -4em;
+  z-index: -1;
+  pointer-events: none;
+  background: radial-gradient(
+    75% 62% at 38% 50%,
+    rgba(16, 11, 9, 0.3) 0%,
+    rgba(16, 11, 9, 0.2) 45%,
+    rgba(16, 11, 9, 0.07) 72%,
+    rgba(16, 11, 9, 0) 100%
+  );
+}
+
+.hero__title {
+  /* Was clamp(3rem, 8vw, 7rem) — 112px at 1440px wide, which read as shouty
+     rather than confident and left no room for the copy beneath it. Fraunces
+     has a large x-height and tight apertures, so it already looks bigger than
+     its point size; it carries authority at 84px that most serifs need 110px
+     to reach. */
+  font-size: clamp(2.75rem, 5.6vw, 5.25rem);
+  font-weight: 700;
+  line-height: 1.02;
+  /* Optical sizing: Fraunces is a variable font with an opsz axis. Letting it
+     know the display size tightens the spacing and thins the hairlines the
+     way a display cut should. */
+  font-variation-settings: "opsz" 84;
+  letter-spacing: -0.025em;
+  margin: 0 0 1.2rem;
+}
+
+.hero__line {
+  display: block;
+}
+
+/* Full size, on the baseline — the dot is a letter in the name, not a
+   superscript suffix. Optical tightening either side keeps "Mirabelle.B"
+   reading as one word at display size. */
+.hero__dot {
+  font-style: normal;
+  color: var(--gilt);
+  margin: 0 -0.02em;
+}
+
+.hero__slogan {
+  font-family: var(--font-quote);
+  font-style: italic;
+  font-weight: 300;
+  /* Scaled with the title so the slogan stays a supporting voice rather than
+     competing with it. */
+  font-size: clamp(1.3rem, 2.3vw, 1.7rem);
+  letter-spacing: 0.01em;
+  color: var(--gilt-soft);
+  margin: 0 0 1.5rem;
+}
+
+/* Matched to .impact__head — same Fraunces cut, weight, line-height and
+   letter-spacing, so the hero paragraph reads in the same voice as the
+   pinned statement further down rather than dropping to Manrope body text. */
+.hero__sub {
+  font-family: var(--font-head);
+  font-variation-settings: "SOFT" 40, "WONK" 1;
+  /* .impact__head runs clamp(1.9rem, 5vw, 4rem), but that statement is 8
+     words at max-width:20ch. This paragraph is 30 words — at 64px it became
+     six lines and pushed the CTAs below the fold. Same typeface and weight,
+     sized for a paragraph instead. Line-height opens from 1.16 to 1.45 for
+     the same reason: display leading on multi-line body copy is unreadable. */
+  font-size: clamp(1.15rem, 1.85vw, 1.6rem);
+  font-weight: 600;
+  line-height: 1.45;
+  letter-spacing: -0.015em;
+  /* Ivory rather than Sand. Lifting the scrims to show the braid work also
+     lifted the surface this copy sits on, and Sand no longer separated from
+     it. The shadow is tighter and darker for the same reason — a wide soft
+     glow does nothing against a mid-tone background, a close one still
+     carves an edge. */
+  color: var(--text);
+  max-width: 54ch;
+  margin: 0 0 2.4rem;
+  text-shadow: 0 1px 10px rgba(16, 11, 9, 0.9), 0 0 3px rgba(16, 11, 9, 0.75);
+}
+
+.hero__cta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.9rem;
+}
+
+.scroll-cue {
+  position: absolute;
+  left: var(--pad-x);
+  bottom: 3vh;
+  width: 1px;
+  height: 64px;
+  background: rgba(154, 135, 120, 0.28);
+  overflow: hidden;
+}
+
+.scroll-cue span {
+  position: absolute;
+  inset: 0;
+  background: var(--gilt);
+  transform: translateY(-100%);
+  animation: cue 2.6s var(--ease) infinite;
+}
+
+@keyframes cue {
+  0% {
+    transform: translateY(-100%);
+  }
+  60%,
+  100% {
+    transform: translateY(100%);
+  }
+}
+
+/* ---------------- Our Promise — pattern subsections ----------------
+   Was a single pinned statement revealed word by word. It is now five
+   labelled groups, one per hair pattern, each showing everything that ships
+   for that pattern. The pin went with the statement: a pinned section holds
+   one idea still while it lands, and this is a list you scroll. */
+
+.impact {
+  max-width: none;
+  padding-left: 0;
+  padding-right: 0;
+}
+
+.impact__head {
+  padding: 0 var(--pad-x);
+  max-width: var(--maxw);
+  margin: 0 auto 3.5rem;
+}
+
+/* Five covers on one line, each opening the full set for that pattern below
+   the row. One cover per pattern is the resting state; the panels are what
+   the row is for. */
+.patterns {
+  padding: 0 var(--pad-x);
+  max-width: var(--maxw);
+  margin: 0 auto;
+}
+
+/* Laid out by .marquee__track once setupMarquee runs; this is the no-JS and
+   pre-hydration state, and what reduced motion falls back to. */
+.patterns__row {
+  display: flex;
+  gap: var(--marquee-gap);
+  overflow-x: auto;
+}
+
+.pattern {
+  flex: 0 0 clamp(180px, 17vw, 250px);
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+  padding: 0;
+  border: 0;
+  background: none;
+  text-align: left;
+  cursor: pointer;
+  color: inherit;
+  font: inherit;
+}
+
+.pattern__shot {
+  display: block;
+  position: relative;
+  overflow: hidden;
+  border-radius: 3px;
+  border: 1px solid color-mix(in srgb, var(--line) 60%, transparent);
+  background: var(--surface);
+  transition: border-color 500ms cubic-bezier(0.16, 1, 0.3, 1),
+    transform 500ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.pattern__shot img {
+  display: block;
+  width: 100%;
+  /* Squarer than the 5/8 gallery tiles: five of those across a 1200px row
+     would each stand nearly 400px tall and the row would dominate the
+     section it introduces. */
+  height: auto;
+  aspect-ratio: 3 / 4;
+  object-fit: cover;
+  object-position: center 30%;
+  /* Held back so the open panel is the bright thing on screen, not the row. */
+  filter: brightness(0.82) saturate(0.92);
+  transition: filter 500ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.pattern:hover .pattern__shot,
+.pattern:focus-visible .pattern__shot {
+  transform: translateY(-4px);
+  border-color: color-mix(in srgb, var(--accent) 40%, transparent);
+}
+
+.pattern:hover .pattern__shot img,
+.pattern:focus-visible .pattern__shot img,
+.pattern.is-open .pattern__shot img {
+  filter: none;
+}
+
+.pattern.is-open .pattern__shot {
+  border-color: var(--gilt);
+}
+
+.pattern__meta {
+  display: flex;
+  align-items: baseline;
+  gap: 0.55rem;
+  flex-wrap: wrap;
+}
+
+.pattern__name {
+  font-family: var(--font-head);
+  font-variation-settings: "SOFT" 40, "WONK" 1;
+  font-size: clamp(1rem, 1.5vw, 1.25rem);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--text);
+}
+
+.pattern__count {
+  font-size: 0.68rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--taupe);
+}
+
+/* The caret is the only affordance saying these open, so it earns its place.
+   It points down closed, up open. */
+.pattern__name::after {
+  content: "";
+  display: inline-block;
+  width: 0.34em;
+  height: 0.34em;
+  margin-left: 0.5em;
+  vertical-align: 0.16em;
+  border-right: 1.5px solid var(--gilt);
+  border-bottom: 1.5px solid var(--gilt);
+  transform: rotate(45deg);
+  transition: transform 300ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.pattern.is-open .pattern__name::after {
+  transform: rotate(-135deg);
+}
+
+.pattern__panel[hidden] {
+  display: none;
+}
+
+.pattern__panel {
+  margin-top: clamp(1.8rem, 3.5vw, 3rem);
+  animation: panel-in 520ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+/* Was `styles-in`, defined alongside the gallery tabs. The tabs are gone and
+   this is now its only user, so it is named for what it animates. */
+@keyframes panel-in {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pattern__panel {
+    animation: none;
+  }
+  .pattern__shot,
+  .pattern__shot img,
+  .pattern__name::after {
+    transition: none;
+  }
+  .pattern:hover .pattern__shot,
+  .pattern:focus-visible .pattern__shot {
+    transform: none;
+  }
+}
+
+@media (max-width: 720px) {
+  .pattern {
+    flex-basis: 46vw;
+  }
+
+  .marquee__track img {
+    width: 56vw;
+  }
+}
+
+/* ---------------- Marquee ----------------
+   Ported from a React auto-slider. Same idea — render the row twice and
+   translate the track by exactly one copy — with three changes the original
+   did not need.
+
+   1. Spacing is margin-right on every item, not gap on the track. With gap,
+      a track of two copies is 2N items + (2N-1) gaps wide, so -50% lands half
+      a gap short of one full copy and the loop visibly ticks. A trailing
+      margin makes the two halves exactly equal.
+   2. The clones are aria-hidden and out of the tab order. The original
+      scrolls plain images; these cards are buttons, and duplicating them
+      verbatim would put every control in the page twice for a screen reader
+      and twice in the tab order.
+   3. It stops. An auto-scrolling row of things you are meant to click will
+      slide out from under the pointer — so it pauses on hover, on focus, and
+      for as long as a panel is open. */
+
+.marquee {
+  --marquee-gap: clamp(0.6rem, 1.4vw, 1.2rem);
+  position: relative;
+  overflow: hidden;
+  /* Feathered edges, so items enter and leave rather than being cut off. */
+  mask: linear-gradient(
+    90deg,
+    transparent 0%,
+    #000 7%,
+    #000 93%,
+    transparent 100%
+  );
+  -webkit-mask: linear-gradient(
+    90deg,
+    transparent 0%,
+    #000 7%,
+    #000 93%,
+    transparent 100%
+  );
+}
+
+.marquee__track {
+  display: flex;
+  width: max-content;
+  animation: marquee-scroll var(--marquee-duration, 40s) linear infinite;
+}
+
+.marquee__track > * {
+  margin-right: var(--marquee-gap);
+}
+
+.marquee:hover .marquee__track,
+.marquee:focus-within .marquee__track,
+.marquee.is-paused .marquee__track {
+  animation-play-state: paused;
+}
+
+@keyframes marquee-scroll {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+/* Panel strips: the tiles keep the gallery ratio but take a fixed width, since
+   a flex track cannot size them from a column count. setupPatterns swaps
+   .styles__grid for .pattern__strip so those grid rules stop applying. */
+.pattern__strip {
+  display: block;
+}
+
+.marquee__track img {
+  flex: none;
+  width: clamp(190px, 19vw, 280px);
+  height: auto;
+  aspect-ratio: 5 / 8;
+  object-fit: cover;
+  object-position: center 32%;
+  border-radius: 3px;
+  border: 1px solid color-mix(in srgb, var(--line) 60%, transparent);
+  background: var(--surface);
+  transition: transform 300ms ease, filter 300ms ease,
+    border-color 300ms ease;
+}
+
+.marquee__track img:hover {
+  transform: scale(1.05);
+  filter: brightness(1.1);
+  border-color: color-mix(in srgb, var(--accent) 40%, transparent);
+}
+
+/* No crawl, no mask. The row becomes an ordinary scroller the visitor drives. */
+@media (prefers-reduced-motion: reduce) {
+  .marquee {
+    overflow-x: auto;
+    mask: none;
+    -webkit-mask: none;
+  }
+
+  .marquee__track {
+    animation: none;
+  }
+
+  .marquee__track img {
+    transition: none;
+  }
+
+  .marquee__track img:hover {
+    transform: none;
+  }
+}
+
+/* ---------------- Style gallery ---------------- */
+
+.styles__head {
+  max-width: 62ch;
+  margin: 0 0 2.6rem;
+}
+
+.styles__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: clamp(0.8rem, 1.6vw, 1.4rem);
+}
+
+.styles__grid img {
+  width: 100%;
+  /* Required, and not obvious: the markup carries width/height attributes for
+     layout stability, and the height attribute is a presentational hint that
+     resolves to a used height. With both dimensions resolved, aspect-ratio is
+     ignored — every tile rendered at its natural 1314px instead of the 5/8
+     below, and the grid came out as a column of full-height photographs.
+     Releasing height is what lets the ratio govern. */
+  height: auto;
+  /* Sources are portrait at roughly 1:1.7-1:1.85, at differing ratios. A fixed
+     ratio keeps the grid even instead of ragged, but 3/4 (1:1.33) cropped so
+     hard it was cutting heads off. 5/8 (1:1.6) sits close enough to the
+     sources that cover only trims the edges. */
+  aspect-ratio: 5 / 8;
+  object-fit: cover;
+  /* Bias the crop upward — on a hair site the crown, the parting and the
+     braid pattern are the subject, and they sit in the top half. */
+  object-position: center 32%;
+  border-radius: 3px;
+  border: 1px solid color-mix(in srgb, var(--line) 60%, transparent);
+  background: var(--surface);
+  transition: transform 700ms cubic-bezier(0.16, 1, 0.3, 1),
+    border-color 700ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.styles__grid img:hover {
+  transform: translateY(-4px);
+  border-color: color-mix(in srgb, var(--accent) 40%, transparent);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .styles__grid img {
+    transition: none;
+  }
+  .styles__grid img:hover {
+    transform: none;
+  }
+}
+
+/* ---------------- Our Work showcase ---------------- */
+/* One composed service board on wide screens; the same ten styles as cards
+   below 1100px. The board carries its captions as baked-in type at a 1536px
+   design width, so once the rendered width drops under about 1100px that type
+   falls below ~10px and stops being readable — that is the breakpoint, not a
+   device guess. Keep it in step with the matchMedia query in main.js. */
+
+.styles__showcase {
+  margin: 0;
+}
+
+.styles__board {
+  width: 100%;
+  height: auto;
+  border-radius: 4px;
+  border: 1px solid color-mix(in srgb, var(--line) 60%, transparent);
+  background: var(--surface);
+}
+
+.styles__cards {
+  display: none;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.work-card {
+  display: flex;
+  flex-direction: column;
+  background: var(--surface);
+  border: 1px solid color-mix(in srgb, var(--line) 60%, transparent);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.work-card img {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  /* Same reasoning as the old tile grid: the crown and the parting are the
+     subject and they sit high in the frame. */
+  object-position: center 28%;
+}
+
+.work-card__name {
+  font-family: var(--font-head);
+  font-size: 0.95rem;
+  line-height: 1.25;
+  color: var(--text);
+  margin: 0.85rem 0.85rem 0;
+  padding-bottom: 0.6rem;
+  border-bottom: 1px solid color-mix(in srgb, var(--accent) 28%, transparent);
+}
+
+.work-card__note {
+  margin: 0.6rem 0.85rem 0.95rem;
+  font-size: 0.8rem;
+  line-height: 1.6;
+  color: var(--muted);
+}
+
+@media (max-width: 1100px) {
+  .styles__board {
+    display: none;
+  }
+
+  .styles__cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+    gap: clamp(0.9rem, 2.2vw, 1.4rem);
+  }
+}
+
+/* Two up is the floor. auto-fill would drop to a single column around 420px
+   and turn ten styles into a very long scroll. */
+@media (max-width: 640px) {
+  .styles__cards {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.7rem;
+  }
+
+  .work-card__name {
+    font-size: 0.86rem;
+    margin: 0.7rem 0.7rem 0;
+  }
+
+  .work-card__note {
+    margin: 0.55rem 0.7rem 0.8rem;
+    font-size: 0.76rem;
+  }
+}
+
+/* ---------------- Split feature sections ---------------- */
+
+.split {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: clamp(2rem, 6vw, 5.5rem);
+  align-items: center;
+}
+
+.split--flip .split__media {
+  order: 2;
+}
+
+.media-frame {
+  border-radius: 3px;
+  overflow: hidden;
+  aspect-ratio: 4 / 3;
+}
+
+.media-frame img {
+  width: 100%;
+  height: 120%;
+  object-fit: cover;
+  will-change: transform;
+}
+
+.ticks li {
+  position: relative;
+  padding: 0.85rem 0 0.85rem 1.6rem;
+  border-top: 1px solid rgba(59, 36, 29, 0.7);
+  font-size: 0.98rem;
+  line-height: 1.65;
+}
+
+.ticks li:last-child {
+  border-bottom: 1px solid rgba(59, 36, 29, 0.7);
+}
+
+.ticks li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 1.5rem;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--gilt);
+}
+
+.ticks strong {
+  color: var(--text);
+  font-weight: 600;
+}
+
+/* ---------------- Materials grid ---------------- */
+
+.materials__head {
+  max-width: 62ch;
+  margin-bottom: 3.5rem;
+}
+
+.materials__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1.25rem;
+}
+
+.mat-card {
+  padding: 2rem 1.75rem;
+  border-radius: 3px;
+}
+
+.mat-card__idx {
+  display: block;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  color: var(--gilt);
+  margin-bottom: 1.6rem;
+}
+
+.mat-card h3 {
+  font-size: 1.3rem;
+  font-weight: 600;
+  margin: 0 0 0.7rem;
+}
+
+.mat-card p {
+  margin: 0;
+  font-size: 0.95rem;
+  line-height: 1.7;
+  color: var(--muted);
+}
+
+/* ---------------- Workflow / audience gallery ---------------- */
+
+.workflow {
+  max-width: none;
+  padding-left: 0;
+  padding-right: 0;
+}
+
+/* Flow layout, not stacked absolutes — the head and the card track must
+   never be able to collide on short viewports. */
+/* Was a pinned stage that dealt the five cards one at a time on scroll. They
+   are all on screen together now, so the pin, the scroll progress bar and the
+   absolute positioning all went with it — the section is an ordinary row that
+   reflows. */
+.workflow__pin {
+  position: relative;
+  padding: 0 var(--pad-x);
+}
+
+.workflow__head {
+  margin: 0 0 3.5rem;
+}
+
+.workflow__head .section-head {
+  margin-bottom: 0;
+}
+
+.workflow__track {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: clamp(0.7rem, 1.2vw, 1.25rem);
+  align-items: stretch;
+}
+
+/* Out-specify .glass (skill gotcha #4) */
+.workflow .workflow-card {
+  display: flex;
+  flex-direction: column;
+  padding: clamp(1.1rem, 1.5vw, 1.9rem) clamp(1rem, 1.3vw, 1.7rem);
+  border-radius: 3px;
+  /* These sit over the brightest, busiest phase of the video — and the video
+     is now graded lighter — so they need real body. Readability beats video
+     beauty. */
+  background: rgba(14, 10, 8, 0.87);
+}
+
+/* Pushes the chip to the bottom edge so five cards of differing copy length
+   still line their specs up. */
+.workflow-card__spec {
+  margin-top: auto;
+  align-self: flex-start;
+}
+
+.workflow-card__tag {
+  font-size: clamp(0.66rem, 0.72vw, 0.8rem);
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--gilt);
+  margin: 0 0 1.1rem;
+}
+
+/* Sized for the column, not the viewport. Five across is a ~240px measure at
+   1440 and a ~330px one at 1920, so these track vw and only reach the larger
+   size the wider layout can actually carry. Below 1100px the grid drops to
+   two and then one column, and the sizes step back up. */
+.workflow-card h3 {
+  font-size: clamp(1.02rem, 1.45vw, 1.6rem);
+  font-weight: 600;
+  line-height: 1.22;
+  margin: 0 0 0.7rem;
+}
+
+.workflow-card p {
+  margin: 0 0 1.4rem;
+  font-size: clamp(0.86rem, 0.95vw, 1.05rem);
+  line-height: 1.6;
+  color: var(--muted);
+}
+
+.workflow-card__spec {
+  display: inline-block;
+  font-size: clamp(0.64rem, 0.7vw, 0.78rem);
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--taupe);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 0.4rem 0.9rem;
+}
+
+/* Five across stops being readable long before the layout breaks: the measure
+   collapses to a couple of words a line. Two, then one. */
+@media (max-width: 1100px) {
+  .workflow__track {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.25rem;
+  }
+
+  .workflow-card h3 {
+    font-size: clamp(1.3rem, 2.6vw, 1.7rem);
+  }
+
+  .workflow-card p {
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 640px) {
+  .workflow__track {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ---------------- Discount offers ---------------- */
+
+.offers {
+  margin-top: clamp(3rem, 6vw, 5rem);
+}
+
+.offers__head {
+  margin: 0 0 2rem;
+  font-family: var(--font-head);
+  font-variation-settings: "SOFT" 40, "WONK" 1;
+  font-size: clamp(1.35rem, 2.4vw, 1.9rem);
+  font-weight: 600;
+  letter-spacing: -0.015em;
+  color: var(--text);
+}
+
+.offers__grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: clamp(1rem, 1.8vw, 1.75rem);
+}
+
+/* One offer, not two. Left at 2 columns a lone card stretches to half the
+   band and the row reads as though something failed to load; capped and
+   centred it reads as deliberate. */
+.offers__grid--single {
+  grid-template-columns: minmax(0, 34rem);
+  justify-content: center;
+}
+
+/* Out-specify .glass */
+.specs .offer {
+  position: relative;
+  overflow: hidden;
+  padding: clamp(1.75rem, 2.4vw, 2.6rem);
+  border-radius: 3px;
+  background: rgba(14, 10, 8, 0.9);
+}
+
+/* A gilt wash reading out of the top-left corner, heavier on the bigger
+   offer. Cheaper than a border and it does not fight the glass edge. */
+.specs .offer::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(
+    90% 120% at 0% 0%,
+    rgba(var(--accent-rgb), 0.16) 0%,
+    rgba(var(--accent-rgb), 0) 62%
+  );
+}
+
+.specs .offer--peak::before {
+  background: radial-gradient(
+    90% 120% at 0% 0%,
+    rgba(var(--accent-rgb), 0.28) 0%,
+    rgba(var(--accent-rgb), 0) 66%
+  );
+}
+
+.specs .offer > * {
+  position: relative;
+}
+
+.offer__label {
+  margin: 0 0 1.2rem;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--gilt);
+}
+
+/* The number is the advertisement. Everything else is the small print. */
+.offer__pct {
+  display: flex;
+  align-items: flex-start;
+  margin: 0 0 0.2rem;
+  font-family: var(--font-head);
+  font-variation-settings: "SOFT" 40, "WONK" 1;
+  font-weight: 700;
+  line-height: 0.86;
+  letter-spacing: -0.04em;
+  color: var(--text);
+  font-size: clamp(3.4rem, 7vw, 6rem);
+}
+
+.offer__pct span {
+  color: var(--gilt);
+}
+
+.offer__title {
+  margin: 0 0 1rem;
+  font-family: var(--font-head);
+  font-variation-settings: "SOFT" 40, "WONK" 1;
+  font-size: clamp(1.15rem, 1.9vw, 1.55rem);
+  font-weight: 600;
+  line-height: 1.2;
+  letter-spacing: -0.012em;
+  color: var(--text);
+}
+
+.offer__body {
+  /* Was 1.5rem to clear the terms rule beneath; that block is gone, so the
+     card should close up rather than sit on dead space. */
+  margin: 0;
+  font-size: 1rem;
+  line-height: 1.65;
+  color: var(--muted);
+  max-width: 42ch;
+}
+
+.offers__note {
+  margin: 1.75rem 0 0;
+  font-size: 0.9rem;
+  line-height: 1.7;
+  color: var(--taupe);
+  max-width: 74ch;
+}
+
+.offers__cta {
+  color: var(--gilt);
+  font-weight: 600;
+  white-space: nowrap;
+  border-bottom: 1px solid color-mix(in srgb, var(--gilt) 45%, transparent);
+  /* Was 20px tall. A text link is still a tap target; padding gets it to the
+     44px minimum without turning it into a button. */
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+}
+
+.offers__cta:hover {
+  border-bottom-color: var(--gilt);
+}
+
+@media (max-width: 820px) {
+  .offers__grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ---------------- Testimonials ---------------- */
+
+.words__head {
+  max-width: 62ch;
+  margin-bottom: 4rem;
+}
+
+.words__grid {
+  display: grid;
+  /* Five quotes do not divide evenly into a row that stays readable, and a
+     4+1 orphan looks like a mistake. Three then two reads as deliberate,
+     and the wider first row carries the two longest quotes. */
+  grid-template-columns: repeat(3, 1fr);
+  gap: clamp(1rem, 1.6vw, 1.6rem);
+}
+
+/* Out-specify .glass */
+.words .quote {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  padding: clamp(1.5rem, 2vw, 2.25rem);
+  border-radius: 3px;
+  background: rgba(14, 10, 8, 0.87);
+}
+
+.quote__tag {
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--taupe);
+  margin: 0 0 1rem;
+}
+
+/* Gilt, and sized to read as a rating rather than decoration. The label on
+   the parent carries the meaning; the glyphs themselves are aria-hidden so a
+   screen reader hears "Rated 5 out of 5", not five bullet characters. */
+.stars {
+  display: block;
+  font-size: 0.95rem;
+  letter-spacing: 0.22em;
+  color: var(--gilt);
+  margin-bottom: 1rem;
+}
+
+.quote__head {
+  margin: 0 0 0.9rem;
+  font-family: var(--font-head);
+  font-variation-settings: "SOFT" 40, "WONK" 1;
+  font-size: clamp(1.15rem, 1.7vw, 1.45rem);
+  font-weight: 600;
+  line-height: 1.25;
+  letter-spacing: -0.012em;
+  color: var(--text);
+}
+
+.quote__body {
+  margin: 0 0 1.6rem;
+  font-size: 0.98rem;
+  line-height: 1.65;
+  color: var(--muted);
+}
+
+/* Pinned to the bottom so the attributions line up across cards of
+   differing quote length. */
+.quote__by {
+  margin-top: auto;
+  padding-top: 1.1rem;
+  border-top: 1px solid var(--line);
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.quote__name {
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: var(--text);
+}
+
+.quote__meta {
+  font-size: 0.78rem;
+  letter-spacing: 0.04em;
+  color: var(--taupe);
+}
+
+/* The wordmark appears here at caption size, so the dot needs its own rule
+   rather than reusing .nav__dot / .footer__dot — those pull negative margins
+   sized for 0.14em tracking, which at this size closes the gap too far. */
+.quote__dot {
+  color: var(--gilt);
+  font-weight: 700;
+}
+
+@media (max-width: 1100px) {
+  .words__grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 640px) {
+  .words__grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ---------------- Specs ---------------- */
+
+.specs__head {
+  max-width: 62ch;
+  margin-bottom: 4rem;
+}
+
+.dims {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 2rem 1.5rem;
+  margin-bottom: 5rem;
+}
+
+.dim {
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--line);
+}
+
+.dim__n {
+  display: block;
+  font-family: var(--font-head);
+  font-size: 2.4rem;
+  font-weight: 700;
+  line-height: 1;
+  color: var(--gilt);
+  margin-bottom: 0.9rem;
+}
+
+.dim h3 {
+  font-size: 1.15rem;
+  font-weight: 600;
+  margin: 0 0 0.5rem;
+}
+
+.dim p {
+  margin: 0;
+  font-size: 0.9rem;
+  line-height: 1.65;
+  color: var(--taupe);
+}
+
+.spec-table {
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.spec-row {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr;
+  gap: 1rem;
+  padding: 1.1rem 1.6rem;
+  border-bottom: 1px solid rgba(59, 36, 29, 0.6);
+  font-size: 0.95rem;
+  align-items: center;
+}
+
+.spec-row:last-child {
+  border-bottom: none;
+}
+
+.spec-row--head {
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--taupe);
+}
+
+.spec__value {
+  font-family: var(--font);
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  color: var(--text);
+  text-align: right;
+}
+
+.spec-row--head span:last-child {
+  text-align: right;
+}
+
+/* ---------------- Booking CTA ---------------- */
+
+.buy {
+  display: flex;
+  justify-content: center;
+}
+
+.buy__panel {
+  width: min(720px, 100%);
+  padding: clamp(2.5rem, 5vw, 4rem);
+  border-radius: 4px;
+  text-align: center;
+}
+
+.buy__title {
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  margin: 0 0 2rem;
+}
+
+.buy__amount {
+  font-size: clamp(3.5rem, 8vw, 5.5rem);
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.03em;
+  font-variant-numeric: tabular-nums;
+  margin: 0 0 0.9rem;
+  background: linear-gradient(135deg, var(--gilt-soft), var(--gilt-deep));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.buy__currency {
+  font-size: 0.4em;
+  vertical-align: super;
+  margin-right: 0.1em;
+}
+
+.buy__unit {
+  display: block;
+  font-family: var(--font);
+  font-size: 0.16em;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--taupe);
+  -webkit-text-fill-color: var(--taupe);
+  margin-top: 1rem;
+}
+
+.buy__note {
+  font-size: 0.95rem;
+  color: var(--muted);
+  max-width: 44ch;
+  margin: 0 auto 2.4rem;
+}
+
+.buy__includes {
+  display: inline-block;
+  text-align: left;
+  margin-bottom: 2.6rem;
+}
+
+.buy__includes li {
+  position: relative;
+  padding: 0.45rem 0 0.45rem 1.6rem;
+  font-size: 0.95rem;
+  color: var(--muted);
+}
+
+.buy__includes li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 1.1rem;
+  width: 8px;
+  height: 1px;
+  background: var(--gilt);
+}
+
+.buy__cta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.9rem;
+  justify-content: center;
+  margin-bottom: 2rem;
+}
+
+.buy__fine {
+  font-size: 0.78rem;
+  letter-spacing: 0.04em;
+  color: var(--taupe);
+  margin: 0;
+}
+
+/* ---------------- Booking form ---------------- */
+/* Sits inside .buy__panel, which is centre-aligned; the form is left-aligned
+   because labelled fields read badly centred. */
+
+.booking {
+  text-align: left;
+  margin: 0 0 1.6rem;
+}
+
+.booking__intro {
+  font-size: 0.92rem;
+  line-height: 1.65;
+  color: var(--muted);
+  margin: 0 0 1.8rem;
+  text-align: center;
+}
+
+.booking__grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem 1.1rem;
+  margin-bottom: 1.8rem;
+}
+
+.field {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  /* Grid items default to min-width:auto, and a select with long option text
+     reports a wide min-content size — without this the two columns stop being
+     equal and the panel overflows on narrow screens. */
+  min-width: 0;
+}
+
+.field--wide {
+  grid-column: 1 / -1;
+}
+
+.field label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--sand);
+}
+
+.field__opt {
+  text-transform: none;
+  letter-spacing: 0.02em;
+  font-weight: 400;
+  color: var(--taupe);
+}
+
+.field input,
+.field select,
+.field textarea {
+  width: 100%;
+  min-height: 46px;
+  padding: 0.7rem 0.85rem;
+  border-radius: 2px;
+  border: 1px solid color-mix(in srgb, var(--line) 85%, transparent);
+  background: rgba(16, 11, 9, 0.55);
+  color: var(--text);
+  font-family: var(--font);
+  font-size: 0.95rem;
+  line-height: 1.5;
+  transition: border-color 220ms var(--ease), box-shadow 220ms var(--ease);
+}
+
+.field textarea {
+  resize: vertical;
+  min-height: 84px;
+}
+
+/* The native date/select pickers render dark-on-dark in some browsers.
+   color-scheme tells the UA to draw its own widgets in the dark palette. */
+.field input[type="date"],
+.field select {
+  color-scheme: dark;
+}
+
+.field input::placeholder,
+.field textarea::placeholder {
+  color: color-mix(in srgb, var(--taupe) 75%, transparent);
+}
+
+.field input:focus-visible,
+.field select:focus-visible,
+.field textarea:focus-visible {
+  outline: none;
+  border-color: var(--gilt);
+  box-shadow: 0 0 0 3px rgba(var(--accent-rgb), 0.22);
+}
+
+/* Invalid styling is applied by JS on submit, not by :invalid — :invalid
+   matches every empty required field on first paint and would light the form
+   up red before anyone has typed a character. */
+.field.is-bad input,
+.field.is-bad select,
+.field.is-bad textarea {
+  border-color: var(--henna);
+}
+
+.field__err {
+  font-size: 0.75rem;
+  line-height: 1.4;
+  color: color-mix(in srgb, var(--henna) 78%, var(--ivory));
+  min-height: 0;
+}
+
+.field__err:empty {
+  display: none;
+}
+
+/* Off-canvas rather than display:none — some bots skip hidden inputs. */
+.booking__pot {
+  position: absolute;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
+.booking__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.9rem;
+  justify-content: center;
+}
+
+.booking button[type="submit"][aria-busy="true"] {
+  opacity: 0.65;
+  pointer-events: none;
+}
+
+.booking__status {
+  margin: 1.2rem 0 0;
+  text-align: center;
+  font-size: 0.9rem;
+  line-height: 1.6;
+}
+
+.booking__status:empty {
+  display: none;
+}
+
+.booking__status[data-state="ok"] {
+  color: var(--gilt-soft);
+}
+
+.booking__status[data-state="err"] {
+  color: color-mix(in srgb, var(--henna) 78%, var(--ivory));
+}
+
+/* Sent state: the form is replaced by the confirmation, so there is nothing
+   to submit twice. */
+.booking.is-sent .booking__grid,
+.booking.is-sent .booking__actions,
+.booking.is-sent .booking__intro {
+  display: none;
+}
+
+@media (max-width: 620px) {
+  .booking__grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ---------------- Visit ---------------- */
+
+.visit__head {
+  max-width: 62ch;
+  margin: 0 0 2.6rem;
+}
+
+.visit__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: clamp(0.9rem, 2vw, 1.4rem);
+  align-items: start;
+}
+
+.visit__card {
+  padding: clamp(1.5rem, 2.4vw, 2.1rem);
+  border-radius: 4px;
+  /* Cards carry different amounts of copy; stretching them to a shared height
+     leaves the short one with a pool of empty glass. Let each end where its
+     content ends. */
+  height: auto;
+}
+
+.visit__label {
+  font-family: var(--font-head);
+  font-size: 1.1rem;
+  color: var(--text);
+  margin: 0 0 1rem;
+  padding-bottom: 0.7rem;
+  border-bottom: 1px solid color-mix(in srgb, var(--accent) 28%, transparent);
+}
+
+.visit__line {
+  margin: 0 0 0.6rem;
+  font-size: 1rem;
+  color: var(--text);
+}
+
+/* Marks a value the salon still owes us. Deliberately conspicuous — this is
+   meant to be noticed and removed, not to blend in and ship. */
+.visit__note {
+  margin: 0 0 1.1rem;
+  font-size: 0.8rem;
+  line-height: 1.55;
+  color: var(--taupe);
+  padding-left: 0.7rem;
+  border-left: 2px solid color-mix(in srgb, var(--henna) 60%, transparent);
+}
+
+.visit__hours {
+  list-style: none;
+  margin: 0 0 1.1rem;
+  padding: 0;
+}
+
+.visit__hours li {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.5rem 0;
+  font-size: 0.92rem;
+  color: var(--text);
+  border-bottom: 1px solid color-mix(in srgb, var(--line) 45%, transparent);
+}
+
+.visit__hours li:last-child {
+  border-bottom: 0;
+}
+
+.visit__hours li span:last-child {
+  color: var(--gilt);
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  align-self: center;
+  /* "10am – 6pm" breaking across two lines inside a narrow card looks like
+     two separate values. */
+  white-space: nowrap;
+}
+
+/* Closed reads as a status badge rather than a time, so it keeps the small
+   uppercase treatment; the opening times do not, because uppercasing them
+   gives "10AM – 6PM", which shouts. */
+.visit__hours .is-closed span {
+  color: var(--taupe);
+}
+
+.visit__hours .is-closed span:last-child {
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-size: 0.75rem;
+}
+
+/* A note that is guidance, not an outstanding TODO — no warning rule. */
+.visit__note--plain {
+  border-left-color: color-mix(in srgb, var(--accent) 35%, transparent);
+}
+
+.visit__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.visit__list li {
+  position: relative;
+  padding: 0.45rem 0 0.45rem 1.6rem;
+  font-size: 0.92rem;
+  line-height: 1.6;
+  color: var(--muted);
+}
+
+.visit__list li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 1.05rem;
+  width: 8px;
+  height: 1px;
+  background: var(--gilt);
+}
+
+.visit__address {
+  font-style: normal; /* <address> italicises by default */
+  /* .icon-row supplies display:flex; the line-height below governs the text
+     span, not the row. */
+  font-size: 1.05rem;
+  line-height: 1.55;
+  color: var(--text);
+  margin: 0 0 0.4rem;
+}
+
+.visit__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  margin: 1.2rem 0 0;
+}
+
+/* Footer links are real tap targets on a phone — the phone number most of
+   all. min-height rather than padding so the columns keep their rhythm. */
+.footer__cols a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+}
+
+/* ---------------- Icon rows ---------------- */
+/* A line of text led by a small gilt glyph. Used for the address and phone in
+   both the Visit cards and the footer, so the two read as the same component. */
+
+.ico {
+  width: 15px;
+  height: 15px;
+  flex: none;
+  fill: none;
+  stroke: var(--gilt);
+  stroke-width: 1.7;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.icon-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.6rem;
+}
+
+/* align-items:flex-start pins the glyph to the top of the flex line, which sits
+   it above the cap height of the first line of text. Nudge it down onto the
+   text baseline instead. Uses em so it tracks the line's own font size. */
+.icon-row .ico {
+  margin-top: 0.3em;
+}
+
+/* Inside a button the glyph is centred by the button's own flex, so no nudge,
+   and it takes the button's colour rather than gilt — on the primary button
+   gilt-on-gilt would vanish. */
+.glass-btn .ico {
+  margin-top: 0;
+  stroke: currentColor;
+  width: 14px;
+  height: 14px;
+}
+
+/* ---------------- Footer ---------------- */
+
+.footer {
+  position: relative;
+  z-index: 10;
+  margin-top: 30vh;
+  padding: 16vh var(--pad-x) 6vh;
+  background: var(--bg);
+}
+
+.footer::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 100%;
+  height: 45vh;
+  background: linear-gradient(to bottom, transparent, var(--bg));
+  pointer-events: none;
+}
+
+.footer__top,
+.footer__cols,
+.footer__base {
+  max-width: var(--maxw);
+  margin: 0 auto;
+}
+
+.footer__big {
+  font-family: var(--font-quote);
+  font-style: italic;
+  font-weight: 300;
+  font-size: clamp(2.2rem, 7vw, 5rem);
+  line-height: 1;
+  color: var(--gilt-soft);
+  margin: 0 0 8vh;
+}
+
+.footer__cols {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 2.5rem;
+  padding-bottom: 6vh;
+  border-bottom: 1px solid var(--line);
+}
+
+.footer__cols p {
+  margin: 0 0 0.35rem;
+  font-size: 0.92rem;
+  color: var(--muted);
+}
+
+.footer__label {
+  font-size: 0.72rem !important;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--gilt) !important;
+  margin-bottom: 1rem !important;
+}
+
+.footer__cols a:hover {
+  color: var(--gilt);
+}
+
+.footer__base {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 3vh;
+  font-size: 0.8rem;
+  color: var(--taupe);
+}
+
+.footer__sig {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--muted);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  font-weight: 600;
+}
+
+/* ---------------- Reveal utility ---------------- */
+
+/* ---------------- Copy legibility over video ----------------
+   Full-width grids (the five standard columns, materials cards, spec table) reach
+   past the directional scrim into bare video. A soft shadow separates
+   small type from busy frames without darkening the imagery itself. */
+
+.lede,
+.ticks li,
+.dim p,
+.dim h3,
+.section-head,
+.hero__slogan,
+.materials__head p,
+.specs__head p,
+.footer__cols p {
+  text-shadow: 0 1px 14px rgba(16, 11, 9, 0.92), 0 0 3px rgba(16, 11, 9, 0.6);
+}
+
+.eyebrow,
+.dim__n {
+  text-shadow: 0 1px 10px rgba(16, 11, 9, 0.85);
+}
+
+/* Panels supply their own ground, so shadows there would only muddy the type. */
+.glass .lede,
+.glass p,
+.buy__panel p,
+.workflow-card p,
+.workflow-card h3,
+.spec-table span {
+  text-shadow: none;
+}
+
+/* ---------------- Reveal utility ---------------- */
+
+.reveal {
+  opacity: 0;
+  transform: translateY(24px);
+}
+
+.reveal.is-in {
+  opacity: 1;
+  transform: none;
+  transition: opacity 0.9s var(--ease), transform 0.9s var(--ease);
+}
+
+/* ---------------- Responsive ---------------- */
+
+@media (max-width: 1024px) {
+  .nav__links {
+    display: none;
+  }
+}
+
+@media (max-width: 900px) {
+  .split {
+    grid-template-columns: 1fr;
+  }
+
+  .split--flip .split__media {
+    order: 0;
+  }
+
+  .spec-row {
+    grid-template-columns: 1.6fr 1fr;
+  }
+
+  .spec-row span:nth-child(2) {
+    display: none;
+  }
+}
+
+/* Mobile: drop the scrubbed video, use a still poster (skill §Mobile) */
+@media (hover: none), (max-width: 768px) {
+  .bg-video {
+    display: none;
+  }
+
+  .mobile-poster {
+    display: block;
+    position: fixed;
+    inset: 0;
+    background-image: url("/img/mobile-poster.webp");
+    background-size: cover;
+    background-position: center;
+    z-index: 0;
+  }
+
+  .nav__call {
+    display: flex;
+  }
+
+  .section {
+    padding: 12vh var(--pad-x);
+  }
+
+}
+
+/* ---------------- Reduced motion ---------------- */
+
+@media (prefers-reduced-motion: reduce) {
+  .motion-glow,
+  .scroll-cue span {
+    animation: none;
+  }
+
+  .reveal {
+    opacity: 1;
+    transform: none;
+  }
+
+  .bg-video {
+    display: none;
+  }
+
+  .mobile-poster {
+    display: block;
+    position: fixed;
+    inset: 0;
+    background-image: url("/img/mobile-poster.webp");
+    background-size: cover;
+    background-position: center;
+    z-index: 0;
+  }
+}
+
+/* ---------------- Header fit on small phones ---------------- */
+/* Deliberately last in the file, and scoped through .nav for weight. Two
+   things outrank a naively-placed rule here:
+     - `@media (hover: none), (max-width: 768px)` above re-shows .nav__call,
+       and it appears later in this file than the nav block does;
+     - glass.css loads AFTER this file, so .glass-btn's display beats a bare
+       .nav__cta selector.
+   Adding the menu button pushed the header past the viewport below 430px
+   (16px over at 390, 86px at 320) and clipped the very control that opens
+   the menu. Shed the redundant parts as space runs out - both survive inside
+   the overlay. */
+
+@media (max-width: 480px) {
+  /* The overlay carries "Call 571-426-0602", so the icon is a duplicate. */
+  .nav .nav__call {
+    display: none;
+  }
+
+  .nav .nav__word {
+    font-size: 0.82rem;
+    letter-spacing: 0.1em;
+  }
+}
+
+/* Smallest phones only: the overlay opens on "Book Your Appointment", and the
+   button that reveals it is one tap away. */
+@media (max-width: 380px) {
+  .nav .nav__cta {
+    display: none;
+  }
+}

@@ -1,0 +1,987 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Mirabelle.B — Premium Braiding Atelier in Ashburn, VA</title>
+    <meta
+      name="description"
+      content="Mirabelle.B is a premium braiding atelier in Ashburn, VA. Braids, locs, wigs and sew-ins — with hair sourced and processed in-house. Crowned by hand."
+    />
+    <meta name="theme-color" content="#100B09" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+
+    <!-- LocalBusiness schema. Address and phone are confirmed. Still omitted
+         rather than guessed: geo and priceRange. Wrong structured data
+         sends real customers to a wrong place and is worse than none. -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "HairSalon",
+        "name": "Mirabelle.B",
+        "description": "Premium African hair braiding — braids, locs, wigs and sew-ins.",
+        "telephone": "+1-571-426-0602",
+        "address": {
+          "@type": "PostalAddress",
+          "streetAddress": "44048 Lords Valley Ter",
+          "addressLocality": "Ashburn",
+          "addressRegion": "VA",
+          "postalCode": "20147",
+          "addressCountry": "US"
+        },
+        "areaServed": "Ashburn, Loudoun County, VA",
+        "openingHoursSpecification": [
+          {
+            "@type": "OpeningHoursSpecification",
+            "dayOfWeek": [
+              "Tuesday",
+              "Wednesday",
+              "Thursday",
+              "Friday",
+              "Saturday"
+            ],
+            "opens": "10:00",
+            "closes": "18:00"
+          }
+        ],
+        "currenciesAccepted": "USD",
+        "makesOffer": [
+          { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Knotless braids" } },
+          { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Box braids" } },
+          { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Cornrows and stitch braids" } },
+          { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Fulani braids" } },
+          { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Feed-in braids" } },
+          { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Children's braiding" } },
+          { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Braided updos" } },
+          { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Goddess braids" } }
+        ]
+      }
+    </script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Manrope:wght@400;500;600;700&family=Cormorant+Garamond:ital,wght@1,300;1,400&display=swap"
+      rel="stylesheet"
+    />
+
+    <link rel="stylesheet" href="/src/style.css" />
+    <link rel="stylesheet" href="/src/glass.css" />
+  </head>
+
+  <body>
+    <!-- ================= BACKGROUND LAYERS ================= -->
+
+    <!-- HERO MEDIA DISABLED — testing the page with no hero image/video.
+         Delete this comment wrapper (the two marker lines) to restore. -->
+    <!--
+    <video
+      id="bgv"
+      class="bg-video"
+      src="/bg.mp4"
+      poster="/img/mobile-poster.webp"
+      muted
+      playsinline
+      preload="none"
+      aria-hidden="true"
+      tabindex="-1"
+    ></video>
+
+    <div class="mobile-poster" aria-hidden="true"></div>
+    -->
+    <div class="bg-tint" aria-hidden="true"></div>
+    <div class="motion-glow" aria-hidden="true"></div>
+
+    <!-- ================= NAV ================= -->
+
+    <header class="nav" id="nav">
+      <a class="nav__logo" href="#home" aria-label="Mirabelle.B — home">
+        <svg class="mark" viewBox="0 0 100 100" aria-hidden="true">
+          <path d="M18 84 V26 L46 58" />
+          <path d="M82 84 V26 L54 58" />
+          <circle class="mark__bead" cx="50" cy="62" r="8" />
+        </svg>
+        <span class="nav__word">Mirabelle<span class="nav__dot">.</span>B</span>
+      </a>
+
+      <nav class="nav__links" aria-label="Primary">
+        <a href="#impact">The Craft</a>
+        <a href="#audience">Who We Serve</a>
+        <a href="#specs">The Standard</a>
+        <a href="#visit">Visit</a>
+      </nav>
+
+      <div class="nav__actions">
+        <a class="nav__call" href="tel:+15714260602" aria-label="Call the salon">
+          <svg viewBox="0 0 100 100" aria-hidden="true">
+            <path
+              d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1 1 .4 1.9.7 2.8a2 2 0 0 1-.4 2.1L8.1 9.9a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.5c.9.4 1.8.6 2.8.7a2 2 0 0 1 1.7 2.1z"
+            />
+          </svg>
+        </a>
+        <a class="glass-btn glass-btn--primary nav__cta" href="#book">Book</a>
+
+        <!-- Below 1024px .nav__links is display:none, which left phones and
+             tablets with no way to reach any section on an 11,000px page.
+             This button and the overlay below are that missing navigation.
+             Both are inert above 1024px, where the inline links return. -->
+        <button
+          class="nav__menu"
+          id="nav-menu-btn"
+          type="button"
+          aria-expanded="false"
+          aria-controls="nav-overlay"
+          aria-label="Open menu"
+        >
+          <span class="nav__menu-bar" aria-hidden="true"></span>
+          <span class="nav__menu-bar" aria-hidden="true"></span>
+        </button>
+      </div>
+    </header>
+
+    <!-- Focus is moved in here while it is open and returned to the button on
+         close; Escape and any link close it. See setupMenu() in main.js. -->
+    <div class="navmenu" id="nav-overlay" hidden>
+      <nav class="navmenu__links" aria-label="Mobile">
+        <a href="#impact">The Craft</a>
+        <a href="#audience">Who We Serve</a>
+        <a href="#specs">The Standard</a>
+        <a href="#visit">Visit</a>
+      </nav>
+      <div class="navmenu__foot">
+        <a class="glass-btn glass-btn--primary glass-btn--lg" href="#book"
+          >Book Your Appointment</a
+        >
+        <a class="navmenu__call" href="tel:+15714260602">Call 571-426-0602</a>
+      </div>
+    </div>
+
+    <!-- ================= PAGE ================= -->
+
+    <main id="page">
+      <!-- ---------- 1. HERO ---------- -->
+      <section class="section hero hero--expand" id="home">
+        <div class="hero__pin" id="hero-pin">
+          <!-- Ambient bed: the same frame, blurred, so the card reads as a
+               sharp window onto it. Fades out as the card takes the screen. -->
+          <div class="hero__bed" id="hero-bed" aria-hidden="true"></div>
+
+          <figure class="hero__card" id="hero-card">
+            <img
+              src="/img/crowned-by-hand-hero.webp"
+              alt="A stylist's hands parting and braiding a client's hair, lit by a wall sconce"
+              width="2688"
+              height="1520"
+              fetchpriority="high"
+            />
+            <div class="hero__veil" id="hero-veil" aria-hidden="true"></div>
+          </figure>
+
+          <!-- The name is the h1, and the expansion splits it at the dot. -->
+          <h1 class="hero__split" id="hero-split">
+            <span class="hero__word hero__word--l"
+              >Mirabelle<em class="hero__dot">.</em></span
+            ><span class="hero__word hero__word--r">B</span>
+          </h1>
+
+          <p class="hero__meta" id="hero-meta">
+            <span class="hero__meta-l">Crowned by hand.</span>
+            <span class="hero__meta-r">Scroll to expand</span>
+          </p>
+
+          <!-- Rides in with the copy: at full bleed the candle sits under the
+               copy column, and the radial ground on .hero__inner alone is not
+               enough to seat type over a lit flame. -->
+          <div class="hero__scrim" id="hero-scrim" aria-hidden="true"></div>
+
+          <!-- Held back until the frame is open, then fades in over it. -->
+          <div class="hero__reveal" id="hero-reveal">
+            <div class="hero__inner">
+              <p class="eyebrow">Appointments &amp; Walk-Ins Welcome</p>
+
+              <p class="hero__slogan">Crowned by hand.</p>
+
+              <div class="hero__cta">
+                <a class="glass-btn glass-btn--primary" href="#book">Book Your Appointment</a>
+                <a class="glass-btn" href="#materials">See the Craft</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ---------- 2. OUR PROMISE ---------- -->
+      <section class="section impact" id="impact">
+        <div class="impact__head">
+          <p class="eyebrow reveal">01 — Our Promise</p>
+        </div>
+
+        <div class="patterns" id="patterns">
+          <div class="patterns__row">
+            <button
+              class="pattern"
+              type="button"
+              aria-expanded="false"
+              aria-controls="pattern-coily"
+            >
+              <span class="pattern__shot">
+                <img src="/img/styles/coily/02.webp" alt="" loading="lazy" width="736" height="1314" />
+              </span>
+              <span class="pattern__meta">
+                <span class="pattern__name">Coily</span>
+                <span class="pattern__count">2 looks</span>
+              </span>
+            </button>
+
+            <button
+              class="pattern"
+              type="button"
+              aria-expanded="false"
+              aria-controls="pattern-curly"
+            >
+              <span class="pattern__shot">
+                <img src="/img/styles/curly/02.webp" alt="" loading="lazy" width="736" height="1196" />
+              </span>
+              <span class="pattern__meta">
+                <span class="pattern__name">Curly</span>
+                <span class="pattern__count">4 looks</span>
+              </span>
+            </button>
+
+            <button
+              class="pattern"
+              type="button"
+              aria-expanded="false"
+              aria-controls="pattern-protective"
+            >
+              <span class="pattern__shot">
+                <img src="/img/styles/protective/01.webp" alt="" loading="lazy" width="746" height="1368" />
+              </span>
+              <span class="pattern__meta">
+                <span class="pattern__name">Protective</span>
+                <span class="pattern__count">3 looks</span>
+              </span>
+            </button>
+
+            <button
+              class="pattern"
+              type="button"
+              aria-expanded="false"
+              aria-controls="pattern-straight"
+            >
+              <span class="pattern__shot">
+                <img src="/img/styles/straight/01.webp" alt="" loading="lazy" width="900" height="1198" />
+              </span>
+              <span class="pattern__meta">
+                <span class="pattern__name">Straight</span>
+                <span class="pattern__count">1 look</span>
+              </span>
+            </button>
+
+            <button
+              class="pattern"
+              type="button"
+              aria-expanded="false"
+              aria-controls="pattern-wavy"
+            >
+              <span class="pattern__shot">
+                <img src="/img/styles/wavy/01.webp" alt="" loading="lazy" width="768" height="1258" />
+              </span>
+              <span class="pattern__meta">
+                <span class="pattern__name">Wavy</span>
+                <span class="pattern__count">4 looks</span>
+              </span>
+            </button>
+          </div>
+
+          <div
+            class="pattern__panel"
+            id="pattern-coily"
+            role="region"
+            aria-label="Coily — all 2 looks"
+            hidden
+          >
+            <div class="styles__grid">
+              <img src="/img/styles/coily/02.webp" alt="Coily texture worn in a defined twist-out" loading="lazy" width="736" height="1314" />
+              <img src="/img/styles/coily/04.webp" alt="Cornrowed front gathered into a coily puff" loading="lazy" width="900" height="1600" />
+            </div>
+          </div>
+
+          <div
+            class="pattern__panel"
+            id="pattern-curly"
+            role="region"
+            aria-label="Curly — all 4 looks"
+            hidden
+          >
+            <div class="styles__grid">
+              <img src="/img/styles/curly/02.webp" alt="Cornrows feeding into loose curled lengths" loading="lazy" width="736" height="1196" />
+              <img src="/img/styles/curly/03.webp" alt="Straight-back cornrows with deep-wave ends" loading="lazy" width="704" height="1344" />
+              <img src="/img/styles/curly/05.webp" alt="Knotless braids finished with curled ends" loading="lazy" width="711" height="1144" />
+              <img src="/img/styles/curly/06.webp" alt="Fulani-style braids with beads and curled lengths" loading="lazy" width="683" height="1024" />
+            </div>
+          </div>
+
+          <div
+            class="pattern__panel"
+            id="pattern-protective"
+            role="region"
+            aria-label="Protective — all 3 looks"
+            hidden
+          >
+            <div class="styles__grid">
+              <img src="/img/styles/protective/01.webp" alt="Knotless braids gathered into a high bun" loading="lazy" width="746" height="1368" />
+              <img src="/img/styles/protective/02.webp" alt="Shoulder-length twists finished with wooden beads" loading="lazy" width="736" height="1224" />
+              <img src="/img/styles/protective/03.webp" alt="Straight-back cornrows running into long braids" loading="lazy" width="720" height="1280" />
+            </div>
+          </div>
+
+          <div
+            class="pattern__panel"
+            id="pattern-straight"
+            role="region"
+            aria-label="Straight — all 1 look"
+            hidden
+          >
+            <div class="styles__grid">
+              <img src="/img/styles/straight/01.webp" alt="Sectioned knots set on a clean parting grid" loading="lazy" width="900" height="1198" />
+            </div>
+          </div>
+
+          <div
+            class="pattern__panel"
+            id="pattern-wavy"
+            role="region"
+            aria-label="Wavy — all 4 looks"
+            hidden
+          >
+            <div class="styles__grid">
+              <img src="/img/styles/wavy/01.webp" alt="Knotless braids with soft wavy ends" loading="lazy" width="768" height="1258" />
+              <img src="/img/styles/wavy/02b.webp" alt="Close detail of braids finished in loose waves" loading="lazy" width="720" height="1280" />
+              <img src="/img/styles/wavy/03.webp" alt="Boho braids with curled, wavy lengths" loading="lazy" width="832" height="1248" />
+              <img src="/img/styles/wavy/07.webp" alt="Cornrows into long wavy lengths" loading="lazy" width="900" height="1600" />
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ---------- 3. DESIGN & MATERIALS ---------- -->
+      <section class="section materials" id="materials">
+        <div class="materials__head">
+          <p class="eyebrow reveal">02 — Design &amp; Materials</p>
+          <h2 class="section-head reveal">What the work is actually made of</h2>
+        </div>
+
+        <div class="materials__grid">
+          <article class="mat-card glass reveal">
+            <span class="mat-card__idx">01</span>
+            <h3>The Hair</h3>
+            <p>
+              Human hair, sorted in-house by texture and length. Matte, uncoated,
+              and matched to your own pattern rather than layered over it.
+            </p>
+          </article>
+
+          <article class="mat-card glass reveal">
+            <span class="mat-card__idx">02</span>
+            <h3>The Part</h3>
+            <p>
+              Measured, square, consistent. The parting grid is the structure
+              everything else sits on — and the first thing a knowledgeable client
+              inspects.
+            </p>
+          </article>
+
+          <article class="mat-card glass reveal">
+            <span class="mat-card__idx">03</span>
+            <h3>The Foundation</h3>
+            <p>
+              Under a sew-in, the braid pattern decides whether the install lays
+              flat and whether your own hair survives it. We photograph ours.
+            </p>
+          </article>
+
+          <article class="mat-card glass reveal">
+            <span class="mat-card__idx">04</span>
+            <h3>The Finish</h3>
+            <p>
+              Scalp oiled and soothed, hairline untouched, a full mirror
+              walk-around, and a printed care card before you leave the chair.
+            </p>
+          </article>
+        </div>
+      </section>
+
+      <!-- ---------- 4. STYLE GALLERY ---------- -->
+      <section class="section styles" id="styles">
+        <div class="styles__head">
+          <p class="eyebrow reveal">03 — Our Work</p>
+          <h2 class="section-head reveal">The work itself</h2>
+          <p class="lede reveal">
+            Every install is matched to your own texture, not approximated to
+            it. This is the full range we braid — knotless, box, cornrows,
+            Fulani, feed-in, goddess, updos, and styles made for kids.
+          </p>
+        </div>
+
+        <figure class="styles__showcase reveal">
+          <!-- Wide screens get the board as one composed piece. Below 1100px
+               its baked-in caption type falls under ~10px, so the same ten
+               styles are re-laid as cards with real text instead. Only one
+               set is ever fetched — see setupWorkShowcase() in main.js.
+
+               The source artwork's header band carried the pre-rename
+               wordmark as script lettering, which cannot be retyped. It is
+               cropped off rather than redrawn: the band duplicated the site's
+               own logo and booking CTA anyway, and what remains carries no
+               brand name at all. If
+               the board is ever regenerated, regenerate the ten tiles in
+               /img/work/ from the same source so they stay in step. -->
+          <img
+            class="styles__board"
+            data-src="/img/our-work-showcase.webp"
+            alt="Service board showing knotless braids, box braids, cornrows and stitch braids, Fulani braids, feed-in braids, kids’ braids, braided updo, half up half down, goddess braids, and professional care"
+            decoding="async"
+            width="1920"
+            height="748"
+          />
+
+          <ul class="styles__cards">
+            <li class="work-card">
+              <img data-src="/img/work/knotless-braids.webp" alt="Knotless Braids" decoding="async" width="414" height="402" />
+              <h3 class="work-card__name">Knotless Braids</h3>
+              <p class="work-card__note">Natural look, lightweight and gentle on your scalp. Perfect for any occasion.</p>
+            </li>
+            <li class="work-card">
+              <img data-src="/img/work/box-braids.webp" alt="Box Braids" decoding="async" width="396" height="402" />
+              <h3 class="work-card__name">Box Braids</h3>
+              <p class="work-card__note">Timeless and versatile. Many sizes and lengths to fit your style.</p>
+            </li>
+            <li class="work-card">
+              <img data-src="/img/work/cornrows-stitch-braids.webp" alt="Cornrows / Stitch Braids" decoding="async" width="441" height="402" />
+              <h3 class="work-card__name">Cornrows / Stitch Braids</h3>
+              <p class="work-card__note">Neat, stylish and long lasting. Perfect for a clean, elegant look.</p>
+            </li>
+            <li class="work-card">
+              <img data-src="/img/work/fulani-braids.webp" alt="Fulani Braids" decoding="async" width="483" height="402" />
+              <h3 class="work-card__name">Fulani Braids</h3>
+              <p class="work-card__note">Trendy and stylish with beautiful beads or accessories.</p>
+            </li>
+            <li class="work-card">
+              <img data-src="/img/work/feed-in-braids.webp" alt="Feed-In Braids" decoding="async" width="486" height="402" />
+              <h3 class="work-card__name">Feed-In Braids</h3>
+              <p class="work-card__note">Natural hair protection with a smooth, flawless finish.</p>
+            </li>
+            <li class="work-card">
+              <img data-src="/img/work/kids-braids.webp" alt="Kids’ Braids" decoding="async" width="429" height="402" />
+              <h3 class="work-card__name">Kids’ Braids</h3>
+              <p class="work-card__note">Cute, comfortable and colorful styles kids will love.</p>
+            </li>
+            <li class="work-card">
+              <img data-src="/img/work/braided-updo.webp" alt="Braided Updo" decoding="async" width="399" height="402" />
+              <h3 class="work-card__name">Braided Updo</h3>
+              <p class="work-card__note">Elegant updo styles for events, weddings and special occasions.</p>
+            </li>
+            <li class="work-card">
+              <img data-src="/img/work/half-up-half-down.webp" alt="Half Up Half Down" decoding="async" width="441" height="402" />
+              <h3 class="work-card__name">Half Up Half Down</h3>
+              <p class="work-card__note">The perfect mix of chic and casual. Best of both worlds.</p>
+            </li>
+            <li class="work-card">
+              <img data-src="/img/work/goddess-braids.webp" alt="Goddess Braids" decoding="async" width="441" height="402" />
+              <h3 class="work-card__name">Goddess Braids</h3>
+              <p class="work-card__note">Braids blended with soft, loose curls for a romantic finish.</p>
+            </li>
+            <li class="work-card">
+              <img data-src="/img/work/professional-care.webp" alt="Professional and Care" decoding="async" width="600" height="402" />
+              <h3 class="work-card__name">Professional &amp; Care</h3>
+              <p class="work-card__note">Expert stylists who care for your hair and your satisfaction.</p>
+            </li>
+          </ul>
+        </figure>
+      </section>
+
+      <!-- ---------- 5. MADE FOR THE AUDIENCE ---------- -->
+      <section class="section workflow" id="audience">
+        <div class="workflow__pin">
+          <div class="workflow__head">
+            <p class="eyebrow">04 — Who We Serve</p>
+            <h2 class="section-head">Built around how you actually live</h2>
+          </div>
+
+          <div class="workflow__track" id="workflow-track">
+            <article class="workflow-card glass reveal">
+              <p class="workflow-card__tag">The Professional</p>
+              <h3>Six weeks of not thinking about your hair</h3>
+              <p>
+                You book every six to eight weeks because mornings are not
+                negotiable. We quote the real length of the appointment, and we
+                start when we said we would.
+              </p>
+              <span class="workflow-card__spec">On-time appointments</span>
+            </article>
+
+            <article class="workflow-card glass reveal">
+              <p class="workflow-card__tag">The Loc Journey</p>
+              <h3>A maintenance home, not a one-off</h3>
+              <p>
+                Locs are a relationship measured in years. The stylist who starts
+                yours should be the one maintaining them in year three — starter
+                locs, microlocs, retwist, interlocking and repair.
+              </p>
+              <span class="workflow-card__spec">4–6 week cycle</span>
+            </article>
+
+            <article class="workflow-card glass reveal">
+              <p class="workflow-card__tag">The Wig Client</p>
+              <h3>Custom units from hair we sourced ourselves</h3>
+              <p>
+                Built to your measurements and density. HD lace, glueless
+                construction, and a natural hairline. Private consultations
+                available, always.
+              </p>
+              <span class="workflow-card__spec">Private consultations</span>
+            </article>
+
+            <article class="workflow-card glass reveal">
+              <p class="workflow-card__tag">The Bride &amp; Event</p>
+              <h3>Trials, timelines, and a party that runs on schedule</h3>
+              <p>
+                Weddings, graduations, milestone birthdays. Booked months ahead
+                with a trial appointment and a firm finish time you can plan the
+                rest of the day around.
+              </p>
+              <span class="workflow-card__spec">Book 48 hours</span>
+            </article>
+
+            <article class="workflow-card glass reveal">
+              <p class="workflow-card__tag">Mothers &amp; Daughters</p>
+              <h3>Gentle hands, patient stylists</h3>
+              <p>
+                Shorter appointments, softer tension, and stylists who explain
+                what they're doing as they do it. Often the reason a mother becomes
+                a client herself.
+              </p>
+              <span class="workflow-card__spec">1.5–3 hrs</span>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <!-- ---------- 6. SPECS / THE STANDARD ---------- -->
+      <section class="section specs" id="specs">
+        <div class="specs__head">
+          <p class="eyebrow reveal">05 — The Standard</p>
+          <h2 class="section-head reveal">Five dimensions, every service</h2>
+          <p class="lede reveal">
+            Every appointment is measured against the same five things. No
+            exceptions for a quiet Tuesday or a busy Saturday.
+          </p>
+        </div>
+
+        <ol class="dims">
+          <li class="dim reveal">
+            <span class="dim__n">1</span>
+            <h3>Source</h3>
+            <p>Hair sourced and processed in-house. We know what was done to it.</p>
+          </li>
+          <li class="dim reveal">
+            <span class="dim__n">2</span>
+            <h3>Technique</h3>
+            <p>Tension-conscious, scalp-first braiding. The method is the product.</p>
+          </li>
+          <li class="dim reveal">
+            <span class="dim__n">3</span>
+            <h3>Scalp Health</h3>
+            <p>Every service starts and ends with the health of what's underneath.</p>
+          </li>
+          <li class="dim reveal">
+            <span class="dim__n">4</span>
+            <h3>Longevity</h3>
+            <p>Built to hold its shape for weeks of real life, not one photograph.</p>
+          </li>
+          <li class="dim reveal">
+            <span class="dim__n">5</span>
+            <h3>Presence</h3>
+            <p>How you carry it when you walk out. The finished feeling.</p>
+          </li>
+        </ol>
+
+        <div class="spec-table glass reveal">
+          <div class="spec-row spec-row--head">
+            <span>Service</span><span>Typical duration</span><span>Range</span>
+          </div>
+          <div class="spec-row">
+            <span>Knotless &amp; box braids</span><span>5–8 hrs</span
+            ><span class="spec__value">$250–450</span>
+          </div>
+          <div class="spec-row">
+            <span>Cornrows &amp; feed-ins</span><span>2–4 hrs</span
+            ><span class="spec__value">$120–280</span>
+          </div>
+          <div class="spec-row">
+            <span>Loc maintenance</span><span>1.5–3 hrs</span
+            ><span class="spec__value">$95–180</span>
+          </div>
+          <div class="spec-row">
+            <span>Starter locs &amp; microlocs</span><span>Multi-session</span
+            ><span class="spec__value">$400–900</span>
+          </div>
+          <div class="spec-row">
+            <span>Custom wig unit</span><span>By consultation</span
+            ><span class="spec__value">$600–1,800</span>
+          </div>
+          <div class="spec-row">
+            <span>Sew-in &amp; fusion</span><span>3–6 hrs</span
+            ><span class="spec__value">$300–650</span>
+          </div>
+        </div>
+
+        <!-- The 20% is confirmed by the owner. Everything else that used to sit
+             here — eligibility rules, exclusions, and a promise of stylist
+             continuity on return visits — was invented and has been removed
+             rather than guessed at. Do not add fine print back unless the
+             salon has actually agreed to it: an offer a client cannot redeem
+             costs more trust than no offer at all. -->
+        <div class="offers" id="offers">
+          <h3 class="offers__head reveal">A reason to try the chair once</h3>
+
+          <div class="offers__grid offers__grid--single">
+            <article class="offer glass offer--first reveal">
+              <p class="offer__label">New clients</p>
+              <p class="offer__pct"><span>20</span>%</p>
+              <h4 class="offer__title">off your first appointment</h4>
+              <p class="offer__body">
+                Because the only way to know whether we are different is to sit
+                in the chair once.
+              </p>
+            </article>
+          </div>
+
+          <p class="offers__note reveal">
+            The discount applies to the service price only. We tell you the
+            real number before you sit down.
+            <a class="offers__cta" href="#book">Book your appointment</a>
+          </p>
+        </div>
+      </section>
+
+      <!-- ---------- 7. TESTIMONIALS ---------- -->
+      <!-- PLACEHOLDER COPY. These five are written samples showing the shape
+           and voice a review should have — one per audience segment from
+           brand-kit.md §5. They are NOT real reviews and must be replaced
+           with genuine, attributed ones before launch: the kit's trust
+           requirements call for "Google reviews embedded or quoted with
+           attribution", and invented testimonials on a commercial page are
+           a legal exposure as well as a credibility one. Tracked in
+           PLACEHOLDERS (main.js) and README → Placeholder content. -->
+      <section class="section words" id="words">
+        <div class="words__head">
+          <p class="eyebrow reveal">06 — In Their Words</p>
+          <h2 class="section-head reveal">Five stars, five different reasons</h2>
+          <p class="lede reveal">
+            The people who book us are not all buying the same thing. These are
+            the five who keep coming back, and what each of them came for.
+          </p>
+        </div>
+
+        <div class="words__grid">
+          <figure class="quote glass reveal">
+            <p class="quote__tag">The Professional</p>
+            <span class="stars" role="img" aria-label="Rated 5 out of 5">
+              <span aria-hidden="true">★★★★★</span>
+            </span>
+            <blockquote class="quote__head">Quoted five hours. Took five hours.</blockquote>
+            <p class="quote__body">Punctuality matters when you work full time. Mirabelle told me the real number when I booked, started on time, and I was out when she said I would be. Six weeks later the parts are still clean and my edges never moved.</p>
+            <figcaption class="quote__by">
+              <span class="quote__name">Danielle R.</span>
+              <span class="quote__meta">Mirabelle<span class="quote__dot">.</span>B</span>
+            </figcaption>
+          </figure>
+
+          <figure class="quote glass reveal">
+            <p class="quote__tag">The Loc Journey</p>
+            <span class="stars" role="img" aria-label="Rated 5 out of 5">
+              <span aria-hidden="true">★★★★★</span>
+            </span>
+            <blockquote class="quote__head">Year three and the same hands.</blockquote>
+            <p class="quote__body">I came in three years into my locs and braced for someone to tell me they all had to be redone. She read them, told me exactly what was salvageable, and has maintained them ever since. That continuity is the whole thing.</p>
+            <figcaption class="quote__by">
+              <span class="quote__name">Adaeze O.</span>
+              <span class="quote__meta">Mirabelle<span class="quote__dot">.</span>B</span>
+            </figcaption>
+          </figure>
+
+          <figure class="quote glass reveal">
+            <p class="quote__tag">The Wig Client</p>
+            <span class="stars" role="img" aria-label="Rated 5 out of 5">
+              <span aria-hidden="true">★★★★★</span>
+            </span>
+            <blockquote class="quote__head">It does not look like a unit.</blockquote>
+            <p class="quote__body">I had never worn a unit that did not end up hidden under a headwrap. This one was measured to my head, the density matches my own hair, and the hairline is genuinely believable. My coworkers thought I had done a big chop.</p>
+            <figcaption class="quote__by">
+              <span class="quote__name">Simone T.</span>
+              <span class="quote__meta">Mirabelle<span class="quote__dot">.</span>B</span>
+            </figcaption>
+          </figure>
+
+          <figure class="quote glass reveal">
+            <p class="quote__tag">The Bride & Event</p>
+            <span class="stars" role="img" aria-label="Rated 5 out of 5">
+              <span aria-hidden="true">★★★★★</span>
+            </span>
+            <blockquote class="quote__head">She built the timeline around the day.</blockquote>
+            <p class="quote__body">Trial six weeks out, a written finish time for the morning of, and she was packed and gone before the photographer arrived. I did not think about my hair once. On a wedding day that is worth more than the style.</p>
+            <figcaption class="quote__by">
+              <span class="quote__name">Kayla B.</span>
+              <span class="quote__meta">Mirabelle<span class="quote__dot">.</span>B</span>
+            </figcaption>
+          </figure>
+
+          <figure class="quote glass reveal">
+            <p class="quote__tag">Mothers & Daughters</p>
+            <span class="stars" role="img" aria-label="Rated 5 out of 5">
+              <span aria-hidden="true">★★★★★</span>
+            </span>
+            <blockquote class="quote__head">My daughter did not cry once.</blockquote>
+            <p class="quote__body">She is nine and has a history with tight braids. Mirabelle showed her every section before she touched it and checked in the whole time. Loose, comfortable, and her scalp was calm that night. I have since booked myself.</p>
+            <figcaption class="quote__by">
+              <span class="quote__name">Renée W.</span>
+              <span class="quote__meta">Mirabelle<span class="quote__dot">.</span>B</span>
+            </figcaption>
+          </figure>
+        </div>
+      </section>
+
+      <!-- ---------- 8. BOOKING CTA ---------- -->
+      <section class="section buy" id="book">
+        <div class="buy__panel glass reveal">
+          <p class="eyebrow">07 — Reserve Your Chair</p>
+          <h2 class="buy__title">Book the appointment</h2>
+
+          <p class="buy__note">
+            Tell us what you want and we confirm the price before you sit down.
+            No number is quoted here that we have not agreed with you first.
+          </p>
+
+          <ul class="buy__includes">
+            <li>Texture, density and scalp consultation</li>
+            <li>Written prep instructions before you arrive</li>
+            <li>Honest finish time quoted up front</li>
+            <li>Aftercare kit and printed care card</li>
+            <li>Follow-up message at the one-week mark</li>
+          </ul>
+
+          <form class="booking" id="booking-form" novalidate>
+            <p class="booking__intro">
+              Send a request and we confirm your slot by text, usually the same
+              day. Nothing is charged here — the deposit is taken once your
+              time is agreed.
+            </p>
+
+            <div class="booking__grid">
+              <p class="field">
+                <label for="bk-name">Your name</label>
+                <input id="bk-name" name="name" type="text" autocomplete="name"
+                       required maxlength="80" />
+                <span class="field__err" data-err-for="bk-name"></span>
+              </p>
+
+              <p class="field">
+                <label for="bk-phone">Mobile number</label>
+                <input id="bk-phone" name="phone" type="tel" autocomplete="tel"
+                       inputmode="tel" required maxlength="30"
+                       placeholder="Best number to text you on" />
+                <span class="field__err" data-err-for="bk-phone"></span>
+              </p>
+
+              <p class="field">
+                <label for="bk-email">Email <span class="field__opt">(optional)</span></label>
+                <input id="bk-email" name="email" type="email"
+                       autocomplete="email" maxlength="120" />
+                <span class="field__err" data-err-for="bk-email"></span>
+              </p>
+
+              <p class="field">
+                <label for="bk-style">Style you want</label>
+                <select id="bk-style" name="style" required>
+                  <option value="">Choose a style…</option>
+                  <option>Knotless Braids</option>
+                  <option>Box Braids</option>
+                  <option>Cornrows / Stitch Braids</option>
+                  <option>Fulani Braids</option>
+                  <option>Feed-In Braids</option>
+                  <option>Kids’ Braids</option>
+                  <option>Braided Updo</option>
+                  <option>Half Up Half Down</option>
+                  <option>Goddess Braids</option>
+                  <option>Not sure yet — need advice</option>
+                </select>
+                <span class="field__err" data-err-for="bk-style"></span>
+              </p>
+
+              <p class="field">
+                <label for="bk-date">Preferred date</label>
+                <input id="bk-date" name="preferred_date" type="date" required />
+                <span class="field__err" data-err-for="bk-date"></span>
+              </p>
+
+              <p class="field">
+                <label for="bk-time">Time of day</label>
+                <select id="bk-time" name="preferred_time">
+                  <option>Morning</option>
+                  <option>Afternoon</option>
+                  <option>Evening</option>
+                  <option>Any time</option>
+                </select>
+              </p>
+
+              <p class="field field--wide">
+                <label for="bk-notes">
+                  Anything we should know <span class="field__opt">(optional)</span>
+                </label>
+                <textarea id="bk-notes" name="notes" rows="3" maxlength="600"
+                          placeholder="Length, hair you are bringing, scalp sensitivity, how long since your last install…"></textarea>
+              </p>
+            </div>
+
+            <!-- Honeypot. Hidden from people, irresistible to bots; handled
+                 in booking.js. aria-hidden + tabindex keep it away from
+                 screen readers and the tab order. -->
+            <p class="booking__pot" aria-hidden="true">
+              <label for="bk-company">Company</label>
+              <input id="bk-company" name="company" type="text"
+                     tabindex="-1" autocomplete="off" />
+            </p>
+
+            <div class="booking__actions">
+              <button class="glass-btn glass-btn--primary glass-btn--lg" type="submit"
+                      data-idle="Request My Appointment"
+                      data-busy="Sending…">Request My Appointment</button>
+              <a class="glass-btn glass-btn--lg" href="tel:+15714260602"
+                >Or Call · 571-426-0602</a
+              >
+            </div>
+
+            <!-- Single live region for the whole form. Announced on submit,
+                 so a screen reader hears the outcome without hunting for it. -->
+            <p class="booking__status" role="status" aria-live="polite"></p>
+          </form>
+
+          <p class="buy__fine">
+            Walk-ins welcome · Booking ahead guarantees your stylist and start time ·
+            Deposits are non-refundable but always credited ·
+            Private consultations available
+          </p>
+        </div>
+      </section>
+
+      <!-- ---------- 9. VISIT ---------- -->
+      <!-- Address, phone and hours are all confirmed and are mirrored in the
+           JSON-LD in <head>. Change them in both places or the structured
+           data starts lying to Google about a real address. -->
+      <section class="section visit" id="visit">
+        <div class="visit__head">
+          <p class="eyebrow reveal">08 &mdash; Visit Us</p>
+          <h2 class="section-head reveal">Where to find us</h2>
+          <p class="lede reveal">
+            We take booked appointments and walk-ins, and the standard is the
+            same either way. Call ahead if you are travelling in &mdash; it
+            guarantees your stylist and your start time.
+          </p>
+        </div>
+
+        <div class="visit__grid">
+          <div class="visit__card glass reveal">
+            <h3 class="visit__label">The salon</h3>
+            <address class="visit__address icon-row">
+              <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21.5s7-5.6 7-11.5a7 7 0 1 0-14 0c0 5.9 7 11.5 7 11.5z"/><circle cx="12" cy="10" r="2.6"/></svg>
+              <span>44048 Lords Valley Ter<br />Ashburn, VA 20147</span>
+            </address>
+            <p class="visit__line">Loudoun County, Virginia</p>
+            <p class="visit__actions">
+              <a class="glass-btn" href="tel:+15714260602"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 16.4v2.6a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 1.1 3.2 2 2 0 0 1 3.1 1h2.6a2 2 0 0 1 2 1.7c.1 1 .4 1.9.7 2.8a2 2 0 0 1-.4 2.1L6.9 8.7a16 16 0 0 0 6 6l1.1-1.1a2 2 0 0 1 2.1-.5c.9.3 1.8.6 2.8.7a2 2 0 0 1 1.7 2z"/></svg>Call 571-426-0602</a>
+              <a
+                class="glass-btn"
+                href="https://www.google.com/maps/search/?api=1&amp;query=44048+Lords+Valley+Ter%2C+Ashburn%2C+VA+20147"
+                target="_blank"
+                rel="noopener"
+                >Get Directions</a
+              >
+            </p>
+          </div>
+
+          <div class="visit__card glass reveal">
+            <h3 class="visit__label">Opening days</h3>
+            <ul class="visit__hours">
+              <li><span>Tuesday &ndash; Saturday</span><span>10am &ndash; 6pm</span></li>
+              <li class="is-closed"><span>Sunday &amp; Monday</span><span>Closed</span></li>
+            </ul>
+            <p class="visit__note visit__note--plain">
+              Last appointment starts well before close &mdash; a full head can
+              run five to eight hours, so call ahead for same-day work.
+            </p>
+          </div>
+
+          <div class="visit__card glass reveal">
+            <h3 class="visit__label">Before you come</h3>
+            <ul class="visit__list">
+              <li>Walk-ins welcome; booking ahead holds your stylist.</li>
+              <li>Most full-head styles run five to eight hours &mdash; we tell
+                  you which when you book.</li>
+              <li>Private consultations available on request.</li>
+              <li>Bringing your own hair? Tell us in the booking notes.</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- ================= FOOTER ================= -->
+
+    <footer class="footer">
+      <div class="footer__top">
+        <p class="footer__big">Crowned by hand.</p>
+      </div>
+
+      <div class="footer__cols">
+        <div>
+          <p class="footer__label">Visit</p>
+          <p class="icon-row">
+            <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21.5s7-5.6 7-11.5a7 7 0 1 0-14 0c0 5.9 7 11.5 7 11.5z"/><circle cx="12" cy="10" r="2.6"/></svg>
+            <span>44048 Lords Valley Ter<br />Ashburn, VA 20147</span>
+          </p>
+          <p class="icon-row">
+            <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 16.4v2.6a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 1.1 3.2 2 2 0 0 1 3.1 1h2.6a2 2 0 0 1 2 1.7c.1 1 .4 1.9.7 2.8a2 2 0 0 1-.4 2.1L6.9 8.7a16 16 0 0 0 6 6l1.1-1.1a2 2 0 0 1 2.1-.5c.9.3 1.8.6 2.8.7a2 2 0 0 1 1.7 2z"/></svg>
+            <a href="tel:+15714260602">571-426-0602</a>
+          </p>
+        </div>
+        <div>
+          <p class="footer__label">Services</p>
+          <p>Braiding · Locs &amp; Microlocs</p>
+          <p>Wigs · Sew-Ins &amp; Fusion</p>
+        </div>
+        <div>
+          <p class="footer__label">Hours</p>
+          <p>Tue–Sat · 10am–6pm</p>
+          <p>Walk-ins welcome</p>
+          <p>Private consultations available</p>
+        </div>
+      </div>
+
+      <div class="footer__base">
+        <span class="footer__sig">
+          <svg class="mark mark--sm" viewBox="0 0 100 100" aria-hidden="true">
+            <path d="M18 84 V26 L46 58" />
+            <path d="M82 84 V26 L54 58" />
+            <circle class="mark__bead" cx="50" cy="62" r="8" />
+          </svg>
+          <span>Mirabelle<span class="footer__dot">.</span>B</span>
+        </span>
+        <span>© <span id="year"></span> Mirabelle.B. All rights reserved.</span>
+      </div>
+    </footer>
+
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>
