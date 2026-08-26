@@ -848,10 +848,34 @@ body.is-menu-open {
   text-shadow: 0 1px 10px rgba(16, 11, 9, 0.9), 0 0 3px rgba(16, 11, 9, 0.75);
 }
 
+/* What the salon does and where, directly under the slogan. Sized between
+   the slogan and body text so it reads as a subtitle, not a paragraph. */
+.hero__where {
+  margin: 0 0 1.6rem;
+  max-width: 40ch;
+  font-size: clamp(0.9rem, 1.15vw, 1rem);
+  line-height: 1.55;
+  color: var(--sand);
+}
+
 .hero__cta {
   display: flex;
   flex-wrap: wrap;
   gap: 0.9rem;
+}
+
+/* Three buttons fit side by side on a laptop but stack badly on a phone,
+   where the header already carries Book and the overlay carries the number.
+   Book and Call are the two that matter on a small screen; the craft link
+   is one scroll away regardless.
+
+   Scoped through .hero__cta for weight: glass.css loads after this file and
+   sets display on a bare .glass-btn, so an unscoped .hero__cta-craft loses.
+   Same trap as .nav .nav__call at the end of this file. */
+@media (max-width: 560px) {
+  .hero__cta .hero__cta-craft {
+    display: none;
+  }
 }
 
 .scroll-cue {
@@ -1679,9 +1703,9 @@ body.is-menu-open {
 
 .words__grid {
   display: grid;
-  /* Five quotes do not divide evenly into a row that stays readable, and a
+  /* Five cards do not divide evenly into a row that stays readable, and a
      4+1 orphan looks like a mistake. Three then two reads as deliberate,
-     and the wider first row carries the two longest quotes. */
+     and the wider first row carries the two longest cards. */
   grid-template-columns: repeat(3, 1fr);
   gap: clamp(1rem, 1.6vw, 1.6rem);
 }
@@ -1763,6 +1787,18 @@ body.is-menu-open {
 .quote__dot {
   color: var(--gilt);
   font-weight: 700;
+}
+
+/* The commitment cards carry no attribution line, so the body is the last
+   child and its bottom margin would otherwise hang as dead space. */
+.words .quote > .quote__body:last-child {
+  margin-bottom: 0;
+}
+
+/* The reviews card is the one card asking for an action rather than making a
+   claim, so it is marked with the gilt edge used elsewhere for CTAs. */
+.words .quote--cta {
+  border-left: 2px solid var(--gilt);
 }
 
 @media (max-width: 1100px) {

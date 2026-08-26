@@ -3,7 +3,7 @@
   "private": true,
   "version": "1.0.0",
   "type": "module",
-  "description": "Scroll-driven landing page for Mirabelle.B — Baltimore braiding atelier",
+  "description": "Scroll-driven landing page for Mirabelle.B — African hair braiding, Ashburn VA",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
