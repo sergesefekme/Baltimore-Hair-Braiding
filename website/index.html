@@ -115,6 +115,10 @@
   </head>
 
   <body>
+    <!-- Keyboard users otherwise tab the whole header on every visit, and this
+         page is ~11,000px with a pinned hero. Visible only while focused. -->
+    <a class="skip-link" href="#page">Skip to content</a>
+
     <!-- ================= BACKGROUND LAYERS ================= -->
 
     <!-- HERO MEDIA DISABLED — testing the page with no hero image/video.
@@ -975,6 +979,15 @@
               <label for="bk-company">Company</label>
               <input id="bk-company" name="company" type="text"
                      tabindex="-1" autocomplete="off" />
+            </p>
+
+            <p class="booking__consent">
+              By sending this request you agree that Mirabelle.B may contact you
+              by text or phone about this appointment. Message and data rates may
+              apply, and you can reply STOP at any time to stop texts. We do not
+              send marketing messages and we never sell your details — see our
+              <a href="/privacy.html">Privacy Policy</a> and
+              <a href="/policies.html">Booking &amp; Salon Policies</a>.
             </p>
 
             <div class="booking__actions">

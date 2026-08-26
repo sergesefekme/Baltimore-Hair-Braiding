@@ -848,6 +848,62 @@ body.is-menu-open {
   text-shadow: 0 1px 10px rgba(16, 11, 9, 0.9), 0 0 3px rgba(16, 11, 9, 0.75);
 }
 
+/* ---------------- Skip link ---------------- */
+/* Off-screen until focused, then parked top-left over the header. Uses a
+   solid ground rather than .glass: it has to stay legible over whatever
+   happens to be behind it, including the hero photograph. */
+
+.skip-link {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 200;
+  transform: translateY(-120%);
+  padding: 0.85rem 1.25rem;
+  background: var(--gilt);
+  color: var(--noir);
+  font-size: 0.9rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-decoration: none;
+  border-radius: 0 0 3px 0;
+}
+
+.skip-link:focus {
+  transform: translateY(0);
+  outline: 2px solid var(--ivory);
+  outline-offset: -4px;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .skip-link {
+    transition: transform 0.18s ease;
+  }
+}
+
+/* ---------------- Booking consent ---------------- */
+/* Sits directly above the submit button. Deliberately readable rather than
+   shrunk to legal-fine-print size: consent a client cannot read is not
+   meaningfully given. */
+
+.booking__consent {
+  margin: 1.5rem 0 0;
+  font-size: 0.82rem;
+  line-height: 1.6;
+  color: var(--taupe);
+  max-width: 62ch;
+}
+
+.booking__consent a {
+  color: var(--gilt);
+  text-decoration: underline;
+  text-underline-offset: 0.15em;
+}
+
+.booking__consent a:hover {
+  color: var(--gilt-soft);
+}
+
 /* ---------------- Meet Mirabelle ---------------- */
 /* The personal note in #about, between the section head and the four fact
    cards. Set in the quote face rather than the body face so it reads as her
