@@ -704,8 +704,12 @@ const PLACEHOLDERS = [
     "#words reviews card and the schema have no profile URL yet — add it, then quote real reviews with attribution",
   ],
   [
-    "Policy terms",
-    "public/policies.html, privacy.html and terms.html carry [BUSINESS OWNER MUST PROVIDE THIS INFORMATION] markers — deposit, cancellation, late and refund terms are unset",
+    "Business identity",
+    "terms.html still needs the legal entity name and structure, and the Virginia cosmetology/braiding licence — the two things a lender checks first",
+  ],
+  [
+    "Data retention",
+    "privacy.html does not say how long booking records are kept before deletion",
   ],
   ['"Sisterlocks" term', 'built as "microlocs" pending certification check'],
 ];
