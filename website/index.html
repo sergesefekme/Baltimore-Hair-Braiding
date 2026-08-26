@@ -3,24 +3,61 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Mirabelle.B — Premium Braiding Atelier in Ashburn, VA</title>
+    <title>Mirabelle.B — African Hair Braiding in Ashburn, VA</title>
     <meta
       name="description"
-      content="Mirabelle.B is a premium braiding atelier in Ashburn, VA. Braids, locs, wigs and sew-ins — with hair sourced and processed in-house. Crowned by hand."
+      content="African hair braiding in Ashburn, VA. Knotless braids, box braids, cornrows, locs, wigs and sew-ins. Appointments and walk-ins, Tue–Sat. Call 571-426-0602."
     />
     <meta name="theme-color" content="#100B09" />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="canonical" href="https://mimi-african-braiding-styling.com/" />
 
-    <!-- LocalBusiness schema. Address and phone are confirmed. Still omitted
-         rather than guessed: geo and priceRange. Wrong structured data
-         sends real customers to a wrong place and is worse than none. -->
+    <!-- Social sharing. Without these a shared link renders as a bare URL,
+         which reads as an abandoned site. og:image is the hero, which is a
+         real photograph of the work. -->
+    <meta property="og:type" content="business.business" />
+    <meta property="og:site_name" content="Mirabelle.B" />
+    <meta property="og:title" content="Mirabelle.B — African Hair Braiding in Ashburn, VA" />
+    <meta
+      property="og:description"
+      content="Professional African hair braiding in Ashburn, Virginia. Knotless braids, box braids, cornrows, locs, wigs and sew-ins. Crowned by hand."
+    />
+    <meta property="og:url" content="https://mimi-african-braiding-styling.com/" />
+    <meta
+      property="og:image"
+      content="https://mimi-african-braiding-styling.com/img/crowned-by-hand-hero.webp"
+    />
+    <meta property="og:image:alt" content="A stylist's hands parting and braiding a client's hair" />
+    <meta property="og:locale" content="en_US" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Mirabelle.B — African Hair Braiding in Ashburn, VA" />
+    <meta
+      name="twitter:description"
+      content="Professional African hair braiding in Ashburn, Virginia. Appointments and walk-ins, Tuesday to Saturday."
+    />
+    <meta
+      name="twitter:image"
+      content="https://mimi-african-braiding-styling.com/img/crowned-by-hand-hero.webp"
+    />
+
+    <!-- LocalBusiness schema. Address, phone and email are confirmed. Still
+         omitted rather than guessed: geo and priceRange. Wrong structured data
+         sends real customers to a wrong place and is worse than none.
+
+         aggregateRating is deliberately absent. There are no verified reviews
+         yet, and marking up ratings the business cannot evidence is a Google
+         structured-data violation that risks a manual action. Add it only
+         once the Google Business Profile carries real reviews. -->
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",
         "@type": "HairSalon",
         "name": "Mirabelle.B",
-        "description": "Premium African hair braiding — braids, locs, wigs and sew-ins.",
+        "description": "Professional African hair braiding in Ashburn, Virginia — knotless braids, box braids, cornrows, Fulani braids, locs, wigs and sew-ins.",
+        "url": "https://mimi-african-braiding-styling.com/",
+        "image": "https://mimi-african-braiding-styling.com/img/crowned-by-hand-hero.webp",
         "telephone": "+1-571-426-0602",
+        "email": "mirabellekamga4@gmail.com",
         "address": {
           "@type": "PostalAddress",
           "streetAddress": "44048 Lords Valley Ter",
@@ -29,7 +66,14 @@
           "postalCode": "20147",
           "addressCountry": "US"
         },
-        "areaServed": "Ashburn, Loudoun County, VA",
+        "areaServed": [
+          { "@type": "City", "name": "Ashburn" },
+          { "@type": "City", "name": "Sterling" },
+          { "@type": "City", "name": "Leesburg" },
+          { "@type": "City", "name": "Herndon" },
+          { "@type": "AdministrativeArea", "name": "Loudoun County, Virginia" },
+          { "@type": "AdministrativeArea", "name": "Northern Virginia" }
+        ],
         "openingHoursSpecification": [
           {
             "@type": "OpeningHoursSpecification",
@@ -105,6 +149,7 @@
       </a>
 
       <nav class="nav__links" aria-label="Primary">
+        <a href="#about">About</a>
         <a href="#impact">The Craft</a>
         <a href="#audience">Who We Serve</a>
         <a href="#specs">The Standard</a>
@@ -143,6 +188,7 @@
          close; Escape and any link close it. See setupMenu() in main.js. -->
     <div class="navmenu" id="nav-overlay" hidden>
       <nav class="navmenu__links" aria-label="Mobile">
+        <a href="#about">About</a>
         <a href="#impact">The Craft</a>
         <a href="#audience">Who We Serve</a>
         <a href="#specs">The Standard</a>
@@ -201,19 +247,88 @@
 
               <p class="hero__slogan">Crowned by hand.</p>
 
+              <!-- The wordmark alone does not tell a first-time visitor what
+                   this is or where it is, and on a phone the hero is the whole
+                   first screen. This line is the plain-language answer. -->
+              <p class="hero__where">
+                African hair braiding in Ashburn, Virginia · Knotless braids,
+                box braids, cornrows, locs &amp; sew-ins · Tuesday to Saturday
+              </p>
+
               <div class="hero__cta">
                 <a class="glass-btn glass-btn--primary" href="#book">Book Your Appointment</a>
-                <a class="glass-btn" href="#materials">See the Craft</a>
+                <a class="glass-btn" href="tel:+15714260602">Call 571-426-0602</a>
+                <a class="glass-btn hero__cta-craft" href="#materials">See the Craft</a>
               </div>
             </div>
           </div>
         </div>
       </section>
 
+
+      <!-- ---------- 1b. ABOUT ---------- -->
+      <!-- Everything asserted here is either visible in the work or already
+           stated elsewhere on this page. The bracketed lines are the facts
+           only the owner can confirm — years, training, team. Do not fill
+           them in with plausible-sounding guesses: an underwriter checking a
+           claim that turns out invented is worse than a gap. -->
+      <section class="section materials" id="about">
+        <div class="materials__head">
+          <p class="eyebrow reveal">01 — Who We Are</p>
+          <h2 class="section-head reveal">Mirabelle.B, in Ashburn</h2>
+          <p class="lede reveal">
+            A braiding atelier in Loudoun County, working in braids, locs and
+            microlocs, wigs and sew-ins. One chair, one standard, and a finish
+            time we tell you before you sit down.
+          </p>
+        </div>
+
+        <div class="materials__grid">
+          <article class="mat-card glass reveal">
+            <span class="mat-card__idx">01</span>
+            <h3>The hands</h3>
+            <p>
+              Mirabelle braids every head herself.
+              [ADD YEARS OF BRAIDING EXPERIENCE] years at it, and
+              [ADD WHERE MIRABELLE TRAINED OR LEARNED TO BRAID].
+            </p>
+          </article>
+
+          <article class="mat-card glass reveal">
+            <span class="mat-card__idx">02</span>
+            <h3>Protective work first</h3>
+            <p>
+              Braids, cornrows, twists and locs are load-bearing, not
+              decorative. Tension is set at the scalp, parts are measured, and
+              nothing is installed tighter than your hairline can carry.
+            </p>
+          </article>
+
+          <article class="mat-card glass reveal">
+            <span class="mat-card__idx">03</span>
+            <h3>A clean chair</h3>
+            <p>
+              Tools are cleaned between clients and the station is reset for
+              every appointment. Children and tender-headed clients are told
+              what is happening before it happens.
+            </p>
+          </article>
+
+          <article class="mat-card glass reveal">
+            <span class="mat-card__idx">04</span>
+            <h3>Who we serve</h3>
+            <p>
+              Ashburn, Sterling, Leesburg, Herndon and the wider Northern
+              Virginia area. Appointments and walk-ins, Tuesday to Saturday.
+            </p>
+          </article>
+        </div>
+      </section>
+
       <!-- ---------- 2. OUR PROMISE ---------- -->
       <section class="section impact" id="impact">
         <div class="impact__head">
-          <p class="eyebrow reveal">01 — Our Promise</p>
+          <p class="eyebrow reveal">02 — Our Promise</p>
         </div>
 
         <div class="patterns" id="patterns">
@@ -368,7 +483,7 @@
       <!-- ---------- 3. DESIGN & MATERIALS ---------- -->
       <section class="section materials" id="materials">
         <div class="materials__head">
-          <p class="eyebrow reveal">02 — Design &amp; Materials</p>
+          <p class="eyebrow reveal">03 — Design &amp; Materials</p>
           <h2 class="section-head reveal">What the work is actually made of</h2>
         </div>
 
@@ -415,7 +530,7 @@
       <!-- ---------- 4. STYLE GALLERY ---------- -->
       <section class="section styles" id="styles">
         <div class="styles__head">
-          <p class="eyebrow reveal">03 — Our Work</p>
+          <p class="eyebrow reveal">04 — Our Work</p>
           <h2 class="section-head reveal">The work itself</h2>
           <p class="lede reveal">
             Every install is matched to your own texture, not approximated to
@@ -505,7 +620,7 @@
       <section class="section workflow" id="audience">
         <div class="workflow__pin">
           <div class="workflow__head">
-            <p class="eyebrow">04 — Who We Serve</p>
+            <p class="eyebrow">05 — Who We Serve</p>
             <h2 class="section-head">Built around how you actually live</h2>
           </div>
 
@@ -571,7 +686,7 @@
       <!-- ---------- 6. SPECS / THE STANDARD ---------- -->
       <section class="section specs" id="specs">
         <div class="specs__head">
-          <p class="eyebrow reveal">05 — The Standard</p>
+          <p class="eyebrow reveal">06 — The Standard</p>
           <h2 class="section-head reveal">Five dimensions, every service</h2>
           <p class="lede reveal">
             Every appointment is measured against the same five things. No
@@ -666,89 +781,81 @@
         </div>
       </section>
 
-      <!-- ---------- 7. TESTIMONIALS ---------- -->
-      <!-- PLACEHOLDER COPY. These five are written samples showing the shape
-           and voice a review should have — one per audience segment from
-           brand-kit.md §5. They are NOT real reviews and must be replaced
-           with genuine, attributed ones before launch: the kit's trust
-           requirements call for "Google reviews embedded or quoted with
-           attribution", and invented testimonials on a commercial page are
-           a legal exposure as well as a credibility one. Tracked in
-           PLACEHOLDERS (main.js) and README → Placeholder content. -->
+      <!-- ---------- 7. TRUST ---------- -->
+      <!-- The five testimonials that stood here were written samples with
+           invented client names and invented 5-star ratings. They were never
+           real reviews. Removed 2026-08-26 — fabricated testimonials on a
+           commercial page are an FTC exposure (16 CFR 465) as well as a
+           credibility one, and they are exactly what a lender's underwriter
+           checks first.
+
+           DO NOT re-add quotes that a client did not actually write. To put
+           real reviews here, collect them through the Google Business Profile
+           and quote them with the reviewer's own words and first name. The
+           slot below is built for that and is honest while it is empty. -->
       <section class="section words" id="words">
         <div class="words__head">
-          <p class="eyebrow reveal">06 — In Their Words</p>
-          <h2 class="section-head reveal">Five stars, five different reasons</h2>
+          <p class="eyebrow reveal">07 — Why Clients Stay</p>
+          <h2 class="section-head reveal">What you can hold us to</h2>
           <p class="lede reveal">
-            The people who book us are not all buying the same thing. These are
-            the five who keep coming back, and what each of them came for.
+            We would rather show you the standard than quote ourselves. These
+            are commitments, not compliments — and every one of them is
+            checkable on the day.
           </p>
         </div>
 
         <div class="words__grid">
           <figure class="quote glass reveal">
-            <p class="quote__tag">The Professional</p>
-            <span class="stars" role="img" aria-label="Rated 5 out of 5">
-              <span aria-hidden="true">★★★★★</span>
-            </span>
-            <blockquote class="quote__head">Quoted five hours. Took five hours.</blockquote>
-            <p class="quote__body">Punctuality matters when you work full time. Mirabelle told me the real number when I booked, started on time, and I was out when she said I would be. Six weeks later the parts are still clean and my edges never moved.</p>
-            <figcaption class="quote__by">
-              <span class="quote__name">Danielle R.</span>
-              <span class="quote__meta">Mirabelle<span class="quote__dot">.</span>B</span>
-            </figcaption>
+            <p class="quote__tag">The quote</p>
+            <blockquote class="quote__head">The price is agreed before you sit down.</blockquote>
+            <p class="quote__body">
+              You are told the real number when you book, not when you stand up
+              to pay. If your hair changes what the work takes, we say so before
+              we start it.
+            </p>
           </figure>
 
           <figure class="quote glass reveal">
-            <p class="quote__tag">The Loc Journey</p>
-            <span class="stars" role="img" aria-label="Rated 5 out of 5">
-              <span aria-hidden="true">★★★★★</span>
-            </span>
-            <blockquote class="quote__head">Year three and the same hands.</blockquote>
-            <p class="quote__body">I came in three years into my locs and braced for someone to tell me they all had to be redone. She read them, told me exactly what was salvageable, and has maintained them ever since. That continuity is the whole thing.</p>
-            <figcaption class="quote__by">
-              <span class="quote__name">Adaeze O.</span>
-              <span class="quote__meta">Mirabelle<span class="quote__dot">.</span>B</span>
-            </figcaption>
+            <p class="quote__tag">The clock</p>
+            <blockquote class="quote__head">The finish time is honest.</blockquote>
+            <p class="quote__body">
+              A full head runs five to eight hours depending on the style. We
+              tell you which when you book, and we start when we said we would.
+            </p>
           </figure>
 
           <figure class="quote glass reveal">
-            <p class="quote__tag">The Wig Client</p>
-            <span class="stars" role="img" aria-label="Rated 5 out of 5">
-              <span aria-hidden="true">★★★★★</span>
-            </span>
-            <blockquote class="quote__head">It does not look like a unit.</blockquote>
-            <p class="quote__body">I had never worn a unit that did not end up hidden under a headwrap. This one was measured to my head, the density matches my own hair, and the hairline is genuinely believable. My coworkers thought I had done a big chop.</p>
-            <figcaption class="quote__by">
-              <span class="quote__name">Simone T.</span>
-              <span class="quote__meta">Mirabelle<span class="quote__dot">.</span>B</span>
-            </figcaption>
+            <p class="quote__tag">The scalp</p>
+            <blockquote class="quote__head">Nothing is installed too tight.</blockquote>
+            <p class="quote__body">
+              Tension is set so your edges survive the style. If you tell us it
+              hurts, we take it down and reset it — that is the job, not a
+              favor.
+            </p>
           </figure>
 
           <figure class="quote glass reveal">
-            <p class="quote__tag">The Bride & Event</p>
-            <span class="stars" role="img" aria-label="Rated 5 out of 5">
-              <span aria-hidden="true">★★★★★</span>
-            </span>
-            <blockquote class="quote__head">She built the timeline around the day.</blockquote>
-            <p class="quote__body">Trial six weeks out, a written finish time for the morning of, and she was packed and gone before the photographer arrived. I did not think about my hair once. On a wedding day that is worth more than the style.</p>
-            <figcaption class="quote__by">
-              <span class="quote__name">Kayla B.</span>
-              <span class="quote__meta">Mirabelle<span class="quote__dot">.</span>B</span>
-            </figcaption>
+            <p class="quote__tag">The aftercare</p>
+            <blockquote class="quote__head">You leave knowing how to keep it.</blockquote>
+            <p class="quote__body">
+              A printed care card goes home with every install, and we message
+              you at the one-week mark to check the scalp has settled.
+            </p>
           </figure>
 
-          <figure class="quote glass reveal">
-            <p class="quote__tag">Mothers & Daughters</p>
-            <span class="stars" role="img" aria-label="Rated 5 out of 5">
-              <span aria-hidden="true">★★★★★</span>
-            </span>
-            <blockquote class="quote__head">My daughter did not cry once.</blockquote>
-            <p class="quote__body">She is nine and has a history with tight braids. Mirabelle showed her every section before she touched it and checked in the whole time. Loose, comfortable, and her scalp was calm that night. I have since booked myself.</p>
-            <figcaption class="quote__by">
-              <span class="quote__name">Renée W.</span>
-              <span class="quote__meta">Mirabelle<span class="quote__dot">.</span>B</span>
-            </figcaption>
+          <!-- REAL REVIEWS GO HERE.
+               [BUSINESS OWNER MUST PROVIDE THIS INFORMATION] — the Google
+               Business Profile URL. Once it exists, replace this card with
+               genuine quoted reviews (reviewer's own words, first name and
+               last initial) and link the profile so anyone can verify them. -->
+          <figure class="quote glass quote--cta reveal">
+            <p class="quote__tag">Reviews</p>
+            <blockquote class="quote__head">Read them in the client's own words.</blockquote>
+            <p class="quote__body">
+              Our reviews live on our Google Business Profile, where they are
+              written by verified clients and cannot be edited by us. If we have
+              braided your hair, leaving one is the kindest thing you can do.
+            </p>
           </figure>
         </div>
       </section>
@@ -756,7 +863,7 @@
       <!-- ---------- 8. BOOKING CTA ---------- -->
       <section class="section buy" id="book">
         <div class="buy__panel glass reveal">
-          <p class="eyebrow">07 — Reserve Your Chair</p>
+          <p class="eyebrow">08 — Reserve Your Chair</p>
           <h2 class="buy__title">Book the appointment</h2>
 
           <p class="buy__note">
@@ -882,11 +989,11 @@
            data starts lying to Google about a real address. -->
       <section class="section visit" id="visit">
         <div class="visit__head">
-          <p class="eyebrow reveal">08 &mdash; Visit Us</p>
+          <p class="eyebrow reveal">09 &mdash; Visit Us</p>
           <h2 class="section-head reveal">Where to find us</h2>
           <p class="lede reveal">
             We take booked appointments and walk-ins, and the standard is the
-            same either way. Call ahead if you are travelling in &mdash; it
+            same either way. Call ahead if you are traveling in &mdash; it
             guarantees your stylist and your start time.
           </p>
         </div>
@@ -908,6 +1015,10 @@
                 rel="noopener"
                 >Get Directions</a
               >
+            </p>
+            <p class="visit__line icon-row">
+              <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 5h18v14H3z"/><path d="m3 6 9 7 9-7"/></svg>
+              <a href="mailto:mirabellekamga4@gmail.com">mirabellekamga4@gmail.com</a>
             </p>
           </div>
 
@@ -955,6 +1066,10 @@
             <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 16.4v2.6a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 1.1 3.2 2 2 0 0 1 3.1 1h2.6a2 2 0 0 1 2 1.7c.1 1 .4 1.9.7 2.8a2 2 0 0 1-.4 2.1L6.9 8.7a16 16 0 0 0 6 6l1.1-1.1a2 2 0 0 1 2.1-.5c.9.3 1.8.6 2.8.7a2 2 0 0 1 1.7 2z"/></svg>
             <a href="tel:+15714260602">571-426-0602</a>
           </p>
+          <p class="icon-row">
+            <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 5h18v14H3z"/><path d="m3 6 9 7 9-7"/></svg>
+            <a href="mailto:mirabellekamga4@gmail.com">mirabellekamga4@gmail.com</a>
+          </p>
         </div>
         <div>
           <p class="footer__label">Services</p>
@@ -966,6 +1081,12 @@
           <p>Tue–Sat · 10am–6pm</p>
           <p>Walk-ins welcome</p>
           <p>Private consultations available</p>
+        </div>
+        <div>
+          <p class="footer__label">Policies</p>
+          <p><a href="/policies.html">Booking &amp; Cancellation</a></p>
+          <p><a href="/privacy.html">Privacy Policy</a></p>
+          <p><a href="/terms.html">Terms &amp; Conditions</a></p>
         </div>
       </div>
 

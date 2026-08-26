@@ -188,17 +188,33 @@ placeholders in the markup:
 
 | What | Where | Note |
 |---|---|---|
-| Service pricing | `#specs`, `#book` | Brand kit §3 placeholder ranges |
-| Discount offers | `#offers` | 20% first-visit and 30% weekday-morning terms are invented — confirm eligibility, exclusions and the off-peak window |
-| Address | footer | "Baltimore, Maryland" only |
-| Hours | footer | Generic |
-| Booking flow | `#book` CTA links to `#book` | Needs a real booking system |
-| Gallery | — | No gallery section; needs real client photos with permission |
-| Reviews | `#words` | Five **written samples**, not real reviews. Brand kit requires real, attributed ones (Google reviews quoted with attribution) before launch |
+| Service pricing | `#specs`, `#book` | No prices are published. The page states the price is agreed before the appointment, which is true — publish real numbers only when they are settled |
+| Google Business Profile | `#words`, `<head>` schema | The reviews card has no profile URL, and the schema carries no `aggregateRating` because there are no verified reviews. Add the URL, then quote real reviews with attribution |
+| Owner background | `#about` | `[ADD YEARS OF BRAIDING EXPERIENCE]` and `[ADD WHERE MIRABELLE TRAINED OR LEARNED TO BRAID]` |
+| Policy terms | `public/policies.html`, `privacy.html`, `terms.html` | Deposit amount, cancellation notice and fee, late grace period, refund window, retention period and legal entity are all marked `[BUSINESS OWNER MUST PROVIDE THIS INFORMATION]` |
+| Legal review | `public/terms.html` | Limitation of liability deliberately left to a Virginia attorney rather than copied from a template |
+
+**Resolved 2026-08-26.** The `#words` section previously held five written
+sample testimonials with invented client names and invented 5-star ratings.
+They were never real reviews and have been removed — fabricated testimonials
+are an FTC exposure (16 CFR 465) as well as a credibility one. The section now
+states checkable commitments and holds a slot for genuine Google reviews. Do
+not reintroduce quotes a client did not write.
 
 Two brand-level items still need your decision before launch: the meaning of
 **"5D"** (this build uses the proposed five dimensions) and the
 **"Sisterlocks"** trademark question (this build says "microlocs").
+
+## Standalone pages
+
+`public/` holds four files that are copied into the build verbatim rather than
+processed by Vite: `policies.html`, `privacy.html`, `terms.html` and the
+`legal.css` they share. They are deliberately outside the bundle so that adding
+them could not disturb the single-page build or the booking form. `legal.css`
+copies the palette tokens from `src/style.css` — if the brand colours change
+there, mirror them.
+
+`robots.txt` and `sitemap.xml` also live in `public/` and list all four pages.
 
 ---
 

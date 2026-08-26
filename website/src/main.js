@@ -700,8 +700,16 @@ function setupYear() {
 
 const PLACEHOLDERS = [
   [
-    "Client testimonials",
-    "#words holds five WRITTEN SAMPLES, not real reviews — replace with genuine, attributed ones before launch",
+    "Google Business Profile",
+    "#words reviews card and the schema have no profile URL yet — add it, then quote real reviews with attribution",
+  ],
+  [
+    "Policy terms",
+    "public/policies.html, privacy.html and terms.html carry [BUSINESS OWNER MUST PROVIDE THIS INFORMATION] markers — deposit, cancellation, late and refund terms are unset",
+  ],
+  [
+    "About section",
+    "#about has [ADD YEARS OF BRAIDING EXPERIENCE] and [ADD WHERE MIRABELLE TRAINED OR LEARNED TO BRAID]",
   ],
   ['"Sisterlocks" term', 'built as "microlocs" pending certification check'],
 ];

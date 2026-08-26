@@ -1,0 +1,5 @@
+# Mirabelle.B — https://mimi-african-braiding-styling.com/
+User-agent: *
+Allow: /
+
+Sitemap: https://mimi-african-braiding-styling.com/sitemap.xml

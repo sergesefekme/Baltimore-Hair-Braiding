@@ -1,0 +1,170 @@
+/* ---------------------------------------------------------------
+   Shared stylesheet for the standalone legal pages.
+
+   These pages live in public/ and are copied to the build verbatim,
+   so they carry their own CSS rather than importing the Vite bundle.
+   Tokens are copied from src/style.css §:root — if the brand palette
+   changes there, mirror it here.
+   --------------------------------------------------------------- */
+
+:root {
+  --noir: #100b09;
+  --espresso: #1a1310;
+  --mahogany: #3b241d;
+  --ivory: #f6efe7;
+  --sand: #d6c4b2;
+  --taupe: #9a8778;
+  --gilt: #d2a24c;
+  --gilt-soft: #e8c888;
+  --font: "Manrope", system-ui, -apple-system, sans-serif;
+  --font-head: "Fraunces", Georgia, "Times New Roman", serif;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--noir);
+  color: var(--sand);
+  font-family: var(--font);
+  font-size: 1rem;
+  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+}
+
+.wrap {
+  max-width: 46rem;
+  margin: 0 auto;
+  padding: clamp(2rem, 6vw, 5rem) clamp(1.25rem, 5vw, 2rem) 6rem;
+}
+
+/* --- Masthead --- */
+
+.mast {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid var(--mahogany);
+  margin-bottom: clamp(2rem, 5vw, 3.5rem);
+}
+
+.mast__word {
+  font-family: var(--font-head);
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--ivory);
+  text-decoration: none;
+  letter-spacing: 0.01em;
+}
+
+.mast__dot { color: var(--gilt); }
+
+.mast__back {
+  font-size: 0.85rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--taupe);
+  text-decoration: none;
+}
+
+.mast__back:hover { color: var(--gilt); }
+
+/* --- Type --- */
+
+h1 {
+  font-family: var(--font-head);
+  font-size: clamp(1.9rem, 5vw, 2.9rem);
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: -0.015em;
+  color: var(--ivory);
+  margin: 0 0 0.75rem;
+}
+
+h2 {
+  font-family: var(--font-head);
+  font-size: clamp(1.2rem, 2.6vw, 1.5rem);
+  font-weight: 600;
+  line-height: 1.25;
+  color: var(--ivory);
+  margin: 3rem 0 0.85rem;
+  scroll-margin-top: 1.5rem;
+}
+
+h3 {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--ivory);
+  margin: 1.75rem 0 0.5rem;
+}
+
+p, li { margin: 0 0 1rem; }
+ul { padding-left: 1.15rem; }
+li { margin-bottom: 0.5rem; }
+
+a { color: var(--gilt); }
+a:hover { color: var(--gilt-soft); }
+
+.updated {
+  font-size: 0.85rem;
+  color: var(--taupe);
+  margin-bottom: 2.5rem;
+}
+
+.lede {
+  font-size: 1.08rem;
+  color: var(--sand);
+  margin-bottom: 2rem;
+}
+
+/* --- Table of contents --- */
+
+.toc {
+  background: var(--espresso);
+  border: 1px solid var(--mahogany);
+  border-radius: 3px;
+  padding: 1.25rem 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.toc p {
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--taupe);
+  margin: 0 0 0.75rem;
+}
+
+.toc ul { margin: 0; padding-left: 1.1rem; }
+.toc li { margin-bottom: 0.35rem; }
+
+/* --- The owner-input marker ---
+   Deliberately loud. These are unresolved business terms, not decoration,
+   and they must be impossible to publish by accident. */
+
+.todo {
+  display: block;
+  background: rgba(168, 84, 54, 0.16);
+  border-left: 3px solid var(--gilt);
+  padding: 0.85rem 1.1rem;
+  margin: 0 0 1rem;
+  font-size: 0.92rem;
+  color: var(--gilt-soft);
+}
+
+/* --- Footer --- */
+
+.legal-foot {
+  margin-top: 4rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--mahogany);
+  font-size: 0.85rem;
+  color: var(--taupe);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1.5rem;
+}
