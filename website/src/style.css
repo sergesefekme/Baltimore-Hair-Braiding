@@ -848,6 +848,50 @@ body.is-menu-open {
   text-shadow: 0 1px 10px rgba(16, 11, 9, 0.9), 0 0 3px rgba(16, 11, 9, 0.75);
 }
 
+/* ---------------- Meet Mirabelle ---------------- */
+/* The personal note in #about, between the section head and the four fact
+   cards. Set in the quote face rather than the body face so it reads as her
+   voice and not as another card of specifications. */
+
+.meet {
+  max-width: 62ch;
+  margin: 0 0 clamp(2.5rem, 5vw, 3.5rem);
+  padding-left: clamp(1rem, 2.5vw, 1.75rem);
+  border-left: 2px solid var(--gilt);
+}
+
+.meet__title {
+  font-family: var(--font-head);
+  font-variation-settings: "SOFT" 40, "WONK" 1;
+  font-size: clamp(1.35rem, 2.6vw, 1.75rem);
+  font-weight: 600;
+  line-height: 1.15;
+  letter-spacing: -0.012em;
+  color: var(--text);
+  margin: 0 0 1rem;
+}
+
+.meet p {
+  margin: 0 0 1rem;
+  color: var(--muted);
+  line-height: 1.7;
+}
+
+.meet p:last-child {
+  margin-bottom: 0;
+}
+
+/* The opening paragraph carries the sentiment, so it is set larger and in
+   the italic quote face; the second returns to body size for the practical
+   half. */
+.meet__lead {
+  font-family: var(--font-quote);
+  font-style: italic;
+  font-size: clamp(1.15rem, 2vw, 1.4rem);
+  line-height: 1.5 !important;
+  color: var(--sand);
+}
+
 /* What the salon does and where, directly under the slogan. Sized between
    the slogan and body text so it reads as a subtitle, not a paragraph. */
 .hero__where {
