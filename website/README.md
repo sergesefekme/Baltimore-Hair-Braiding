@@ -190,7 +190,6 @@ placeholders in the markup:
 |---|---|---|
 | Service pricing | `#specs`, `#book` | No prices are published. The page states the price is agreed before the appointment, which is true — publish real numbers only when they are settled |
 | Google Business Profile | `#words`, `<head>` schema | The reviews card has no profile URL, and the schema carries no `aggregateRating` because there are no verified reviews. Add the URL, then quote real reviews with attribution |
-| Owner background | `#about` | `[ADD YEARS OF BRAIDING EXPERIENCE]` and `[ADD WHERE MIRABELLE TRAINED OR LEARNED TO BRAID]` |
 | Policy terms | `public/policies.html`, `privacy.html`, `terms.html` | Deposit amount, cancellation notice and fee, late grace period, refund window, retention period and legal entity are all marked `[BUSINESS OWNER MUST PROVIDE THIS INFORMATION]` |
 | Legal review | `public/terms.html` | Limitation of liability deliberately left to a Virginia attorney rather than copied from a template |
 

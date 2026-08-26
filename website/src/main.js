@@ -707,10 +707,6 @@ const PLACEHOLDERS = [
     "Policy terms",
     "public/policies.html, privacy.html and terms.html carry [BUSINESS OWNER MUST PROVIDE THIS INFORMATION] markers — deposit, cancellation, late and refund terms are unset",
   ],
-  [
-    "About section",
-    "#about has [ADD YEARS OF BRAIDING EXPERIENCE] and [ADD WHERE MIRABELLE TRAINED OR LEARNED TO BRAID]",
-  ],
   ['"Sisterlocks" term', 'built as "microlocs" pending certification check'],
 ];
 
