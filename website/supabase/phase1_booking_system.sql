@@ -1,0 +1,85 @@
+-- ===========================================================================
+-- Phase 1 — services catalogue + booking_requests extension
+-- APPLIED to project mirabelle-b-booking (dqglhppksyhekaflnyop) 2026-08-26
+-- ===========================================================================
+--
+-- Applied as five migrations in this order:
+--   phase1_services_table
+--   phase1_seed_services
+--   phase1_extend_booking_requests
+--   phase1_status_vocabulary
+--   phase1_appointments_view
+--
+-- ADDITIVE. Nothing was dropped or renamed. booking_requests keeps its name
+-- and every existing column, so the deployed site, the after-insert trigger
+-- (notify_trigger.sql) and the notify-booking function all kept working
+-- through the migration without a redeploy. Verified after applying:
+--   - all 3 existing rows intact
+--   - anon SELECT on booking_requests returns []
+--   - anon SELECT on the new appointments view returns []
+--   - anon INSERT still returns 201
+--
+-- The full statements are recorded in the Supabase migration history. This
+-- file documents the decisions behind them.
+--
+-- ---------------------------------------------------------------------------
+-- services
+-- ---------------------------------------------------------------------------
+-- anon may SELECT where active=true, because name/price/duration are already
+-- printed on the public site. No write policy: seeding is service_role only.
+--
+-- starting_price is NULL for the five styles the site publishes no figure for
+-- (Fulani, Kids', Braided Updo, Half Up Half Down, Goddess). The form must
+-- keep saying "Price agreed when you book" for those. DO NOT populate these
+-- with an estimate — a published price the salon has not agreed to is the
+-- same class of problem as the testimonials removed on 2026-08-26.
+--
+-- 13 rows seeded: the 9 work-card styles plus loc maintenance, starter locs,
+-- custom wig and sew-in, all of which appear in the site's price table.
+--
+-- ---------------------------------------------------------------------------
+-- booking_requests, new columns
+-- ---------------------------------------------------------------------------
+--   service_id                     -> services(id), nullable; the live site
+--                                     still posts free-text `style`
+--   appointment_date/_time         the slot the SALON agrees, kept separate
+--                                  from preferred_date/preferred_time so a
+--                                  reschedule never destroys the original ask
+--   source, utm_*, landing_page,
+--   referrer                       cookie-free attribution, read from the URL
+--   updated_at, confirmed_at,
+--   completed_at, cancelled_at     status timeline
+--   reminder_sent_at,
+--   review_request_sent_at         idempotency guards — a scheduled job MUST
+--                                  check these or a retry mails twice
+--   quoted_price                   set at confirmation, for revenue reporting
+--
+-- The attribution fields arrive from a URL and are attacker-controlled, so
+-- booking_requests_attrib_len bounds every one of them.
+--
+-- ---------------------------------------------------------------------------
+-- status vocabulary
+-- ---------------------------------------------------------------------------
+-- new|confirmed|declined|done  ->  pending|confirmed|completed|cancelled|no_show
+--
+-- Both sets remain valid in the CHECK constraint. The deployed site never
+-- writes status (it relies on the default), so widening first and mapping
+-- second meant nothing could fail mid-deploy. Existing rows were renamed in
+-- place: new->pending, done->completed, declined->cancelled. No row was
+-- deleted and no row changed meaning. Default is now 'pending'.
+--
+-- booking_requests_touch keeps updated_at correct without the application
+-- having to remember.
+--
+-- ---------------------------------------------------------------------------
+-- appointments view
+-- ---------------------------------------------------------------------------
+-- WITH (security_invoker = true) is load-bearing. Without it the view runs
+-- with the definer's rights and would hand anon every customer's name and
+-- phone through PostgREST, defeating the RLS on the table underneath. With
+-- it, the view inherits the table's policies exactly.
+--
+-- Verify after any change to this view:
+--   curl "$SUPABASE_URL/rest/v1/appointments?select=customer_name,phone" \
+--        -H "apikey: <publishable key>"
+--   -> must return []
