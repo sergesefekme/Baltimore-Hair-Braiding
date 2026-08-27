@@ -152,6 +152,39 @@ async function send(payload) {
   return { mode: "stored" };
 }
 
+/* Landing pages link to /?service=<slug>#book. Mapped explicitly rather than
+   slugifying the option text: the cornrows page is /cornrows but its option
+   reads "Cornrows / Stitch Braids", so a naive slugify would miss it and the
+   visitor would land on an unset dropdown having already told us what they
+   wanted. */
+const SERVICE_SLUGS = {
+  "knotless-braids": "Knotless Braids",
+  "box-braids": "Box Braids",
+  "cornrows": "Cornrows / Stitch Braids",
+  "cornrows-stitch-braids": "Cornrows / Stitch Braids",
+  "fulani-braids": "Fulani Braids",
+  "feed-in-braids": "Feed-In Braids",
+  "kids-braids": "Kids’ Braids",
+  "braided-updo": "Braided Updo",
+  "half-up-half-down": "Half Up Half Down",
+  "goddess-braids": "Goddess Braids",
+};
+
+/** Preselects the style when the visitor arrived from a service page. */
+function preselectService(form) {
+  const slug = new URLSearchParams(location.search).get("service");
+  if (!slug) return;
+
+  const wanted = SERVICE_SLUGS[slug.toLowerCase()];
+  if (!wanted) return;
+
+  const select = form.elements["style"];
+  if (!select) return;
+
+  const match = [...select.options].find((o) => o.text === wanted);
+  if (match) select.value = match.value || match.text;
+}
+
 export function setupBooking() {
   // Runs even when the form is absent, so a service landing page still records
   // where the visitor came from before they navigate to book.
@@ -171,6 +204,8 @@ export function setupBooking() {
 
   // Stops the picker offering dates that validate() would only reject.
   if (date) date.min = todayLocal();
+
+  preselectService(form);
 
   // Clear a field's error as soon as the visitor starts fixing it.
   form.addEventListener("input", (e) => {
