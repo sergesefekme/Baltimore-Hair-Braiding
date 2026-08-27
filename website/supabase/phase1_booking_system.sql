@@ -150,3 +150,66 @@
 -- Verify afterwards: sign in at /admin.html and confirm the pending queue
 -- lists real bookings. If it is empty but bookings exist, the admins row is
 -- missing.
+
+
+-- ===========================================================================
+-- Phase 5 — reminders and review requests
+-- APPLIED 2026-08-26
+-- ===========================================================================
+--
+--   phase5_settings
+--   phase5_scheduled_jobs      (+ Edge Function send-scheduled)
+--
+-- Two pg_cron jobs, both daily, times in UTC:
+--   mirabelle-reminders  0 14 * * *   24h-before reminder
+--   mirabelle-reviews   15 14 * * *   review request, 24-48h after completion
+--
+-- 14:00 UTC is 10am Eastern in summer and 9am in winter - a civil hour to
+-- receive either message in both.
+--
+-- ---------------------------------------------------------------------------
+-- Why selection is in SQL and rendering is in the function
+-- ---------------------------------------------------------------------------
+-- The sent-at column is stamped in the SAME statement that queues the send.
+-- The guard and the send therefore cannot drift apart, which is the usual way
+-- a reminder system starts mailing people twice.
+--
+-- The consequence, deliberately chosen: if Resend later rejects the mail, the
+-- row is already stamped and will NOT retry. One client misses one email,
+-- which is recoverable by hand. The alternative - stamp after a confirmed
+-- send - re-sends on every tick if the process dies in between, and a client
+-- receiving the same reminder five times is the failure people actually
+-- notice. To re-send one deliberately, null the column.
+--
+-- `for update skip locked` so two overlapping runs cannot claim the same row.
+--
+-- ---------------------------------------------------------------------------
+-- Tomorrow, in whose timezone
+-- ---------------------------------------------------------------------------
+-- Reminders compare against (now() at time zone 'America/New_York')::date + 1,
+-- not a UTC date. With UTC, an evening appointment would be reminded a day
+-- early for part of the year.
+--
+-- ---------------------------------------------------------------------------
+-- The review URL
+-- ---------------------------------------------------------------------------
+-- Held in public.settings, not in code, so it can be set without a deploy.
+-- While it is null send_review_requests() returns 0 and sends NOTHING: an
+-- email asking for a review that leads nowhere spends goodwill and earns no
+-- review. To switch it on:
+--
+--   update public.settings
+--   set value = 'https://g.page/r/YOUR_ID/review'
+--   where key = 'google_review_url';
+--
+-- completed_at also has a 14-day upper bound, so switching the URL on later
+-- cannot mail every client the salon has ever served, all at once.
+--
+-- ---------------------------------------------------------------------------
+-- Verified on apply
+-- ---------------------------------------------------------------------------
+--   review job with no URL           -> 0 sent
+--   one confirmed appointment due    -> 1 sent, HTTP 200 "ok"
+--   second and third run             -> 0 sent (already stamped)
+--   same row set to cancelled        -> 0 sent
+--   total outbound calls in the test -> exactly 2, none of them duplicates
