@@ -15,6 +15,8 @@
    next to the rest of the page.
    --------------------------------------------------------- */
 
+import { attributionPayload, captureAttribution } from "./attribution.js";
+
 const URL_BASE = import.meta.env.VITE_SUPABASE_URL;
 const ANON_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY;
 const TABLE = "booking_requests";
@@ -151,6 +153,10 @@ async function send(payload) {
 }
 
 export function setupBooking() {
+  // Runs even when the form is absent, so a service landing page still records
+  // where the visitor came from before they navigate to book.
+  captureAttribution();
+
   const form = document.querySelector("#booking-form");
   if (!form) return;
 
@@ -210,6 +216,9 @@ export function setupBooking() {
         preferred_date: get("preferred_date"),
         preferred_time: get("preferred_time"),
         notes: get("notes"),
+        // Which ad, post or search produced this booking. Read on landing,
+        // held for the tab. See attribution.js.
+        ...attributionPayload(),
       });
 
       form.classList.add("is-sent");
