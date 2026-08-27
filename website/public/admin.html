@@ -1,0 +1,297 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Appointments — Mirabelle.B</title>
+    <!-- Staff tool, not a page for customers or search engines. -->
+    <meta name="robots" content="noindex, nofollow" />
+    <meta name="theme-color" content="#100B09" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Manrope:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      /* Brand tokens copied from src/style.css :root. This page is outside the
+         Vite bundle, so it cannot import them. Mirror any palette change. */
+      :root {
+        --noir: #100b09;
+        --espresso: #1a1310;
+        --umber: #241a16;
+        --mahogany: #3b241d;
+        --ivory: #f6efe7;
+        --sand: #d6c4b2;
+        --taupe: #9a8778;
+        --gilt: #d2a24c;
+        --gilt-deep: #a87c33;
+        --gilt-soft: #e8c888;
+        --henna: #a85436;
+        --ok: #7f9c5c;
+        --font: "Manrope", system-ui, -apple-system, sans-serif;
+        --font-head: "Fraunces", Georgia, serif;
+      }
+
+      * { box-sizing: border-box; }
+
+      body {
+        margin: 0;
+        background: var(--noir);
+        color: var(--sand);
+        font-family: var(--font);
+        font-size: 16px;
+        line-height: 1.55;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      #app {
+        max-width: 60rem;
+        margin: 0 auto;
+        padding: clamp(1rem, 3vw, 2rem) clamp(0.9rem, 3vw, 1.5rem) 5rem;
+      }
+
+      /* ---------- top bar ---------- */
+      .bar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid var(--mahogany);
+        margin-bottom: 1.5rem;
+      }
+      .bar__who { font-size: 0.85rem; color: var(--taupe); }
+
+      /* ---------- stats ---------- */
+      .stats {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+        gap: 0.7rem;
+        margin-bottom: 2rem;
+      }
+      .stat {
+        background: var(--espresso);
+        border: 1px solid var(--mahogany);
+        border-radius: 4px;
+        padding: 0.85rem 1rem;
+        display: flex;
+        flex-direction: column;
+        gap: 0.15rem;
+      }
+      .stat__n {
+        font-family: var(--font-head);
+        font-size: 1.7rem;
+        font-weight: 700;
+        line-height: 1;
+        color: var(--ivory);
+        font-variant-numeric: tabular-nums;
+      }
+      .stat__l {
+        font-size: 0.72rem;
+        letter-spacing: 0.11em;
+        text-transform: uppercase;
+        color: var(--taupe);
+      }
+      /* The count that means "someone is waiting on you" gets the gilt edge. */
+      .stat--alert { border-color: var(--gilt); }
+      .stat--alert .stat__n { color: var(--gilt); }
+      .stat--ok .stat__n { color: var(--ok); }
+
+      /* ---------- panels ---------- */
+      .panel { margin-bottom: 2.5rem; }
+      .panel__t {
+        font-family: var(--font-head);
+        font-size: 1.25rem;
+        font-weight: 600;
+        color: var(--ivory);
+        margin: 0 0 0.3rem;
+      }
+      .panel__n { font-size: 0.88rem; color: var(--taupe); margin: 0 0 1rem; }
+      .empty {
+        font-size: 0.9rem;
+        color: var(--taupe);
+        background: var(--espresso);
+        border: 1px dashed var(--mahogany);
+        border-radius: 4px;
+        padding: 1rem;
+        margin: 0;
+      }
+
+      /* ---------- cards ---------- */
+      .cards { display: grid; gap: 0.85rem; }
+      .card {
+        background: var(--espresso);
+        border: 1px solid var(--mahogany);
+        border-radius: 4px;
+        padding: 1rem 1.1rem;
+      }
+      .card__head {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 0.75rem;
+        margin-bottom: 0.7rem;
+      }
+      .card__name {
+        font-family: var(--font-head);
+        font-size: 1.05rem;
+        font-weight: 700;
+        color: var(--ivory);
+      }
+      .pill {
+        font-size: 0.66rem;
+        font-weight: 700;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        padding: 0.2rem 0.5rem;
+        border-radius: 3px;
+        white-space: nowrap;
+        background: var(--umber);
+        color: var(--taupe);
+      }
+      .pill--pending { background: #3a2a12; color: var(--gilt-soft); }
+      .pill--confirmed { background: #26301c; color: #a9c383; }
+      .pill--completed { background: #1f2a1a; color: var(--ok); }
+      .pill--cancelled,
+      .pill--no_show { background: #3a2018; color: #d98462; }
+
+      .card__meta { margin: 0 0 0.8rem; }
+      .kv { display: flex; gap: 0.6rem; margin: 0 0 0.3rem; font-size: 0.9rem; }
+      .kv__k {
+        color: var(--taupe);
+        min-width: 4.5rem;
+        flex: 0 0 auto;
+        font-size: 0.8rem;
+        padding-top: 0.1rem;
+      }
+      .kv__v { color: var(--sand); word-break: break-word; }
+
+      .card__contact,
+      .card__acts {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        margin: 0.8rem 0 0;
+      }
+
+      /* ---------- buttons ---------- */
+      .btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 44px;
+        padding: 0.5rem 0.95rem;
+        border-radius: 3px;
+        border: 1px solid var(--mahogany);
+        background: transparent;
+        color: var(--sand);
+        font-family: inherit;
+        font-size: 0.8rem;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        text-decoration: none;
+        cursor: pointer;
+      }
+      .btn:hover { border-color: var(--gilt-deep); color: var(--ivory); }
+      .btn:focus-visible { outline: 2px solid var(--gilt); outline-offset: 2px; }
+      .btn:disabled { opacity: 0.55; cursor: default; }
+      .btn--primary {
+        background: var(--gilt);
+        border-color: var(--gilt);
+        color: var(--noir);
+        width: 100%;
+      }
+      .btn--primary:hover { background: var(--gilt-soft); color: var(--noir); }
+      .btn--ok { border-color: #4b5f36; color: #a9c383; }
+      .btn--warn { border-color: var(--gilt-deep); color: var(--gilt-soft); }
+      .btn--danger { border-color: #6b3527; color: #d98462; }
+      .btn--ghost { color: var(--taupe); }
+
+      /* ---------- confirm block ---------- */
+      .confirm {
+        margin-top: 0.9rem;
+        padding-top: 0.9rem;
+        border-top: 1px solid var(--mahogany);
+      }
+      .confirm__t {
+        margin: 0 0 0.6rem;
+        font-size: 0.72rem;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: var(--gilt);
+      }
+      .confirm__grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+        gap: 0.5rem;
+        margin-bottom: 0.6rem;
+      }
+      .confirm input {
+        width: 100%;
+        min-height: 44px;
+        padding: 0.5rem 0.7rem;
+        background: var(--noir);
+        border: 1px solid var(--mahogany);
+        border-radius: 3px;
+        color: var(--ivory);
+        font-family: inherit;
+        font-size: 0.95rem;
+      }
+      .confirm input:focus-visible {
+        outline: 2px solid var(--gilt);
+        outline-offset: 1px;
+      }
+
+      /* ---------- table ---------- */
+      .tbl-wrap { overflow-x: auto; }
+      .tbl { width: 100%; border-collapse: collapse; font-size: 0.9rem; min-width: 22rem; }
+      .tbl th,
+      .tbl td { text-align: left; padding: 0.55rem 0.8rem; border-bottom: 1px solid var(--mahogany); }
+      .tbl th {
+        font-size: 0.7rem;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: var(--taupe);
+      }
+      .tbl td { color: var(--sand); }
+      .tbl .num { text-align: right; font-variant-numeric: tabular-nums; color: var(--ivory); }
+
+      /* ---------- login ---------- */
+      .login { max-width: 22rem; margin: 12vh auto 0; text-align: center; }
+      .login__t {
+        font-family: var(--font-head);
+        font-size: 1.8rem;
+        font-weight: 700;
+        color: var(--ivory);
+        margin: 0 0 0.4rem;
+      }
+      .login__n { font-size: 0.9rem; color: var(--taupe); margin: 0 0 1.5rem; }
+      .login__form { display: grid; gap: 0.6rem; }
+      .login__form input {
+        min-height: 46px;
+        padding: 0.6rem 0.85rem;
+        background: var(--espresso);
+        border: 1px solid var(--mahogany);
+        border-radius: 3px;
+        color: var(--ivory);
+        font-family: inherit;
+        font-size: 1rem;
+      }
+      .login__form input:focus-visible {
+        outline: 2px solid var(--gilt);
+        outline-offset: 1px;
+      }
+      .login__err { color: #d98462; font-size: 0.85rem; margin: 0.3rem 0 0; min-height: 1.2em; }
+    </style>
+  </head>
+
+  <body>
+    <main id="app">
+      <p class="empty">Loading…</p>
+    </main>
+    <script type="module" src="/admin.js"></script>
+  </body>
+</html>

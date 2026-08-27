@@ -83,3 +83,70 @@
 --   curl "$SUPABASE_URL/rest/v1/appointments?select=customer_name,phone" \
 --        -H "apikey: <publishable key>"
 --   -> must return []
+
+
+-- ===========================================================================
+-- Phase 4 — admin access, status workflow, confirmation email
+-- APPLIED 2026-08-26
+-- ===========================================================================
+--
+--   phase4_admin_access
+--   phase4_status_email_trigger
+--   phase4_is_admin_security_invoker
+--
+-- ---------------------------------------------------------------------------
+-- Who may read bookings
+-- ---------------------------------------------------------------------------
+-- THE TRAP: the obvious policy is `to authenticated`, which reads as
+-- "signed-in staff". It is not. `authenticated` is ANY account in the
+-- project, so with open sign-ups a stranger could register and read every
+-- customer's name, phone and notes. Access is granted to an explicit
+-- allowlist instead — public.admins, tested by public.is_admin().
+--
+-- is_admin() is SECURITY INVOKER, not DEFINER. PostgREST exposes every public
+-- function at /rest/v1/rpc/<name>, and a definer-rights function there is a
+-- lever waiting to be found. It does not need the rights: the policy on
+-- public.admins already lets a user read their own row, so invoker rights
+-- return the same answer.
+--
+-- There is deliberately NO delete policy on booking_requests. A cancelled
+-- appointment is a status, not an absence — deleting it would destroy the
+-- attribution history the ad-spend report depends on.
+--
+-- ---------------------------------------------------------------------------
+-- Status changes and the confirmation email
+-- ---------------------------------------------------------------------------
+-- on_booking_status_change() is BEFORE UPDATE, because it assigns to NEW.
+-- An AFTER trigger's assignments are discarded and confirmed_at would
+-- silently never be set.
+--
+-- Guarded on `status IS DISTINCT FROM old.status` so it fires on the
+-- transition, not on every save. Without that, correcting a phone number on
+-- an already-confirmed booking would email the client a second confirmation.
+--
+-- Living in the database rather than the dashboard means the email sends
+-- however the status changed — admin page, Supabase Studio, or a future
+-- automation. There is no path that confirms an appointment silently.
+--
+-- ---------------------------------------------------------------------------
+-- ONE MANUAL STEP
+-- ---------------------------------------------------------------------------
+-- Supabase has no SQL-safe way to create an auth user (passwords are hashed
+-- by the Auth service, not by us). So:
+--
+--   1. Dashboard -> Authentication -> Users -> Add user
+--      Email: mirabellekamga4@gmail.com, set a password, auto-confirm.
+--   2. Dashboard -> Authentication -> Providers -> Email
+--      TURN OFF "Enable sign-ups". Without this anyone can create an
+--      account. They would still not be an admin, but there is no reason to
+--      let strangers hold accounts on this project at all.
+--   3. Then run, with the new user's id:
+--
+--        insert into public.admins (user_id, email)
+--        select id, email from auth.users
+--        where email = 'mirabellekamga4@gmail.com'
+--        on conflict (user_id) do nothing;
+--
+-- Verify afterwards: sign in at /admin.html and confirm the pending queue
+-- lists real bookings. If it is empty but bookings exist, the admins row is
+-- missing.

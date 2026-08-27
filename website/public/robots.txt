@@ -2,4 +2,8 @@
 User-agent: *
 Allow: /
 
+# Staff tool. Also carries a noindex meta tag - robots.txt alone does not
+# stop a page being indexed if something links to it.
+Disallow: /admin.html
+
 Sitemap: https://mimi-african-braiding-styling.com/sitemap.xml
