@@ -848,6 +848,78 @@ body.is-menu-open {
   text-shadow: 0 1px 10px rgba(16, 11, 9, 0.9), 0 0 3px rgba(16, 11, 9, 0.75);
 }
 
+/* ---------------- Work card pricing ---------------- */
+/* Price and duration sit directly under the description, and the CTA is
+   pinned to the bottom so the buttons line up across cards of differing
+   description length. */
+
+.work-card {
+  display: flex;
+  flex-direction: column;
+}
+
+.work-card__meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.3rem 0.7rem;
+  margin: 0.6rem 0 0.9rem;
+}
+
+.work-card__price {
+  font-family: var(--font-head);
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--gilt);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.01em;
+}
+
+/* The six styles with no published figure. Sized down and set in the body
+   face so it reads as a note, not as a number. */
+.work-card__price--quote {
+  font-family: var(--font);
+  font-size: 0.82rem;
+  font-weight: 500;
+  color: var(--taupe);
+  letter-spacing: 0;
+}
+
+.work-card__dur {
+  font-size: 0.8rem;
+  color: var(--taupe);
+  white-space: nowrap;
+}
+
+.work-card__cta {
+  /* auto pins the button to the bottom edge so the CTAs line up across a row
+     of cards with different description lengths. The gap above it comes from
+     .work-card__meta's margin, not a second margin-top here — declaring it
+     twice silently cancelled the pinning. */
+  margin-top: auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  padding: 0.55rem 1rem;
+  border: 1px solid var(--gilt-deep);
+  border-radius: 3px;
+  background: transparent;
+  color: var(--gilt-soft);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+  text-decoration: none;
+}
+
+.work-card__cta:hover,
+.work-card__cta:focus-visible {
+  background: var(--gilt);
+  color: var(--noir);
+  border-color: var(--gilt);
+}
+
 /* ---------------- Skip link ---------------- */
 /* Off-screen until focused, then parked top-left over the header. Uses a
    solid ground rather than .glass: it has to stay legible over whatever
@@ -1368,8 +1440,19 @@ body.is-menu-open {
   background: var(--surface);
 }
 
-.styles__cards {
+/* The composed board is retired. It carried the same ten styles as baked-in
+   artwork, which means no price, no Book button, and nothing a search engine
+   can read. The cards say all three, so they now run at every width. The
+   board markup is kept and simply never shown or fetched — see
+   setupWorkShowcase() in main.js. */
+.styles__board {
   display: none;
+}
+
+.styles__cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+  gap: clamp(0.9rem, 2.2vw, 1.4rem);
   list-style: none;
   margin: 0;
   padding: 0;
@@ -1412,14 +1495,8 @@ body.is-menu-open {
 }
 
 @media (max-width: 1100px) {
-  .styles__board {
-    display: none;
-  }
-
   .styles__cards {
-    display: grid;
     grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
-    gap: clamp(0.9rem, 2.2vw, 1.4rem);
   }
 }
 

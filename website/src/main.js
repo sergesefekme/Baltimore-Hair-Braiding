@@ -360,29 +360,15 @@ function setupWorkShowcase() {
   const section = document.querySelector("#styles");
   if (!section) return;
 
-  const board = section.querySelector(".styles__board");
+  // The composed board is retired: it could not carry a price, a Book button,
+  // or anything a search engine can read. The cards run at every width now, so
+  // there is no swap to manage and the board is never fetched.
   const cards = [...section.querySelectorAll(".work-card img")];
-  const small = window.matchMedia("(max-width: 1100px)");
 
-  function hydrate(els) {
-    els.forEach((el) => {
-      if (!el.dataset.src) return;
-      el.src = el.dataset.src;
-      delete el.dataset.src;
-    });
-  }
-
-  function apply() {
-    hydrate(small.matches ? cards : board ? [board] : []);
-  }
-
-  apply();
-
-  small.addEventListener("change", () => {
-    apply();
-    // Section height changes a lot across the swap, and the pinned
-    // sections below are measured in absolute scroll distance.
-    ScrollTrigger.refresh();
+  cards.forEach((el) => {
+    if (!el.dataset.src) return;
+    el.src = el.dataset.src;
+    delete el.dataset.src;
   });
 }
 
