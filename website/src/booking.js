@@ -32,6 +32,29 @@ function todayLocal() {
   return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
 }
 
+/** "2026-09-10" -> "Saturday, September 10". Built from the field's own
+ *  yyyy-mm-dd string and rendered at UTC noon, so the weekday cannot slip a
+ *  day either side of midnight. Falls back to the raw value rather than
+ *  showing a visitor "Invalid Date". */
+function prettyDate(iso) {
+  const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(String(iso || ""));
+  if (!m) return String(iso || "");
+  const d = new Date(Date.UTC(+m[1], +m[2] - 1, +m[3], 12));
+  if (Number.isNaN(d.getTime())) return String(iso || "");
+  return d.toLocaleDateString("en-US", {
+    weekday: "long",
+    month: "long",
+    day: "numeric",
+    timeZone: "UTC",
+  });
+}
+
+/** First name only, for the greeting. "Sarah Johnson" -> "Sarah". */
+function firstName(full) {
+  const s = String(full || "").trim();
+  return s ? s.split(/\s+/)[0] : "";
+}
+
 function setError(field, message) {
   const wrap = field.closest(".field");
   const slot = wrap?.querySelector(".field__err");
@@ -135,6 +158,11 @@ export function setupBooking() {
   const button = form.querySelector('button[type="submit"]');
   const date = form.elements["preferred_date"];
 
+  // Guards against a double tap on a slow connection filing two identical
+  // requests. Set for the whole in-flight window and never cleared on
+  // success, so the form cannot be submitted twice from one page view.
+  let sending = false;
+
   // Stops the picker offering dates that validate() would only reject.
   if (date) date.min = todayLocal();
 
@@ -145,6 +173,7 @@ export function setupBooking() {
 
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
+    if (sending) return;
 
     const problems = validate(form);
     if (problems.length) {
@@ -163,7 +192,9 @@ export function setupBooking() {
       return;
     }
 
+    sending = true;
     button.setAttribute("aria-busy", "true");
+    button.disabled = true;
     button.textContent = button.dataset.busy;
     status.dataset.state = "";
     status.textContent = "";
@@ -183,16 +214,37 @@ export function setupBooking() {
 
       form.classList.add("is-sent");
       status.dataset.state = "ok";
-      status.textContent =
-        result.mode === "stored"
-          ? "Thank you — your request is in. We will text you to confirm the time, usually the same day."
-          : `Your message app should be opening with the details ready to send to ${SALON_TEL_HUMAN}. If nothing opened, call or text that number.`;
+
+      const who = firstName(get("name"));
+      const what = get("style");
+      const when = prettyDate(get("preferred_date"));
+
+      if (result.mode === "stored") {
+        const hello = who ? `Thank you, ${who}! ` : "Thank you! ";
+        const asked =
+          what && when
+            ? `We received your request for ${what} on ${when}. `
+            : "We received your request. ";
+        status.textContent =
+          hello +
+          asked +
+          "Mirabelle.B will contact you shortly to confirm your appointment." +
+          (get("email") ? " A confirmation email is on its way." : "");
+      } else {
+        status.textContent = `Your message app should be opening with the details ready to send to ${SALON_TEL_HUMAN}. If nothing opened, call or text that number.`;
+      }
+
+      // Stays disabled: the request is filed and re-sending it would only
+      // create a duplicate for the salon to untangle.
+      button.textContent = "Request sent";
     } catch (err) {
       console.error("[booking]", err);
       status.dataset.state = "err";
       status.textContent =
         "Sorry — that did not send. Please call or text 571-426-0602 and we will book you in.";
+      sending = false;
       button.removeAttribute("aria-busy");
+      button.disabled = false;
       button.textContent = button.dataset.idle;
     }
   });
