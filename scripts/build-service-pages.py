@@ -248,6 +248,74 @@ def faqs(s):
     return out
 
 
+CAMPAIGN_SCRIPT = r"""    <script>
+      /* CAMPAIGN BRIDGE.
+         Ad traffic lands HERE, not on the home page, and this page loads no
+         bundle by design. Without this the UTM parameters die at the first
+         click: the booking link is /?service=...#book, the home page then sees
+         no campaign, and every ad-driven booking records as "direct" — which
+         silently destroys the ad reporting it was all built for.
+
+         Two belts, because attribution that only works sometimes is worse than
+         none. The values are written to the same sessionStorage key the
+         booking form reads, AND appended to the booking links in case storage
+         is unavailable (private mode, storage disabled). */
+      (function () {
+        var p = new URLSearchParams(location.search);
+        var F = ["utm_source", "utm_medium", "utm_campaign", "utm_content", "utm_term"];
+        var d = {};
+        F.forEach(function (k) { d[k] = p.get(k); });
+
+        var u = (d.utm_source || "").toLowerCase();
+        var ref = document.referrer || "";
+        var h = "";
+        try { h = ref ? new URL(ref).hostname.toLowerCase() : ""; } catch (e) {}
+
+        var src = "direct";
+        if (u) {
+          src = /facebook|^fb$|meta/.test(u) ? "facebook"
+              : /instagram|^ig$/.test(u) ? "instagram"
+              : /google|adwords|gads/.test(u) ? "google"
+              : /^(direct|none)$/.test(u) ? "direct" : "referral";
+        } else if (p.has("fbclid")) {
+          src = "facebook";
+        } else if (p.has("gclid") || p.has("gbraid") || p.has("wbraid")) {
+          src = "google";
+        } else if (h) {
+          src = /(^|\.)facebook\.com$|(^|\.)fb\.(com|me)$/.test(h) ? "facebook"
+              : /(^|\.)instagram\.com$/.test(h) ? "instagram"
+              : /(^|\.)google\./.test(h) ? "organic"
+              : /(^|\.)bing\.com$|(^|\.)duckduckgo\.com$/.test(h) ? "organic"
+              : h === location.hostname ? "direct" : "referral";
+        }
+
+        d.source = src;
+        d.landing_page = (location.pathname + location.search).slice(0, 500);
+        d.referrer = (h && h !== location.hostname) ? ref.slice(0, 500) : null;
+
+        /* First touch wins, matching src/attribution.js. Someone who browses
+           three service pages before booking is still credited to the ad that
+           brought them to the first one. */
+        try {
+          if (!sessionStorage.getItem("mb_attrib")) {
+            sessionStorage.setItem("mb_attrib", JSON.stringify(d));
+          }
+        } catch (e) {}
+
+        var q = F.filter(function (k) { return d[k]; })
+                 .map(function (k) { return k + "=" + encodeURIComponent(d[k]); })
+                 .join("&");
+        if (q) {
+          Array.prototype.forEach.call(
+            document.querySelectorAll('a[href*="?service="]'),
+            function (a) {
+              a.href = a.getAttribute("href").replace("#book", "") + "&" + q + "#book";
+            }
+          );
+        }
+      })();
+    </script>"""
+
 PAGE = """<!doctype html>
 <html lang="en">
   <head>
@@ -346,12 +414,13 @@ PAGE = """<!doctype html>
       </section>
 
       <section class="block block--cta">
-        <h2>Book {name_lower} in Ashburn</h2>
+        <h2>Ready for your new look?</h2>
         <p>
-          Send a request and we confirm your slot by text, usually the same day.
-          Nothing is charged on this website.
+          Book your {name_lower} appointment with Mirabelle.B in Ashburn,
+          Virginia. Send a request and we confirm your slot by text, usually the
+          same day — nothing is charged on this website.
         </p>
-        <a class="cta" href="/?service={form_slug}#book">Book this style</a>
+        <a class="cta" href="/?service={form_slug}#book">Book your appointment</a>
         <p class="cta__sub">
           44048 Lords Valley Ter, Ashburn, VA 20147 ·
           <a href="https://www.google.com/maps/search/?api=1&amp;query=44048+Lords+Valley+Ter%2C+Ashburn%2C+VA+20147"
@@ -368,6 +437,8 @@ PAGE = """<!doctype html>
     <script>
       document.getElementById("y").textContent = new Date().getFullYear();
     </script>
+
+__CAMPAIGN_SCRIPT__
   </body>
 </html>
 """
@@ -394,10 +465,11 @@ def build(s):
     price_txt = f"From ${s['price']}" if s["price"] else "Price agreed when you book"
     facts = price_txt + (f" &middot; {s['duration']}" if s["duration"] else "")
 
-    meta = (f"{s['name']} in Ashburn, Virginia by Mirabelle.B African Hair Braiding. "
+    meta = (f"Book professional {s['name'].lower()} with Mirabelle.B in Ashburn, "
+            f"Virginia. "
             + (f"From ${s['price']}. " if s["price"] else "")
             + (f"About {s['duration']}. " if s["duration"] else "")
-            + "Book online or call 571-426-0602.")
+            + "View pricing, appointment information and protective styling details.")
 
     benefits = "".join(f"\n          <li>{esc(b)}</li>" for b in s["benefits"])
 
@@ -465,6 +537,15 @@ def build(s):
                    if s["price"] else {}),
             },
             {
+                "@type": "BreadcrumbList",
+                "itemListElement": [
+                    {"@type": "ListItem", "position": 1, "name": "Home",
+                     "item": SITE + "/"},
+                    {"@type": "ListItem", "position": 2, "name": s["name"],
+                     "item": f"{SITE}/{s['slug']}/"},
+                ],
+            },
+            {
                 "@type": "FAQPage",
                 "mainEntity": [
                     {"@type": "Question", "name": q,
@@ -483,7 +564,7 @@ def build(s):
         benefits=benefits, spec=spec, gallery=gallery, why=why, faq=faq_html,
         form_slug=FORM_SLUG[s["form_value"]],
         schema=json.dumps(schema, indent=2),
-    )
+    ).replace("__CAMPAIGN_SCRIPT__", CAMPAIGN_SCRIPT)
 
 
 def main():

@@ -912,12 +912,30 @@ body.is-menu-open {
   white-space: nowrap;
 }
 
-.work-card__cta {
-  /* auto pins the button to the bottom edge so the CTAs line up across a row
-     of cards with different description lengths. The gap above it comes from
-     .work-card__meta's margin, not a second margin-top here — declaring it
-     twice silently cancelled the pinning. */
+/* Sits above Book Now. Understated on purpose: the card's job is to get a
+   booking, and "Learn more" is the alternative for someone not ready yet. */
+.work-card__more {
+  display: inline-block;
   margin-top: auto;
+  padding-top: 0.5rem;
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  color: var(--taupe);
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+
+.work-card__more:hover,
+.work-card__more:focus-visible {
+  color: var(--gilt-soft);
+}
+
+.work-card__cta {
+  /* .work-card__more now carries margin-top:auto, which pins this pair to the
+     bottom edge so the CTAs line up across a row of cards with different
+     description lengths. */
+  margin-top: 0.5rem;
   display: inline-flex;
   align-items: center;
   justify-content: center;
