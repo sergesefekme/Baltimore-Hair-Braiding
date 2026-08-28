@@ -240,9 +240,16 @@ export function setupBooking() {
       return;
     }
 
-    // Honeypot: a real visitor never sees this field, so anything in it is a
-    // bot. Answer as if it succeeded rather than telling them they were caught.
-    if (form.elements["company"]?.value) {
+    /* Honeypot. A real visitor never sees this field, so anything in it is a
+       bot; we answer as if it succeeded rather than telling them they were
+       caught.
+
+       The field is named "fax" precisely so no browser autofills it. It was
+       "company" until 2026-08-27, which browsers DO autofill — and because a
+       filled honeypot is silently discarded, that could have thrown away a
+       real booking behind a success message. Trimmed, so an autofilled space
+       cannot trigger it either. */
+    if (form.elements["fax"]?.value.trim()) {
       form.classList.add("is-sent");
       status.dataset.state = "ok";
       status.textContent = "Thank you — your request is in.";

@@ -1032,12 +1032,26 @@
               </p>
             </div>
 
-            <!-- Honeypot. Hidden from people, irresistible to bots; handled
-                 in booking.js. aria-hidden + tabindex keep it away from
-                 screen readers and the tab order. -->
+            <!-- Honeypot. Off-canvas rather than display:none, because some
+                 bots skip hidden inputs; aria-hidden and tabindex keep it out
+                 of screen readers and the tab order.
+
+                 NAMED "fax", NOT "company". A field called company (or
+                 organization, address, name...) is a browser-autofill target,
+                 and autocomplete="off" is widely ignored for autofill. An
+                 autofilled honeypot is worse than no honeypot: submit() treats
+                 any value here as a bot and silently discards the booking, so a
+                 real client would get "your request is in" and never be called.
+                 Nothing autofills a fax field. Do not rename this to anything
+                 a browser recognises.
+
+                 The label reads as an instruction, so that if the stylesheet
+                 ever fails to load a human sees "Leave this field blank"
+                 rather than wondering why a braiding salon wants their
+                 company name. -->
             <p class="booking__pot" aria-hidden="true">
-              <label for="bk-company">Company</label>
-              <input id="bk-company" name="company" type="text"
+              <label for="bk-fax">Leave this field blank</label>
+              <input id="bk-fax" name="fax" type="text"
                      tabindex="-1" autocomplete="off" />
             </p>
 
