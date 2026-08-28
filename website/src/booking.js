@@ -219,7 +219,10 @@ export function setupBooking() {
     const problems = validate(form);
     if (problems.length) {
       status.dataset.state = "err";
-      status.textContent = `Please check ${problems.length} field${problems.length > 1 ? "s" : ""} above.`;
+      status.textContent =
+        problems.length === 1
+          ? "Just one thing to check above."
+          : `A few details need your attention above — ${problems.length} of them.`;
       problems[0].focus();
       return;
     }

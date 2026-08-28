@@ -22,6 +22,17 @@ const REST = `${SUPABASE_URL}/rest/v1`;
 const AUTH = `${SUPABASE_URL}/auth/v1`;
 const SESSION_KEY = "mb_admin_session";
 
+/* The database stores pending/confirmed/completed/cancelled/no_show. Those
+   are column values, not words to show a person. Mirabelle reads this between
+   clients; it should read like her diary, not like a schema. */
+const STATUS_LABEL = {
+  pending: "Appointment Pending",
+  confirmed: "Appointment Confirmed",
+  completed: "Completed",
+  cancelled: "Cancelled",
+  no_show: "No Show",
+};
+
 const $ = (sel) => document.querySelector(sel);
 const el = (tag, cls, text) => {
   const n = document.createElement(tag);
@@ -180,7 +191,9 @@ function bookingCard(r, opts = {}) {
 
   const head = el("div", "card__head");
   head.append(el("span", "card__name", r.name));
-  head.append(el("span", `pill pill--${r.status}`, r.status.replace("_", " ")));
+  head.append(
+    el("span", `pill pill--${r.status}`, STATUS_LABEL[r.status] ?? r.status)
+  );
   card.append(head);
 
   const meta = el("div", "card__meta");
@@ -240,7 +253,7 @@ function bookingCard(r, opts = {}) {
     form.append(grid);
 
     form.append(
-      actionButton("Confirm & email client", "btn--primary", async () => {
+      actionButton("Confirm appointment", "btn--primary", async () => {
         if (!dateIn.value) {
           alert("Pick the appointment date first.");
           return;
@@ -296,7 +309,7 @@ function bookingCard(r, opts = {}) {
   const acts = el("div", "card__acts");
   if (r.status === "confirmed") {
     acts.append(
-      actionButton("Mark completed", "btn--ok", () =>
+      actionButton("Mark as completed", "btn--ok", () =>
         patch(r.id, { status: "completed" })
       ),
       actionButton("No-show", "btn--warn", () =>
@@ -315,7 +328,7 @@ function bookingCard(r, opts = {}) {
   }
   if (r.status === "cancelled" || r.status === "no_show") {
     acts.append(
-      actionButton("Reopen as pending", "btn--ghost", () =>
+      actionButton("Reopen", "btn--ghost", () =>
         patch(r.id, { status: "pending" })
       )
     );
@@ -377,7 +390,7 @@ function render() {
 
   root.append(
     section(
-      "Needs your reply",
+      "Awaiting your reply",
       "Requests nobody has answered yet. Confirming emails the client automatically.",
       pending,
       { confirmable: true }
