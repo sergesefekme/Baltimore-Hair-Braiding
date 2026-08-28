@@ -185,6 +185,19 @@ function preselectService(form) {
   if (match) select.value = match.value || match.text;
 }
 
+/* Event layer. No analytics vendor is installed — no GA4, no Meta Pixel, no
+   cookies — because the published privacy policy says so. These push onto the
+   standard dataLayer so a tag manager added later consumes them with no
+   rewiring. */
+function track(event, extra) {
+  try {
+    window.dataLayer = window.dataLayer || [];
+    window.dataLayer.push(Object.assign({ event }, extra || {}));
+  } catch {
+    /* never let analytics break a booking */
+  }
+}
+
 export function setupBooking() {
   // Runs even when the form is absent, so a service landing page still records
   // where the visitor came from before they navigate to book.
@@ -206,6 +219,19 @@ export function setupBooking() {
   if (date) date.min = todayLocal();
 
   preselectService(form);
+
+  // Fired once, on the first real interaction — not on page view. Someone
+  // scrolling past the form has not started a booking.
+  let started = false;
+  form.addEventListener(
+    "input",
+    () => {
+      if (started) return;
+      started = true;
+      track("booking_started", { service: form.elements["style"]?.value || null });
+    },
+    { once: false }
+  );
 
   /* Book Now on a service card jumps to the form. Without this it arrived
      with an empty dropdown, so a visitor who had just chosen a style had to
@@ -281,6 +307,21 @@ export function setupBooking() {
 
       form.classList.add("is-sent");
       status.dataset.state = "ok";
+
+      /* THE CONVERSION. Deliberately here and nowhere else: inside the success
+         branch, after send() resolved, and gated on mode === "stored" so the
+         SMS fallback — which we cannot confirm was ever sent — is not counted
+         as a booking. A conversion that fires on a click, or on an unconfirmed
+         fallback, quietly inflates every campaign report it touches. */
+      if (result.mode === "stored") {
+        const a = attributionPayload();
+        track("booking_submitted", {
+          service: get("style"),
+          preferred_date: get("preferred_date"),
+          source: a.source,
+          campaign: a.utm_campaign,
+        });
+      }
 
       const who = firstName(get("name"));
       const what = get("style");

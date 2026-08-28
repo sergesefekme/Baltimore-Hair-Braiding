@@ -313,6 +313,38 @@ CAMPAIGN_SCRIPT = r"""    <script>
             }
           );
         }
+
+        /* EVENT LAYER. No third-party script is installed — no GA4, no Meta
+           Pixel, no cookies — because the published privacy policy says so and
+           that promise is worth keeping. This pushes the same events onto a
+           standard dataLayer, so if a tag manager is ever added it consumes
+           them without any of this being rewritten.
+
+           The conversion event is NOT here. book_now_clicked is a click, not
+           a booking; firing a conversion on it would report every curious tap
+           as a customer and make the ad reporting worse than useless. The
+           conversion fires in booking.js, only after the row is stored. */
+        window.dataLayer = window.dataLayer || [];
+        window.dataLayer.push({
+          event: "service_page_viewed",
+          service: document.title.split(" in Ashburn")[0],
+          source: d.source,
+          campaign: d.utm_campaign || null,
+        });
+
+        Array.prototype.forEach.call(
+          document.querySelectorAll("[data-mb-event]"),
+          function (el) {
+            el.addEventListener("click", function () {
+              window.dataLayer.push({
+                event: el.getAttribute("data-mb-event"),
+                service: el.getAttribute("data-mb-service") || null,
+                source: d.source,
+                campaign: d.utm_campaign || null,
+              });
+            });
+          }
+        );
       })();
     </script>"""
 
@@ -362,7 +394,7 @@ PAGE = """<!doctype html>
           <h1>{h1}</h1>
           <p class="lede">{lede}</p>
           <p class="facts">{facts}</p>
-          <a class="cta" href="/?service={form_slug}#book">Book this style</a>
+          <a class="cta" href="/?service={form_slug}#book" data-mb-event="book_now_clicked" data-mb-service="{name}">Book this style</a>
           <p class="cta__sub">Or call <a href="tel:+15714260602">571-426-0602</a> · Tue–Sat, 10am–6pm</p>
         </div>
       </section>
@@ -420,7 +452,7 @@ PAGE = """<!doctype html>
           Virginia. Send a request and we confirm your slot by text, usually the
           same day — nothing is charged on this website.
         </p>
-        <a class="cta" href="/?service={form_slug}#book">Book your appointment</a>
+        <a class="cta" href="/?service={form_slug}#book" data-mb-event="book_now_clicked" data-mb-service="{name}">Book your appointment</a>
         <p class="cta__sub">
           44048 Lords Valley Ter, Ashburn, VA 20147 ·
           <a href="https://www.google.com/maps/search/?api=1&amp;query=44048+Lords+Valley+Ter%2C+Ashburn%2C+VA+20147"
@@ -428,6 +460,17 @@ PAGE = """<!doctype html>
         </p>
       </section>
     </main>
+
+    <!-- Thumb-reach booking, phones only. The hero CTA scrolls away within a
+         screen or two and the next one is at the foot of a long page. -->
+    <div class="stickybook">
+      <span class="stickybook__meta">
+        <span class="stickybook__name">{name}</span>
+        <span class="stickybook__price">{sticky_price}</span>
+      </span>
+      <a class="stickybook__cta" href="/?service={form_slug}#book"
+         data-mb-event="book_now_clicked" data-mb-service="{name}">Book now</a>
+    </div>
 
     <footer class="foot">
       <p><a href="/">All services</a> · <a href="/policies.html">Booking policies</a> · <a href="/privacy.html">Privacy</a></p>
@@ -563,6 +606,9 @@ def build(s):
         what=esc(s["what"]), good_for=esc(s["good_for"]),
         benefits=benefits, spec=spec, gallery=gallery, why=why, faq=faq_html,
         form_slug=FORM_SLUG[s["form_value"]],
+        name=esc(s["name"]),
+        sticky_price=(f"From ${s['price']}" + (f" · {s['duration']}" if s["duration"] else ""))
+                     if s["price"] else "Price agreed when you book",
         schema=json.dumps(schema, indent=2),
     ).replace("__CAMPAIGN_SCRIPT__", CAMPAIGN_SCRIPT)
 

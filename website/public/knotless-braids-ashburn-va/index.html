@@ -163,7 +163,7 @@
           <h1>Knotless Braids in Ashburn, VA</h1>
           <p class="lede">Professional, lightweight and beautiful knotless braids by Mirabelle.B African Hair Braiding.</p>
           <p class="facts">From $250 &middot; 5–8 hours</p>
-          <a class="cta" href="/?service=knotless-braids#book">Book this style</a>
+          <a class="cta" href="/?service=knotless-braids#book" data-mb-event="book_now_clicked" data-mb-service="Knotless Braids">Book this style</a>
           <p class="cta__sub">Or call <a href="tel:+15714260602">571-426-0602</a> · Tue–Sat, 10am–6pm</p>
         </div>
       </section>
@@ -280,7 +280,7 @@
           Virginia. Send a request and we confirm your slot by text, usually the
           same day — nothing is charged on this website.
         </p>
-        <a class="cta" href="/?service=knotless-braids#book">Book your appointment</a>
+        <a class="cta" href="/?service=knotless-braids#book" data-mb-event="book_now_clicked" data-mb-service="Knotless Braids">Book your appointment</a>
         <p class="cta__sub">
           44048 Lords Valley Ter, Ashburn, VA 20147 ·
           <a href="https://www.google.com/maps/search/?api=1&amp;query=44048+Lords+Valley+Ter%2C+Ashburn%2C+VA+20147"
@@ -288,6 +288,17 @@
         </p>
       </section>
     </main>
+
+    <!-- Thumb-reach booking, phones only. The hero CTA scrolls away within a
+         screen or two and the next one is at the foot of a long page. -->
+    <div class="stickybook">
+      <span class="stickybook__meta">
+        <span class="stickybook__name">Knotless Braids</span>
+        <span class="stickybook__price">From $250 · 5–8 hours</span>
+      </span>
+      <a class="stickybook__cta" href="/?service=knotless-braids#book"
+         data-mb-event="book_now_clicked" data-mb-service="Knotless Braids">Book now</a>
+    </div>
 
     <footer class="foot">
       <p><a href="/">All services</a> · <a href="/policies.html">Booking policies</a> · <a href="/privacy.html">Privacy</a></p>
@@ -363,6 +374,38 @@
             }
           );
         }
+
+        /* EVENT LAYER. No third-party script is installed — no GA4, no Meta
+           Pixel, no cookies — because the published privacy policy says so and
+           that promise is worth keeping. This pushes the same events onto a
+           standard dataLayer, so if a tag manager is ever added it consumes
+           them without any of this being rewritten.
+
+           The conversion event is NOT here. book_now_clicked is a click, not
+           a booking; firing a conversion on it would report every curious tap
+           as a customer and make the ad reporting worse than useless. The
+           conversion fires in booking.js, only after the row is stored. */
+        window.dataLayer = window.dataLayer || [];
+        window.dataLayer.push({
+          event: "service_page_viewed",
+          service: document.title.split(" in Ashburn")[0],
+          source: d.source,
+          campaign: d.utm_campaign || null,
+        });
+
+        Array.prototype.forEach.call(
+          document.querySelectorAll("[data-mb-event]"),
+          function (el) {
+            el.addEventListener("click", function () {
+              window.dataLayer.push({
+                event: el.getAttribute("data-mb-event"),
+                service: el.getAttribute("data-mb-service") || null,
+                source: d.source,
+                campaign: d.utm_campaign || null,
+              });
+            });
+          }
+        );
       })();
     </script>
   </body>

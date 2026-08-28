@@ -69,23 +69,32 @@ a { color: var(--gilt); }
   border-bottom: 1px solid var(--mahogany);
 }
 
+/* The home link in the header is a navigation control, not a word in a
+   sentence, so it gets a full tap target. The three links still under 44px on
+   this page are all inline within prose, which WCAG 2.5.8 exempts. */
 .mast__word {
   font-family: var(--font-head);
   font-size: 1.2rem;
   font-weight: 700;
   color: var(--ivory);
   text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
 }
 .mast__dot { color: var(--gilt); }
 
+/* The most important tap on a salon page. It measured 19px tall on a phone,
+   well under the 44px comfortable minimum, so the padding is explicit. */
 .mast__call {
-  font-size: 0.9rem;
+  font-size: 0.95rem;
   font-weight: 700;
   letter-spacing: 0.04em;
   text-decoration: none;
   min-height: 44px;
   display: inline-flex;
   align-items: center;
+  padding: 0 0.25rem;
 }
 
 /* ---------- hero ---------- */
@@ -106,7 +115,7 @@ a { color: var(--gilt); }
 
 .eyebrow {
   margin: 0 0 0.6rem;
-  font-size: 0.7rem;
+  font-size: 0.75rem;
   font-weight: 700;
   letter-spacing: 0.2em;
   text-transform: uppercase;
@@ -220,15 +229,19 @@ h1 {
   padding: 0.85rem 1.1rem;
 }
 
+/* Eight of these are the main interactive elements on the page and they
+   measured 32px on a phone. A question a thumb misses is a question that
+   goes unanswered. */
 .faq summary {
   cursor: pointer;
   font-weight: 600;
   color: var(--ivory);
   list-style: none;
-  min-height: 32px;
+  min-height: 44px;
   display: flex;
   align-items: center;
   gap: 0.6rem;
+  padding: 0.2rem 0;
 }
 .faq summary::-webkit-details-marker { display: none; }
 
@@ -256,6 +269,15 @@ h1 {
   color: var(--taupe);
 }
 .foot p { margin: 0 0 0.4rem; }
+
+/* Footer links measured 18px. Inline-flex with a min-height gives them a
+   thumb-sized hit area without changing how the line looks. */
+.foot a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 0 0.2rem;
+}
 
 /* ---------- wide screens ---------- */
 
@@ -302,7 +324,7 @@ h1 {
 .spec__row dt,
 .why__row dt {
   margin: 0;
-  font-size: 0.78rem;
+  font-size: 0.82rem;
   letter-spacing: 0.1em;
   text-transform: uppercase;
   color: var(--gilt);
@@ -342,4 +364,84 @@ h1 {
   object-fit: cover;
   border-radius: 4px;
   border: 1px solid var(--mahogany);
+}
+
+/* ---------------- Sticky booking bar (phones only) ---------------- */
+/* Ad traffic arrives on a phone and reads a long page. The hero CTA scrolls
+   away within a screen or two, and the next one is at the very bottom. This
+   keeps booking one thumb-reach away throughout.
+   Hidden from 700px up, where the hero CTA stays in view long enough not to
+   need it, and where a fixed bar would just eat screen. */
+
+.stickybook {
+  display: none;
+}
+
+@media (max-width: 699px) {
+  .stickybook {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 40;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.7rem 1rem calc(0.7rem + env(safe-area-inset-bottom, 0px));
+    background: rgba(16, 11, 9, 0.96);
+    border-top: 1px solid var(--mahogany);
+    /* Backdrop blur is progressive: without support the solid ground above
+       still carries the contrast. */
+    backdrop-filter: blur(8px);
+  }
+
+  .stickybook__meta {
+    flex: 1 1 auto;
+    min-width: 0;
+    line-height: 1.25;
+  }
+
+  .stickybook__name {
+    display: block;
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: var(--ivory);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .stickybook__price {
+    display: block;
+    font-size: 0.78rem;
+    color: var(--gilt);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .stickybook__cta {
+    flex: 0 0 auto;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 46px;
+    padding: 0.7rem 1.15rem;
+    background: var(--gilt);
+    color: var(--noir);
+    border-radius: 3px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    text-decoration: none;
+  }
+
+  .stickybook__cta:focus-visible {
+    outline: 2px solid var(--ivory);
+    outline-offset: 2px;
+  }
+
+  /* Nothing at the foot of the page may hide behind the bar. */
+  body {
+    padding-bottom: 5.5rem;
+  }
 }
