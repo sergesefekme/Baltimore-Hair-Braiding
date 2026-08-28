@@ -280,3 +280,25 @@
 --   confirm               -> "ok (confirmed)"
 --   change date and time  -> "ok (reschedule)"
 --   edit notes only       -> nothing sent
+
+
+-- ===========================================================================
+-- Reminder contents — cancellation link
+-- APPLIED 2026-08-26  (send-scheduled v2)
+-- ===========================================================================
+--
+-- The reminder already carried service, date, time, address, phone and
+-- preparation instructions. It gave cancellation INSTRUCTIONS (call or text)
+-- but no LINK, so it now deep-links policies.html#cancellation — the client
+-- lands on the rule rather than the top of a long page. Anchor verified
+-- present before shipping the link; a dead anchor in an email is worse than
+-- no link, because it silently scrolls to the top and looks broken.
+--
+-- Also labelled the address and preparation blocks ("Where", "How to
+-- prepare", "Need to change or cancel?") so the email is scannable on a
+-- phone rather than three unlabelled paragraphs, and added Where/Phone to the
+-- plain-text alternative, which previously omitted the phone number entirely.
+--
+-- Verified: one confirmed and one CANCELLED appointment, both due tomorrow.
+-- send_appointment_reminders() returned 1. The confirmed row was stamped, the
+-- cancelled row was not, and the function returned "ok (reminder)".
