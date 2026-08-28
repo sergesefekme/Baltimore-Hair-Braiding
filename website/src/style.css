@@ -1803,7 +1803,10 @@ body.is-menu-open {
 }
 
 /* The number is the advertisement. Everything else is the small print. */
-.offer__pct {
+/* Was .offer__pct, when the offer was a percentage. Renamed with the offer:
+   a class called "pct" rendering a dollar amount is how the next person
+   editing this gets confused. */
+.offer__amt {
   display: flex;
   align-items: flex-start;
   margin: 0 0 0.2rem;
@@ -1812,11 +1815,21 @@ body.is-menu-open {
   font-weight: 700;
   line-height: 0.86;
   letter-spacing: -0.04em;
-  color: var(--text);
+  color: var(--gilt);
   font-size: clamp(3.4rem, 7vw, 6rem);
 }
 
-.offer__pct span {
+/* The currency mark rides at cap height rather than sitting on the baseline,
+   where a full-size "$" would swamp the digits it belongs to. */
+.offer__cur {
+  font-size: 0.52em;
+  line-height: 1;
+  padding-top: 0.12em;
+  margin-right: 0.04em;
+  color: var(--gilt-soft);
+}
+
+.offer__num {
   color: var(--gilt);
 }
 
