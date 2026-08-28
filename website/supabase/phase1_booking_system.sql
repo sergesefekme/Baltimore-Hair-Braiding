@@ -254,3 +254,29 @@
 -- published in the site's own price table. "Half Up Half Down" is spelled
 -- without hyphens to match the work card and the booking dropdown - the three
 -- must agree or preselection silently fails.
+
+
+-- ===========================================================================
+-- Confirmation flow — reschedule notification
+-- APPLIED 2026-08-26  (phase4_notify_on_reschedule)
+-- ===========================================================================
+--
+-- "Change appointment date/time" is a listed dashboard capability, so a
+-- reschedule has to reach the client. The trigger previously fired only on a
+-- status change, which meant moving a confirmed appointment updated the
+-- database and told nobody — the client would arrive on the old day.
+--
+-- It now fires on either: the transition into 'confirmed', or a
+-- date/time change while already confirmed. An edit that touches neither
+-- (correcting a phone number, adding a note) still sends nothing.
+--
+-- The payload carries is_reschedule so the email can say "has been moved"
+-- rather than "is confirmed" to someone who has already had one confirmation
+-- for a different day. The facts in the email are identical either way; only
+-- the framing changes.
+--
+-- Verified on apply, in order:
+--   insert                -> "ok"               (salon + customer)
+--   confirm               -> "ok (confirmed)"
+--   change date and time  -> "ok (reschedule)"
+--   edit notes only       -> nothing sent

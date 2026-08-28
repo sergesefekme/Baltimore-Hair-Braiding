@@ -245,6 +245,30 @@
         outline-offset: 1px;
       }
 
+      /* ---------- reschedule ---------- */
+      .resched {
+        margin-top: 0.9rem;
+        padding-top: 0.9rem;
+        border-top: 1px solid var(--mahogany);
+      }
+      .resched summary {
+        cursor: pointer;
+        list-style: none;
+        min-height: 32px;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-size: 0.72rem;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: var(--gilt);
+      }
+      .resched summary::-webkit-details-marker { display: none; }
+      .resched summary::before { content: "+"; font-size: 1rem; line-height: 1; }
+      .resched[open] summary::before { content: "2"; }
+      .resched summary:focus-visible { outline: 2px solid var(--gilt); outline-offset: 3px; }
+      .resched .confirm__grid { margin-top: 0.7rem; }
+
       /* ---------- table ---------- */
       .tbl-wrap { overflow-x: auto; }
       .tbl { width: 100%; border-collapse: collapse; font-size: 0.9rem; min-width: 22rem; }

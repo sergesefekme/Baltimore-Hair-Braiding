@@ -256,6 +256,43 @@ function bookingCard(r, opts = {}) {
     card.append(form);
   }
 
+  /* Reschedule, for an appointment already confirmed. Collapsed by default:
+     it is the least-used action on the card and would otherwise push Mark
+     completed below the fold on a phone. Saving re-emails the client, because
+     the trigger fires on a slot change as well as a status change - moving an
+     appointment and telling nobody is how a client arrives on the wrong day. */
+  if (r.status === "confirmed") {
+    const box = el("details", "resched");
+    box.append(el("summary", null, "Change date or time"));
+
+    const grid = el("div", "confirm__grid");
+    const d = el("input");
+    d.type = "date";
+    d.value = r.appointment_date || slotOf(r) || "";
+    d.setAttribute("aria-label", "New appointment date");
+
+    const t = el("input");
+    t.type = "time";
+    t.value = (r.appointment_time || "").slice(0, 5);
+    t.setAttribute("aria-label", "New appointment time");
+
+    grid.append(d, t);
+    box.append(grid);
+    box.append(
+      actionButton("Save & email client", "btn--primary", async () => {
+        if (!d.value) {
+          alert("Pick a date first.");
+          return;
+        }
+        await patch(r.id, {
+          appointment_date: d.value,
+          appointment_time: t.value || null,
+        });
+      })
+    );
+    card.append(box);
+  }
+
   const acts = el("div", "card__acts");
   if (r.status === "confirmed") {
     acts.append(
