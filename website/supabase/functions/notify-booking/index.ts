@@ -51,6 +51,7 @@ const SITE = "https://mimi-african-braiding-styling.com";
 const NOIR = "#100b09";
 const ESPRESSO = "#1a1310";
 const GILT = "#d2a24c";
+const GILT_DEEP = "#a87c33";
 const IVORY = "#f6efe7";
 const SAND = "#d6c4b2";
 const TAUPE = "#9a8778";
@@ -105,21 +106,38 @@ async function send(payload: Record<string, unknown>) {
 /* ------------------------------------------------------------------ */
 
 function salonEmail(r: Record<string, unknown>) {
+  const tel = String(r.phone ?? "").replace(/[^\d+]/g, "");
+
+  /* Phone and email are tap targets, not text. This lands on a phone between
+     clients, and retyping a number off a screen is how numbers get misdialled. */
+  const phoneCell = tel
+    ? `<a href="tel:${esc(tel)}" style="color:${GILT_DEEP};font-weight:700;text-decoration:none">${esc(r.phone)}</a>`
+    : esc(r.phone);
+  const emailCell = r.email
+    ? `<a href="mailto:${esc(r.email)}" style="color:${GILT_DEEP};font-weight:700;text-decoration:none">${esc(r.email)}</a>`
+    : "&mdash;";
+
   const rows = [
-    ["Name", r.name],
-    ["Phone", r.phone],
-    ["Email", r.email || "—"],
-    ["Style", r.style],
-    ["Preferred", `${prettyDate(r.preferred_date)} (${r.preferred_time || "any time"})`],
-    ["Notes", r.notes || "—"],
-    // Phase 1 attribution. Reads "—" until Phase 3 starts populating it.
-    ["Source", r.source || "—"],
-    ["Campaign", r.utm_campaign || "—"],
+    ["Customer", `<strong>${esc(r.name)}</strong>`],
+    ["Phone", phoneCell],
+    ["Email", emailCell],
+    ["Service", `<strong>${esc(r.style)}</strong>`],
+    // Date and time as separate rows: combined, the time hides inside the
+    // date and gets skimmed past.
+    ["Date", `<strong>${esc(prettyDate(r.preferred_date))}</strong>`],
+    ["Time", esc(r.preferred_time || "Any time")],
+    ["Notes", esc(r.notes || "—")],
+    // Attribution. Reads "—" for a visitor who arrived with no campaign on
+    // the URL, which is most organic traffic.
+    ["Lead source", esc(r.source || "—")],
+    ["Campaign", esc(r.utm_campaign || "—")],
   ]
     .map(
       ([k, v]) =>
-        `<tr><td style="padding:6px 14px 6px 0;color:${TAUPE}">${esc(k)}</td>` +
-        `<td style="padding:6px 0;color:${NOIR}"><strong>${esc(v)}</strong></td></tr>`
+        `<tr>` +
+        `<td style="padding:7px 16px 7px 0;color:${TAUPE};font-size:13px;white-space:nowrap;vertical-align:top">${k}</td>` +
+        `<td style="padding:7px 0;color:${NOIR};font-size:15px">${v}</td>` +
+        `</tr>`
     )
     .join("");
 
@@ -128,11 +146,51 @@ function salonEmail(r: Record<string, unknown>) {
     // Replying goes straight to the client when they left an address.
     reply_to: (r.email as string) || undefined,
     subject: `New booking: ${r.name} — ${r.style} on ${r.preferred_date}`,
-    html:
-      `<h2 style="font-family:Georgia,serif;color:${NOIR}">New booking request</h2>` +
-      `<table style="font-family:system-ui,sans-serif;font-size:15px">${rows}</table>` +
-      `<p style="font-family:system-ui,sans-serif;font-size:13px;color:${TAUPE}">` +
-      `Received ${esc(r.created_at)}</p>`,
+    text:
+      `New booking request\n\n` +
+      `Customer: ${r.name}\n` +
+      `Phone: ${r.phone}\n` +
+      `Email: ${r.email || "—"}\n` +
+      `Service: ${r.style}\n` +
+      `Date: ${prettyDate(r.preferred_date)}\n` +
+      `Time: ${r.preferred_time || "Any time"}\n` +
+      `Notes: ${r.notes || "—"}\n` +
+      `Lead source: ${r.source || "—"}\n` +
+      `Campaign: ${r.utm_campaign || "—"}\n\n` +
+      `Review and confirm: ${SITE}/admin.html\n`,
+    html: `
+<div style="margin:0;padding:20px 12px;background:#f6efe7;font-family:system-ui,-apple-system,'Segoe UI',sans-serif">
+  <div style="max-width:520px;margin:0 auto;background:#ffffff;border:1px solid #e0d3c6;border-radius:4px;overflow:hidden">
+
+    <div style="padding:18px 24px;background:${NOIR}">
+      <p style="margin:0;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:${GILT}">New booking request</p>
+      <p style="margin:5px 0 0;font-family:Georgia,serif;font-size:19px;font-weight:700;color:#f6efe7">
+        ${esc(r.name)} &middot; ${esc(r.style)}
+      </p>
+    </div>
+
+    <div style="padding:20px 24px 24px">
+      <table style="border-collapse:collapse;width:100%">${rows}</table>
+
+      <!-- The call to action. Without it this is a notification the salon
+           reads and then has to go and find the dashboard for. -->
+      <table style="border-collapse:collapse;margin:22px 0 0"><tr><td>
+        <a href="${SITE}/admin.html"
+           style="display:inline-block;padding:14px 26px;background:${GILT};color:${NOIR};font-size:14px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;text-decoration:none;border-radius:3px">
+          Review &amp; confirm this appointment
+        </a>
+      </td></tr></table>
+
+      <p style="margin:14px 0 0;font-size:13px;color:${TAUPE}">
+        Confirming there emails the client automatically.
+      </p>
+
+      <p style="margin:16px 0 0;padding-top:14px;border-top:1px solid #e0d3c6;font-size:12px;color:${TAUPE}">
+        Received ${esc(r.created_at)}
+      </p>
+    </div>
+  </div>
+</div>`,
   };
 }
 
