@@ -213,3 +213,44 @@
 --   second and third run             -> 0 sent (already stamped)
 --   same row set to cancelled        -> 0 sent
 --   total outbound calls in the test -> exactly 2, none of them duplicates
+
+
+-- ===========================================================================
+-- Schema reconciliation — requested field names
+-- APPLIED 2026-08-26  (phase7_duration_and_campaign_v2)
+-- ===========================================================================
+--
+-- Checked the requested appointments/services field list against what Phase 1
+-- already built: 27 of 29 names already resolved. Only two did not.
+--
+--   services.duration      human-readable string, e.g. "5-8 hours"
+--   appointments.campaign  alias of utm_campaign
+--
+-- services.duration is populated with the EXACT text printed in the site's
+-- spec table, not derived from duration_min/duration_max. Dividing minutes
+-- turns loc maintenance (90-180) into "1-3 hours" and loses the half hour the
+-- site actually advertises. The minutes pair stays for anything that needs to
+-- compute; this column is for display. Change one, change the other.
+--
+-- The five styles with no published duration keep NULL, exactly as they keep
+-- a NULL starting_price. The site says "Price agreed when you book" for those
+-- and must not start implying a time it has never quoted.
+--
+-- `campaign` is an ALIAS in the view, not a stored column. Two columns holding
+-- the same fact drift the moment one write path forgets the other, and then
+-- the ad report quietly disagrees with itself.
+--
+-- The view was DROPPED and recreated rather than CREATE OR REPLACE: replace
+-- can only append columns, and inserting these mid-list errors with "cannot
+-- change name of view column". No data is involved - it is a projection over
+-- booking_requests. RE-VERIFY RLS AFTER ANY SUCH DROP: a recreated view that
+-- forgets `with (security_invoker = true)` silently hands anon every
+-- customer's name and phone. Checked after applying: anon SELECT returns [].
+--
+-- Statuses were already exactly pending/confirmed/completed/cancelled/no_show.
+--
+-- The services table holds 13 rows, not 9: the requested nine plus loc
+-- maintenance, starter locs, custom wig and sew-in, all four of which are
+-- published in the site's own price table. "Half Up Half Down" is spelled
+-- without hyphens to match the work card and the booking dropdown - the three
+-- must agree or preselection silently fails.
