@@ -2000,6 +2000,22 @@ body.is-menu-open {
   font-weight: 700;
 }
 
+/* A real review, rendered from the database. Marked with the gilt edge so it
+   reads as someone else's voice rather than the salon's own copy. */
+.words .quote--real {
+  border-left: 2px solid var(--gilt);
+}
+
+/* Reviews are quoted speech, so they get the quote face. The commitments
+   beneath them stay in the body face — the two must not look interchangeable. */
+.quote__body--real {
+  font-family: var(--font-quote);
+  font-style: italic;
+  font-size: 1.12rem;
+  line-height: 1.55;
+  color: var(--sand);
+}
+
 /* The commitment cards carry no attribution line, so the body is the last
    child and its bottom margin would otherwise hang as dead space. */
 .words .quote > .quote__body:last-child {

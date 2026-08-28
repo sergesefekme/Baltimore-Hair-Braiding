@@ -9,6 +9,7 @@
 
 import Lenis from "lenis";
 import { setupBooking } from "./booking.js";
+import { setupReviews } from "./reviews.js";
 import gsap from "gsap";
 import ScrollTrigger from "gsap/ScrollTrigger";
 
@@ -730,6 +731,7 @@ function init() {
   setupPatterns();
   setupWorkShowcase();
   setupBooking();
+  setupReviews();
   setupMenu();
   setupNav();
   setupReveals();
