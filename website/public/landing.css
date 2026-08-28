@@ -269,3 +269,77 @@ h1 {
 @media (prefers-reduced-motion: no-preference) {
   .skip { transition: transform 0.18s ease; }
 }
+
+/* ---------------- Service page additions ---------------- */
+
+.note {
+  font-size: 0.9rem;
+  color: var(--taupe);
+  border-left: 2px solid var(--mahogany);
+  padding-left: 1rem;
+  margin-top: 1.25rem;
+}
+
+/* Spec and "why" share a definition-list shape: a label column that stays
+   narrow and a value column that wraps. Rendered as rows rather than a table
+   so it reflows to one column on a phone without a horizontal scroll. */
+.spec__list,
+.why {
+  margin: 0;
+  display: grid;
+  gap: 0.1rem;
+}
+
+.spec__row,
+.why__row {
+  display: grid;
+  grid-template-columns: 11rem 1fr;
+  gap: 0.6rem 1rem;
+  padding: 0.75rem 0;
+  border-bottom: 1px solid var(--mahogany);
+}
+
+.spec__row dt,
+.why__row dt {
+  margin: 0;
+  font-size: 0.78rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--gilt);
+}
+
+.spec__row dd,
+.why__row dd {
+  margin: 0;
+  color: var(--sand);
+}
+
+.spec__row dd {
+  font-weight: 600;
+  color: var(--ivory);
+  font-variant-numeric: tabular-nums;
+}
+
+@media (max-width: 620px) {
+  .spec__row,
+  .why__row {
+    grid-template-columns: 1fr;
+    gap: 0.2rem;
+  }
+}
+
+/* ---------------- Gallery ---------------- */
+
+.gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 0.7rem;
+}
+
+.gallery img {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  border-radius: 4px;
+  border: 1px solid var(--mahogany);
+}

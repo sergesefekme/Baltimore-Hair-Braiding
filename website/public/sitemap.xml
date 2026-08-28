@@ -21,41 +21,6 @@
     <priority>0.3</priority>
   </url>
   <url>
-    <loc>https://mimi-african-braiding-styling.com/knotless-braids.html</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://mimi-african-braiding-styling.com/box-braids.html</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://mimi-african-braiding-styling.com/cornrows.html</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://mimi-african-braiding-styling.com/fulani-braids.html</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://mimi-african-braiding-styling.com/kids-braids.html</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://mimi-african-braiding-styling.com/feed-in-braids.html</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://mimi-african-braiding-styling.com/goddess-braids.html</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
     <loc>https://mimi-african-braiding-styling.com/braided-updo.html</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
@@ -64,5 +29,45 @@
     <loc>https://mimi-african-braiding-styling.com/half-up-half-down.html</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://mimi-african-braiding-styling.com/knotless-braids-ashburn-va/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://mimi-african-braiding-styling.com/box-braids-ashburn-va/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://mimi-african-braiding-styling.com/cornrows-ashburn-va/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://mimi-african-braiding-styling.com/stitch-braids-ashburn-va/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://mimi-african-braiding-styling.com/fulani-braids-ashburn-va/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://mimi-african-braiding-styling.com/feed-in-braids-ashburn-va/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://mimi-african-braiding-styling.com/kids-braids-ashburn-va/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://mimi-african-braiding-styling.com/goddess-braids-ashburn-va/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
   </url>
 </urlset>
