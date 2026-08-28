@@ -161,13 +161,13 @@ function customerEmail(r: Record<string, unknown>) {
     text:
       `Hello ${firstName(r.name)},\n\n` +
       `Thank you for choosing Mirabelle.B African Hair Braiding.\n\n` +
-      `We received your request for:\n` +
-      `  Service: ${r.style}\n` +
-      `  Preferred date: ${prettyDate(r.preferred_date)}\n` +
-      `  Preferred time: ${r.preferred_time || "Any time"}\n\n` +
-      `Your appointment is currently PENDING CONFIRMATION. ` +
+      `We received your request for:\n\n` +
+      `Service: ${r.style}\n` +
+      `Preferred Date: ${prettyDate(r.preferred_date)}\n` +
+      `Preferred Time: ${r.preferred_time || "Any time"}\n\n` +
+      `Your appointment is currently pending confirmation.\n\n` +
       `We will contact you shortly to confirm availability.\n\n` +
-      `Questions? Call or text ${SALON_PHONE}.\n\n` +
+      `Questions, or need to change something? Call or text ${SALON_PHONE}.\n\n` +
       `Mirabelle.B African Hair Braiding\n` +
       `${SALON_ADDRESS}\n${SITE}\n`,
     html: `
@@ -184,33 +184,42 @@ function customerEmail(r: Record<string, unknown>) {
     </div>
 
     <div style="padding:24px 28px 28px">
-      <h1 style="margin:0 0 14px;font-family:Georgia,'Times New Roman',serif;font-size:23px;font-weight:700;color:${IVORY};line-height:1.25">
-        Thank you, ${name} — we have your request
-      </h1>
+      <p style="margin:0 0 16px;font-size:17px;line-height:1.5;color:${IVORY}">
+        Hello ${name},
+      </p>
 
-      <p style="margin:0 0 20px;font-size:15px;line-height:1.65;color:${SAND}">
-        Thank you for choosing Mirabelle.B African Hair Braiding. Here is what
-        you asked for:
+      <p style="margin:0 0 18px;font-size:15px;line-height:1.65;color:${SAND}">
+        Thank you for choosing Mirabelle.B African Hair Braiding.
+      </p>
+
+      <p style="margin:0 0 14px;font-size:15px;line-height:1.65;color:${SAND}">
+        We received your request for:
       </p>
 
       <table style="width:100%;border-collapse:collapse;background:${NOIR};border-left:2px solid ${GILT};padding:0">
         <tr><td style="padding:14px 18px">
           <table style="border-collapse:collapse">
             ${line("Service", service)}
-            ${line("Preferred date", date)}
-            ${line("Preferred time", time)}
+            ${line("Preferred Date", date)}
+            ${line("Preferred Time", time)}
           </table>
         </td></tr>
       </table>
 
       <p style="margin:20px 0 0;font-size:15px;line-height:1.65;color:${SAND}">
         Your appointment is currently
-        <strong style="color:${GILT}">pending confirmation</strong>. We will
-        contact you shortly to confirm availability — usually the same day.
+        <strong style="color:${GILT}">pending confirmation</strong>.
       </p>
 
-      <p style="margin:16px 0 0;font-size:15px;line-height:1.65;color:${SAND}">
-        Need to change something, or in a hurry? Call or text
+      <p style="margin:14px 0 0;font-size:15px;line-height:1.65;color:${SAND}">
+        We will contact you shortly to confirm availability.
+      </p>
+
+      <!-- Beyond the requested copy, kept deliberately: a confirmation with no
+           way to reach the salon sends the client back to the site to hunt for
+           the number. One line, and it is the line people actually use. -->
+      <p style="margin:14px 0 0;font-size:15px;line-height:1.65;color:${SAND}">
+        Questions, or need to change something? Call or text
         <a href="tel:+15714260602" style="color:${GILT};font-weight:600;text-decoration:none">${SALON_PHONE}</a>.
       </p>
 
