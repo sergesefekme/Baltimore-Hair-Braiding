@@ -122,8 +122,16 @@
 
     <!-- ================= BACKGROUND LAYERS ================= -->
 
-    <!-- HERO MEDIA DISABLED — testing the page with no hero image/video.
-         Delete this comment wrapper (the two marker lines) to restore. -->
+    <!-- HERO MEDIA DISABLED, and /bg.mp4 has been DELETED (2026-08-28).
+         The video was 9.2MB — about three quarters of the whole build — and
+         shipped on every deploy while being invisible to visitors, because
+         this block is commented out.
+
+         Uncommenting this alone will NOT restore the hero: the file is gone.
+         Recover it first with
+             git checkout 7fa87d0 -- website/public/bg.mp4
+         and compress it before shipping it again. mobile-poster.webp was kept
+         — style.css still references it. -->
     <!--
     <video
       id="bgv"
