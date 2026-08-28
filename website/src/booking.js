@@ -207,6 +207,19 @@ export function setupBooking() {
 
   preselectService(form);
 
+  /* Book Now on a service card jumps to the form. Without this it arrived
+     with an empty dropdown, so a visitor who had just chosen a style had to
+     choose it again — the commonest way a booking form loses people. */
+  document.querySelectorAll(".work-card__cta[data-service]").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const wanted = SERVICE_SLUGS[btn.dataset.service];
+      if (!wanted) return;
+      const select = form.elements["style"];
+      const match = [...select.options].find((o) => o.text === wanted);
+      if (match) select.value = match.value || match.text;
+    });
+  });
+
   // Clear a field's error as soon as the visitor starts fixing it.
   form.addEventListener("input", (e) => {
     if (e.target.closest(".field.is-bad")) setError(e.target, "");

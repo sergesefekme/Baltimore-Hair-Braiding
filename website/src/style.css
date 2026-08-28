@@ -848,6 +848,27 @@ body.is-menu-open {
   text-shadow: 0 1px 10px rgba(16, 11, 9, 0.9), 0 0 3px rgba(16, 11, 9, 0.75);
 }
 
+/* The card heading is a link to that style's page. Underline only on
+   hover/focus: nine underlined headings in a grid reads as a list of links
+   rather than a set of cards. */
+.work-card__name a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.work-card__name a:hover,
+.work-card__name a:focus-visible {
+  color: var(--gilt-soft);
+  text-decoration: underline;
+  text-underline-offset: 0.18em;
+}
+
+.work-card__name a:focus-visible {
+  outline: 2px solid var(--gilt);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
 /* ---------------- Work card pricing ---------------- */
 /* Price and duration sit directly under the description, and the CTA is
    pinned to the bottom so the buttons line up across cards of differing
