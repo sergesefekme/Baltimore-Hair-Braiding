@@ -26,13 +26,17 @@
    --------------------------------------------------------- */
 
 /* ===========================================================
-   PASTE YOUR META PIXEL ID HERE — the numeric ID only,
-   e.g. "1234567890123456". Nothing else needs changing.
-   While it is empty, the banner still works and simply has
-   nothing to load, which is the correct behaviour before the
-   Pixel exists.
-   =========================================================== */
-const PIXEL_ID = "";
+   The Meta Pixel ID. This is the only place it appears.
+   ===========================================================
+
+   THE <noscript> HALF OF META'S SNIPPET IS DELIBERATELY ABSENT.
+   Meta's paste-in code ends with a <noscript><img src=".../tr?id=..."> that
+   fires the moment the HTML is parsed. It cannot be gated — a browser with
+   JavaScript disabled runs no consent logic — so including it would track
+   those visitors without asking, which is exactly what this file exists to
+   prevent. The cost is losing a sliver of no-JS traffic from the reporting.
+   That is the right side of the trade. */
+const PIXEL_ID = "1614226446907840";
 
 const KEY = "mb_consent";
 const VERSION = 1; // bump to re-ask everyone after a material policy change
