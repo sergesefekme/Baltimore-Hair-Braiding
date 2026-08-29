@@ -198,6 +198,29 @@ function styles() {
   document.head.appendChild(el);
 }
 
+/* Reserve exactly the banner's height at the foot of the page.
+   Measured rather than hardcoded: the banner wraps to two and three rows at
+   narrower widths, so any fixed value would be wrong somewhere. Without this
+   the banner overlays the bottom of the page and swallows clicks on whatever
+   is under it — which is how it ate the booking form's submit button. */
+function reserveSpace(bar) {
+  const apply = () => {
+    if (!bar.isConnected) return;
+    document.body.style.paddingBottom = bar.offsetHeight + "px";
+  };
+  apply();
+  // Re-measure on rotate/resize, where the row count changes.
+  const ro =
+    typeof ResizeObserver !== "undefined" ? new ResizeObserver(apply) : null;
+  if (ro) ro.observe(bar);
+  window.addEventListener("resize", apply);
+  return () => {
+    if (ro) ro.disconnect();
+    window.removeEventListener("resize", apply);
+    document.body.style.paddingBottom = "";
+  };
+}
+
 function banner() {
   styles();
   document.body.classList.add("mbc-open");
@@ -216,7 +239,11 @@ function banner() {
     '<button type="button" class="mbc__btn mbc__btn--accept">Accept</button>' +
     "</div>";
 
+  document.body.appendChild(bar);
+  const release = reserveSpace(bar);
+
   const close = () => {
+    release();
     bar.remove();
     document.body.classList.remove("mbc-open");
   };
@@ -231,7 +258,6 @@ function banner() {
     close();
   });
 
-  document.body.appendChild(bar);
 }
 
 /* ---------------- boot ---------------- */
