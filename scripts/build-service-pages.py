@@ -372,6 +372,7 @@ PAGE = """<!doctype html>
       rel="stylesheet"
     />
     <link rel="stylesheet" href="/landing.css" />
+    <script src="/consent.js" defer></script>
     <script type="application/ld+json">
 {schema}
     </script>
