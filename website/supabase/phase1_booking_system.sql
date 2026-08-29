@@ -135,7 +135,7 @@
 -- by the Auth service, not by us). So:
 --
 --   1. Dashboard -> Authentication -> Users -> Add user
---      Email: mirabellekamga4@gmail.com, set a password, auto-confirm.
+--      Email: kamgamirabelle4@gmail.com, set a password, auto-confirm.
 --   2. Dashboard -> Authentication -> Providers -> Email
 --      TURN OFF "Enable sign-ups". Without this anyone can create an
 --      account. They would still not be an admin, but there is no reason to
@@ -144,7 +144,7 @@
 --
 --        insert into public.admins (user_id, email)
 --        select id, email from auth.users
---        where email = 'mirabellekamga4@gmail.com'
+--        where email = 'kamgamirabelle4@gmail.com'
 --        on conflict (user_id) do nothing;
 --
 -- Verify afterwards: sign in at /admin.html and confirm the pending queue

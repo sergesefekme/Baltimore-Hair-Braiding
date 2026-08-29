@@ -25,7 +25,7 @@ Your name, kept as given. What follows is how to *write* it consistently — the
 | Handle | `@mirabelleb` — **proposed, availability unverified** |
 | Domain | **`mimi-african-braiding-styling.com`** — registered, DNS on AWS Route 53 |
 | Sending address | `bookings@mimi-african-braiding-styling.com` (booking alerts) |
-| Contact email | `mirabellekamga4@gmail.com` — **temporary**, receives booking alerts |
+| Contact email | `kamgamirabelle4@gmail.com` — **temporary**, receives booking alerts |
 
 ### Rules
 - **The dot is part of the name**, not punctuation. Never write "Mirabelle M" with a space, and never drop the dot.
@@ -55,7 +55,7 @@ Before the sign, packaging, and domain are finalized, run a USPTO search on "Mir
 
 **Note the mismatch worth deciding on.** The domain says *mimi african braiding styling*; the brand mark says *Mirabelle.B*. Both are defensible — "Mimi" is a natural short form of Mirabelle, and the domain carries the service and the SEO terms a stranger actually searches for. But a visitor who hears the name spoken will not guess the URL. Decide deliberately whether the domain is a keyword asset pointing at the brand, or whether one of the two should move.
 
-**The contact address is still temporary.** `mirabellekamga4@gmail.com` receives booking alerts. Now that the domain exists, a mailbox on it (`hello@` or `bookings@`) reads better anywhere the address is published — the sending side already uses the domain.
+**The contact address is still temporary.** `kamgamirabelle4@gmail.com` receives booking alerts. Now that the domain exists, a mailbox on it (`hello@` or `bookings@`) reads better anywhere the address is published — the sending side already uses the domain.
 
 ---
 
