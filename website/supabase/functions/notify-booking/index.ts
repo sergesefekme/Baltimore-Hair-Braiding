@@ -32,7 +32,7 @@ const RESEND_KEY = Deno.env.get("RESEND_API_KEY");
 // Falls back to the salon's own address so a forgotten secret degrades to
 // "mail still arrives" rather than "bookings vanish".
 const NOTIFY_TO =
-  Deno.env.get("BOOKING_NOTIFY_TO") ?? "kamgamirabelle4@gmail.com";
+  Deno.env.get("BOOKING_NOTIFY_TO") ?? "booking@mimi-african-braiding-styling.com";
 
 // When the salon registers its own domain, verify it at Resend and set
 // BOOKING_NOTIFY_FROM. Nothing else changes.
