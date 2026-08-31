@@ -26,6 +26,11 @@
  * independent: the salon notification is what the business cannot afford to
  * lose, so a failure to reach the customer must never suppress it. See
  * SEND ORDER below.
+ *
+ * The salon alert below deliberately does NOT carry the 240px badge the
+ * customer emails use. It is an internal ops notification read on a phone
+ * between clients, and the first thing it has to show is who booked and for
+ * what. A logo occupying the top third of it would push that below the fold.
  */
 
 const RESEND_KEY = Deno.env.get("RESEND_API_KEY");

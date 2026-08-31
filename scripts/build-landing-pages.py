@@ -19,6 +19,22 @@ Run:  python scripts/build-landing-pages.py
 import io
 import os
 
+#
+# DO NOT RUN THIS WITHOUT READING THIS FIRST.
+#
+# Seven of the nine slugs below (knotless-braids, box-braids, cornrows,
+# fulani-braids, feed-in-braids, goddess-braids, kids-braids) are no longer
+# full pages. They were replaced by /<slug>-ashburn-va/ from
+# build-service-pages.py, and what sits at the old .html paths now is a
+# hand-written noindex redirect stub pointing at the new URL. Running this
+# script would overwrite those stubs with full pages again and put duplicate
+# content back on the site.
+#
+# Only braided-updo and half-up-half-down are still real pages here; those two
+# services never got an -ashburn-va page. If you need to regenerate, do it for
+# those two slugs alone.
+#
+
 OUT = os.path.join("website", "public")
 SITE = "https://mimi-african-braiding-styling.com"
 
@@ -215,7 +231,9 @@ PAGE = """<!doctype html>
     <title>{name} in Ashburn, VA — Mirabelle.B</title>
     <meta name="description" content="{meta_desc}" />
     <meta name="theme-color" content="#100B09" />
-    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="icon" href="/favicon.ico" sizes="32x32" />
+    <link rel="icon" href="/img/brand/favicon-192.png" type="image/png" sizes="192x192" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <link rel="canonical" href="{site}/{slug}.html" />
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="Mirabelle.B" />
@@ -240,7 +258,12 @@ PAGE = """<!doctype html>
     <a class="skip" href="#main">Skip to content</a>
 
     <header class="mast">
-      <a class="mast__word" href="/">Mirabelle<span class="mast__dot">.</span>B</a>
+      <a class="mast__word" href="/">
+        <img class="mast__mark" src="/img/brand/mark-96.webp"
+             srcset="/img/brand/mark-96.webp 1x, /img/brand/mark-192.webp 2x"
+             width="60" height="60" alt="" decoding="async" />
+        <span>Mirabelle<span class="mast__dot">.</span>B</span>
+      </a>
       <a class="mast__call" href="tel:+15714260602">571-426-0602</a>
     </header>
 
