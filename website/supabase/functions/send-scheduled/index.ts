@@ -72,12 +72,20 @@ const shell = (inner: string) => `
 <div style="margin:0;padding:24px 12px;background:${NOIR};font-family:system-ui,-apple-system,'Segoe UI',sans-serif">
   <div style="max-width:560px;margin:0 auto;background:${ESPRESSO};border:1px solid #3b241d;border-radius:4px">
     <div style="padding:28px 28px 0">
-      <!-- Absolute URL: an email has no site to be relative to. Sized and
-           styled inline so that a client blocking images still renders the
-           alt text as the wordmark rather than as bare default type. -->
-      <img src="${SITE}/img/brand/logo-full-340.png" width="84" height="84"
-           alt="Mirabelle.B"
-           style="display:block;border:0;width:84px;height:84px;border-radius:50%;font-family:Georgia,'Times New Roman',serif;font-size:19px;font-weight:700;color:${IVORY}" />
+      <!-- Absolute URL: an email has no site to be relative to.
+           BOTH a width attribute and inline width: Outlook on Windows renders
+           through Word, which honours the HTML attribute and ignores much of
+           the CSS, while Gmail and Apple Mail take the CSS. Giving only one of
+           them is how a logo ends up full-bleed in one client and thumbnail in
+           another. height:auto rather than a fixed height so it can never be
+           stretched if the source aspect ratio ever changes.
+           max-width:100% keeps it inside a narrow phone viewport.
+           The alt text is styled so that a client blocking images still shows
+           the wordmark rather than bare default type.
+           Source is 520px for a true 2x at this size. -->
+      <img src="${SITE}/img/brand/logo-email.png" width="240"
+           alt="Mirabelle.B — African Braiding &amp; Styling"
+           style="display:block;border:0;width:240px;max-width:100%;height:auto;border-radius:50%;font-family:Georgia,'Times New Roman',serif;font-size:22px;font-weight:700;color:${IVORY}" />
       <p style="margin:10px 0 0;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:${GILT}">
         African Hair Braiding &middot; Ashburn, VA
       </p>

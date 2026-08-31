@@ -188,11 +188,29 @@ def main():
              OUT / f"logo-full-{w}.webp", format="WEBP", quality=88, method=6)
     # Not WebP: Outlook on Windows still will not render it, and a broken image
     # in a booking confirmation is worse than a few extra kilobytes.
+    #
+    # logo-email is the one emails point at, rendered at 240px. It is built at
+    # 520 so that 240 is a true 2x -- phones are where most of this mail is
+    # read, and a 340px file at 240px is 1.4x and visibly soft.
+    #
+    # logo-full-340 is KEPT FOREVER even though nothing new references it.
+    # Email that has already gone out links to that exact URL, and deleting it
+    # would blank the logo in mail already sitting in people's inboxes.
+    # Quantised to a 256-colour palette: 145KB instead of 283KB, with no
+    # banding visible in the gold gradient even at 2x zoom (checked, not
+    # assumed). PNG-8 is as universally supported as PNG-24, Outlook included,
+    # and this file is fetched over mobile data by most of its readers.
+    save(full.resize((520, 520), Image.LANCZOS).convert("RGB")
+             .convert("P", palette=Image.ADAPTIVE, colors=256),
+         OUT / "logo-email.png", format="PNG", optimize=True)
     save(full.resize((340, 340), Image.LANCZOS).convert("RGB"),
          OUT / "logo-full-340.png", format="PNG", optimize=True)
 
+    # 96/192 rather than 76/152: the nav mark is now 56px and the service-page
+    # masthead 60px, so 2x needs 120 derivative pixels and a 3x phone at 60px
+    # wants 180. 152 fell short of that and would have resampled up.
     print("nav mark - circular cameo:")
-    for s in (76, 152):
+    for s in (96, 192):
         save(mark(s), OUT / f"mark-{s}.webp", format="WEBP", quality=92, method=6)
 
     print("favicons - monogram on dark disc:")

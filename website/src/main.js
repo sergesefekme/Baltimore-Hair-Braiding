@@ -65,6 +65,17 @@ function setupLenis() {
 
    The fix refuses the browser's jump, lets the pins measure from the top,
    then travels to the anchor through Lenis so both agree on where we are. */
+/* The nav is fixed, so scrolling a section to y=0 parks its heading behind
+   it. Every anchor travel therefore stops short by the height of the bar.
+
+   Measured at call time, never hardcoded: the bar is 92px on desktop and 82px
+   on a phone, and both numbers moved when the logo grew from 38px to 56/46.
+   A constant here would have been wrong within the week. */
+function navOffset() {
+  const nav = document.querySelector(".nav");
+  return nav ? -Math.round(nav.getBoundingClientRect().height) : 0;
+}
+
 function setupInitialHash() {
   const hash = window.location.hash;
   if (!hash || hash === "#") return;
@@ -87,7 +98,12 @@ function setupInitialHash() {
     // final until the following paint.
     requestAnimationFrame(() =>
       requestAnimationFrame(() => {
-        if (lenis) lenis.scrollTo(target, { immediate: true, force: true });
+        if (lenis)
+          lenis.scrollTo(target, {
+            immediate: true,
+            force: true,
+            offset: navOffset(),
+          });
         else target.scrollIntoView();
       })
     );
@@ -107,7 +123,7 @@ function setupAnchors() {
       if (!target) return;
 
       e.preventDefault();
-      if (lenis) lenis.scrollTo(target, { offset: 0, duration: 1.4 });
+      if (lenis) lenis.scrollTo(target, { offset: navOffset(), duration: 1.4 });
       else target.scrollIntoView({ behavior: "smooth" });
     });
   });

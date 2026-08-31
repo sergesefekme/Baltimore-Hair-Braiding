@@ -260,6 +260,21 @@ ol {
 
 /* ---------------- Nav ---------------- */
 
+/* The no-Lenis fallback in main.js uses scrollIntoView(), and a browser may
+   still do a native jump before our handler runs. Both land the target at
+   y=0, behind the fixed bar. This is the CSS half of the same fix navOffset()
+   applies in JS; 96px clears the 92px desktop bar with a little air. */
+:target,
+#book,
+#home,
+#about,
+#impact,
+#audience,
+#specs,
+#visit {
+  scroll-margin-top: 96px;
+}
+
 .nav {
   position: fixed;
   top: 0;
@@ -308,8 +323,8 @@ ol {
    disc gives it both. The full badge is never used at this size — its two
    lines of small-caps tagline turn to grey mud below about 140px. */
 .mark {
-  width: 38px;
-  height: 38px;
+  width: 56px;
+  height: 56px;
   flex: none;
   border-radius: 50%;
   /* The source is already a disc on transparency. This only stops a sliver of
@@ -317,9 +332,30 @@ ol {
   overflow: hidden;
 }
 
+/* Phones get 46px, not 56. The header on this site has a history of running
+   past the viewport once things are added to it -- see the note above the
+   480px block near the end of this file, where the menu button pushed it 16px
+   over at 390 and 86px over at 320. 46 keeps the mark clearly visible while
+   leaving that margin intact; measured at 320, 360, 390 and 430. */
+@media (max-width: 640px) {
+  .mark {
+    width: 46px;
+    height: 46px;
+  }
+}
+
 .mark--sm {
   width: 26px;
   height: 26px;
+}
+
+/* The footer signature is a small sign-off line, not a header lockup, so it
+   keeps its own size and is not swept up by the rule above. */
+@media (max-width: 640px) {
+  .mark--sm {
+    width: 26px;
+    height: 26px;
+  }
 }
 
 /* The whole badge, at the one size where the tagline actually reads. */

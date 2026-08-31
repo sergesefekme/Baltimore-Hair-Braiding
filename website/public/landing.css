@@ -89,10 +89,20 @@ a { color: var(--gilt); }
    badge cannot go here: at 34px its tagline is unreadable. Built by
    scripts/build-brand-assets.py. */
 .mast__mark {
-  width: 34px;
-  height: 34px;
+  width: 60px;
+  height: 60px;
   flex: none;
   border-radius: 50%;
+}
+
+/* These pages are the landing point for paid traffic, so the mark stays large
+   on a phone too -- but .mast is a plain flex row with a call link beside it,
+   and 60px starts crowding the number below 400px. */
+@media (max-width: 420px) {
+  .mast__mark {
+    width: 48px;
+    height: 48px;
+  }
 }
 
 /* The most important tap on a salon page. It measured 19px tall on a phone,
