@@ -54,6 +54,49 @@ function setupLenis() {
   gsap.ticker.lagSmoothing(0);
 }
 
+/* Landing on the page WITH a hash — which is what every "Book this style"
+   button does: /?service=knotless-braids#book.
+
+   The browser jumps to the anchor natively before any of this runs, so the
+   document ends up thousands of pixels down while Lenis initialises believing
+   it is at zero. From then on the two disagree: Lenis drives the scroll and
+   thinks there is nothing above, so scrolling up does nothing and the visitor
+   is stranded at the booking form with no way back up the page.
+
+   The fix refuses the browser's jump, lets the pins measure from the top,
+   then travels to the anchor through Lenis so both agree on where we are. */
+function setupInitialHash() {
+  const hash = window.location.hash;
+  if (!hash || hash === "#") return;
+
+  let target;
+  try {
+    target = document.querySelector(hash);
+  } catch {
+    return; // not a valid selector
+  }
+  if (!target) return;
+
+  // Undo the native jump before anything measures from it.
+  window.scrollTo(0, 0);
+  if (lenis) lenis.scrollTo(0, { immediate: true });
+
+  const settle = () => {
+    ScrollTrigger.refresh();
+    // Two frames: refresh() re-lays the pins, and the new positions are not
+    // final until the following paint.
+    requestAnimationFrame(() =>
+      requestAnimationFrame(() => {
+        if (lenis) lenis.scrollTo(target, { immediate: true, force: true });
+        else target.scrollIntoView();
+      })
+    );
+  };
+
+  if (document.readyState === "complete") settle();
+  else window.addEventListener("load", settle, { once: true });
+}
+
 /** Anchor links routed through Lenis so pins don't get skipped. */
 function setupAnchors() {
   document.querySelectorAll('a[href^="#"]').forEach((a) => {
@@ -723,7 +766,12 @@ function warnPlaceholders() {
    --------------------------------------------------------- */
 
 function init() {
+  /* A browser restoring a previous scroll position on back/forward lands us
+     in the same desynced state as a hash jump. We place the scroll ourselves. */
+  if ("scrollRestoration" in history) history.scrollRestoration = "manual";
+
   setupLenis();
+  setupInitialHash();
   setupAnchors();
   setupVideoScrub();
   setupHeroExpand();
