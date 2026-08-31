@@ -9,7 +9,9 @@
       content="African hair braiding in Ashburn, VA. Knotless braids, box braids, cornrows, locs, wigs and sew-ins. Appointments and walk-ins, Tue–Sat. Call 571-426-0602."
     />
     <meta name="theme-color" content="#100B09" />
-    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="icon" href="/favicon.ico" sizes="32x32" />
+    <link rel="icon" href="/img/brand/favicon-192.png" type="image/png" sizes="192x192" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <link rel="canonical" href="https://mimi-african-braiding-styling.com/" />
 
     <!-- Social sharing. Without these a shared link renders as a bare URL,
@@ -155,11 +157,17 @@
 
     <header class="nav" id="nav">
       <a class="nav__logo" href="#home" aria-label="Mirabelle.B — home">
-        <svg class="mark" viewBox="0 0 100 100" aria-hidden="true">
-          <path d="M18 84 V26 L46 58" />
-          <path d="M82 84 V26 L54 58" />
-          <circle class="mark__bead" cx="50" cy="62" r="8" />
-        </svg>
+        <!-- The braided profile from the master badge. The full badge is not
+             usable here: at 38px its two lines of tagline are a grey smear. -->
+        <img
+          class="mark"
+          src="/img/brand/mark-76.webp"
+          srcset="/img/brand/mark-76.webp 1x, /img/brand/mark-152.webp 2x"
+          width="38"
+          height="38"
+          alt=""
+          decoding="async"
+        />
         <span class="nav__word">Mirabelle<span class="nav__dot">.</span>B</span>
       </a>
 
@@ -1178,6 +1186,19 @@
 
     <footer class="footer">
       <div class="footer__top">
+        <!-- The one place on the page with room for the whole badge, tagline
+             and all. Everything above uses the profile alone. -->
+        <img
+          class="footer__badge"
+          src="/img/brand/logo-full-360.webp"
+          srcset="/img/brand/logo-full-360.webp 360w, /img/brand/logo-full-720.webp 720w"
+          sizes="(max-width: 640px) 112px, 152px"
+          width="152"
+          height="152"
+          alt="Mirabelle.B — African Braiding &amp; Styling. Beauty. Culture. Confidence."
+          loading="lazy"
+          decoding="async"
+        />
         <p class="footer__big">Crowned by hand.</p>
       </div>
 
@@ -1217,11 +1238,16 @@
 
       <div class="footer__base">
         <span class="footer__sig">
-          <svg class="mark mark--sm" viewBox="0 0 100 100" aria-hidden="true">
-            <path d="M18 84 V26 L46 58" />
-            <path d="M82 84 V26 L54 58" />
-            <circle class="mark__bead" cx="50" cy="62" r="8" />
-          </svg>
+          <img
+            class="mark mark--sm"
+            src="/img/brand/mark-76.webp"
+            srcset="/img/brand/mark-76.webp 1x, /img/brand/mark-152.webp 2x"
+            width="26"
+            height="26"
+            alt=""
+            loading="lazy"
+            decoding="async"
+          />
           <span>Mirabelle<span class="footer__dot">.</span>B</span>
         </span>
         <span>© <span id="year"></span> Mirabelle.B. All rights reserved.</span>

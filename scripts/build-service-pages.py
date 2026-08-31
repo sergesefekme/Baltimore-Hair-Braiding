@@ -356,7 +356,9 @@ PAGE = """<!doctype html>
     <title>{h1} | Mirabelle.B African Hair Braiding</title>
     <meta name="description" content="{meta}" />
     <meta name="theme-color" content="#100B09" />
-    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="icon" href="/favicon.ico" sizes="32x32" />
+    <link rel="icon" href="/img/brand/favicon-192.png" type="image/png" sizes="192x192" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <link rel="canonical" href="{site}/{slug}/" />
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="Mirabelle.B" />
@@ -382,7 +384,12 @@ PAGE = """<!doctype html>
     <a class="skip" href="#main">Skip to content</a>
 
     <header class="mast">
-      <a class="mast__word" href="/">Mirabelle<span class="mast__dot">.</span>B</a>
+      <a class="mast__word" href="/">
+        <img class="mast__mark" src="/img/brand/mark-76.webp"
+             srcset="/img/brand/mark-76.webp 1x, /img/brand/mark-152.webp 2x"
+             width="34" height="34" alt="" decoding="async" />
+        <span>Mirabelle<span class="mast__dot">.</span>B</span>
+      </a>
       <a class="mast__call" href="tel:+15714260602">571-426-0602</a>
     </header>
 
@@ -474,6 +481,11 @@ PAGE = """<!doctype html>
     </div>
 
     <footer class="foot">
+      <img class="foot__badge"
+           src="/img/brand/logo-full-360.webp"
+           srcset="/img/brand/logo-full-360.webp 360w, /img/brand/logo-full-720.webp 720w"
+           sizes="104px" width="104" height="104" loading="lazy" decoding="async"
+           alt="Mirabelle.B &mdash; African Braiding &amp; Styling. Beauty. Culture. Confidence." />
       <p><a href="/">All services</a> · <a href="/policies.html">Booking policies</a> · <a href="/privacy.html">Privacy</a></p>
       <p>© <span id="y">2026</span> Mirabelle.B African Hair Braiding · Ashburn, Virginia</p>
     </footer>

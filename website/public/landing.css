@@ -80,9 +80,20 @@ a { color: var(--gilt); }
   text-decoration: none;
   display: inline-flex;
   align-items: center;
+  gap: 0.55rem;
   min-height: 44px;
 }
 .mast__dot { color: var(--gilt); }
+
+/* The braided profile from the master badge, on its own white disc. The full
+   badge cannot go here: at 34px its tagline is unreadable. Built by
+   scripts/build-brand-assets.py. */
+.mast__mark {
+  width: 34px;
+  height: 34px;
+  flex: none;
+  border-radius: 50%;
+}
 
 /* The most important tap on a salon page. It measured 19px tall on a phone,
    well under the 44px comfortable minimum, so the padding is explicit. */
@@ -269,6 +280,16 @@ h1 {
   color: var(--taupe);
 }
 .foot p { margin: 0 0 0.4rem; }
+
+/* Centred above the small print: the one spot on these pages with room for
+   the whole badge, tagline included. */
+.foot__badge {
+  display: block;
+  width: 104px;
+  height: auto;
+  margin: 0 auto 1.4rem;
+  border-radius: 50%;
+}
 
 /* Footer links measured 18px. Inline-flex with a min-height gives them a
    thumb-sized hit area without changing how the line looks. */
