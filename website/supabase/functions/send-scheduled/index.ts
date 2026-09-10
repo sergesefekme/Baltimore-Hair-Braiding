@@ -175,11 +175,11 @@ function reviewEmail(r: Record<string, unknown>, url: string) {
     text:
       `Hello ${firstName(r.name)},\n\n` +
       `Thank you for choosing Mirabelle.B. We hope you love your new braids.\n\n` +
-      `If you enjoyed your visit, would you take a moment to leave a Google ` +
-      `review? It helps other clients find us, and it genuinely helps a small ` +
-      `business grow.\n\n${url}\n\n` +
-      `And if anything was not right, please tell us first — call or text ` +
-      `${SALON_PHONE} and we will put it right.\n\n` +
+      `Would you take a moment to leave a Google review? Your honest ` +
+      `feedback helps us improve and helps other clients learn about ` +
+      `Mirabelle.B.\n\n${url}\n\n` +
+      `And whether you write one or not: if anything was not right, ` +
+      `please call or text ${SALON_PHONE} and we will put it right.\n\n` +
       `Thank you,\nMirabelle.B African Hair Braiding\n`,
     html: shell(`
       <h1 style="margin:0 0 14px;font-family:Georgia,serif;font-size:23px;font-weight:700;color:${IVORY};line-height:1.25">
@@ -189,9 +189,9 @@ function reviewEmail(r: Record<string, unknown>, url: string) {
         Thank you for choosing Mirabelle.B. We hope you love your new braids.
       </p>
       <p style="margin:0 0 22px;font-size:15px;line-height:1.65;color:${SAND}">
-        If you enjoyed your visit, would you take a moment to leave a Google
-        review? It helps other clients find us, and it genuinely helps a small
-        business grow.
+        Would you take a moment to leave a Google review? Your honest
+        feedback helps us improve and helps other clients learn about
+        Mirabelle.B.
       </p>
       <p style="margin:0 0 22px">
         <a href="${esc(url)}" style="display:inline-block;padding:13px 22px;background:${GILT};color:${NOIR};font-size:14px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;text-decoration:none;border-radius:3px">
@@ -199,7 +199,8 @@ function reviewEmail(r: Record<string, unknown>, url: string) {
         </a>
       </p>
       <p style="margin:0;font-size:15px;line-height:1.65;color:${SAND}">
-        And if anything was not right, please tell us first — call or text
+        And whether you write one or not: if anything was not right,
+        please call or text
         <a href="tel:+15714260602" style="color:${GILT};font-weight:600;text-decoration:none">${SALON_PHONE}</a>
         and we will put it right.
       </p>`),
