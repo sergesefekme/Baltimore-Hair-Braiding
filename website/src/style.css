@@ -2528,14 +2528,14 @@ body.is-menu-open {
   font-weight: 600;
   letter-spacing: 0.03em;
   align-self: center;
-  /* "10am – 6pm" breaking across two lines inside a narrow card looks like
-     two separate values. */
+  /* "9:30am – 7:30pm" breaking across two lines inside a narrow card looks
+     like two separate values. */
   white-space: nowrap;
 }
 
 /* Closed reads as a status badge rather than a time, so it keeps the small
    uppercase treatment; the opening times do not, because uppercasing them
-   gives "10AM – 6PM", which shouts. */
+   gives "9:30AM – 7:30PM", which shouts. */
 .visit__hours .is-closed span {
   color: var(--taupe);
 }

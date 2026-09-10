@@ -817,7 +817,7 @@ Final 15 frames must be visually near-identical to the first 15 so the loop is s
 | 1 | ~~**Meaning of "5D"**~~ | **Resolved 2026-08-25.** "5D" retired with the old name. The five dimensions survive as "The Standard" (Section 05). |
 | 2 | **"Sisterlocks" terminology** | Confirm whether you hold Sisterlocks™ certification. If not, we publish "microlocs." |
 | 3 | **Real pricing** | Section 3 ranges are placeholders. |
-| 4 | ~~**Exact address, hours, phone**~~ | **Answered 2026-08-24.** 44048 Lords Valley Ter, Ashburn, VA 20147 · Tue–Sat 10am–6pm · 571-426-0602. Live in the site and in the LocalBusiness JSON-LD. |
+| 4 | ~~**Exact address, hours, phone**~~ | **Answered 2026-08-24.** 44048 Lords Valley Ter, Ashburn, VA 20147 · Mon–Sat, closed Sunday (Mon 2–7pm, Tue 11am–7pm, Wed 9am–7pm, Thu 10:30am–7pm, Fri 11am–7pm, Sat 9:30am–7:30pm) · 571-426-0602. Live in the site and in the LocalBusiness JSON-LD. |
 | 5 | **Stylist names, specialties, bios** | For Section 09. |
 | 6 | **Booking system** | Square, Vagaro, GlossGenius, Acuity, or custom? Determines how Section 12 is built. |
 | 7 | **Deposit & cancellation policy** | Your actual terms, to state publicly. |

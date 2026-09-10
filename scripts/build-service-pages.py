@@ -403,7 +403,7 @@ PAGE = """<!doctype html>
           <p class="lede">{lede}</p>
           <p class="facts">{facts}</p>
           <a class="cta" href="/?service={form_slug}#book" data-mb-event="book_now_clicked" data-mb-service="{name}">Book this style</a>
-          <p class="cta__sub">Or call <a href="tel:+15714260602">571-426-0602</a> · Tue–Sat, 10am–6pm</p>
+          <p class="cta__sub">Or call <a href="tel:+15714260602">571-426-0602</a> · Open Monday to Saturday</p>
         </div>
       </section>
 
