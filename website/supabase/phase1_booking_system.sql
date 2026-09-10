@@ -302,3 +302,103 @@
 -- Verified: one confirmed and one CANCELLED appointment, both due tomorrow.
 -- send_appointment_reminders() returned 1. The confirmed row was stamped, the
 -- cancelled row was not, and the function returned "ok (reminder)".
+
+-- ===========================================================================
+-- Review-request pipeline — AUDITED 2026-09-10, NOTHING BUILT
+-- ===========================================================================
+--
+-- A request came in to "prepare the implementation so a future automation can
+-- send a Google review request 24-48 hours after a completed appointment",
+-- with the instruction not to build one unless it already existed.
+--
+-- It already existed. Nothing was built. This block records the audit so the
+-- next person does not build a second one beside it.
+--
+-- ---------------------------------------------------------------------------
+-- The chain, end to end
+-- ---------------------------------------------------------------------------
+--   1. admin.js  "Mark as completed"  -> PATCH { status: 'completed' }
+--      Offered ONLY on a row already in 'confirmed'. There is no path from
+--      'pending' straight to 'completed'.
+--   2. trigger booking_requests_status_change (BEFORE UPDATE)
+--      -> on_booking_status_change() stamps completed_at := now()
+--      The admin never sends completed_at; the database owns that timestamp,
+--      so it cannot be back-dated from the browser.
+--   3. pg_cron  mirabelle-reviews  15 14 * * *  -> send_review_requests()
+--   4. pg_net POST -> Edge Function send-scheduled  { kind: 'review' }
+--   5. send-scheduled -> Resend, from the verified salon domain
+--
+-- ---------------------------------------------------------------------------
+-- The eight stated requirements, and where each one is actually met
+-- ---------------------------------------------------------------------------
+-- 1. Only status Completed
+--       send_review_requests(): where b.status = 'completed'
+-- 2. Never cancelled
+--       Same predicate. 'cancelled' is not 'completed'.
+-- 3. Never no-shows
+--       Same predicate. 'no_show' is not 'completed'. admin.js offers
+--       "No-show" as a sibling button to "Mark as completed", so the two are
+--       mutually exclusive by construction.
+-- 4. Never merely because a booking form was submitted
+--       An inserted row is 'pending'. The INSERT trigger calls notify-booking
+--       only. Nothing in the review path can see a 'pending' row.
+-- 5. One request per completed appointment
+--       where b.review_request_sent_at is null
+-- 6. Records when it was sent
+--       The same CTE that selects the row also stamps
+--       review_request_sent_at := now(). Guard and send cannot drift apart.
+--       `for update skip locked` stops two overlapping runs claiming one row.
+-- 7. Customer's existing contact information, used securely
+--       b.email, already on the row. SECURITY DEFINER with a pinned
+--       search_path; the address is passed to the Edge Function and to Resend
+--       and nowhere else. anon cannot read booking_requests at all (RLS
+--       returns []), so nothing here widens exposure.
+-- 8. Existing Supabase and Resend architecture
+--       pg_cron + pg_net + the existing send-scheduled function + the existing
+--       verified Resend domain. No new service, table, or function.
+--
+-- ---------------------------------------------------------------------------
+-- Why the window really is 24-48 hours
+-- ---------------------------------------------------------------------------
+-- The predicate is completed_at <= now() - interval '24 hours', and the job
+-- runs once a day at 14:15 UTC. A client completed at 14:14 UTC becomes
+-- eligible 24h01m later and is picked up by that same day's run; one completed
+-- at 14:16 UTC waits for the following day, about 48 hours. The daily cadence
+-- is what bounds the top of the window - making the job hourly would narrow it
+-- to 24-25h, which is NOT wanted here: 14:00 UTC is a civil hour to receive
+-- the mail in Eastern time, and an hourly job would mail people at 3am.
+--
+-- ---------------------------------------------------------------------------
+-- THE ONLY THING STOPPING IT
+-- ---------------------------------------------------------------------------
+-- public.settings.google_review_url is NULL, so send_review_requests() returns
+-- 0 and sends nothing. Every other part of the chain is live and correct: the
+-- cron job is active, the function is correct, the trigger stamps
+-- completed_at, and send-scheduled is deployed at v4.
+--
+-- The official profile URL was supplied on 2026-09-10 and is already live on
+-- the site as the reviews-section button. Activating the email is one
+-- statement, deliberately NOT run in that phase because the instruction was
+-- not to modify Supabase:
+--
+--   update public.settings
+--   set value = 'https://g.page/r/CXa8Qe-O-DsOECE/review'
+--   where key = 'google_review_url';
+--
+-- Run it and the next 14:15 UTC tick starts sending. Note the 14-day lower
+-- bound on completed_at: switching it on will NOT mail the entire back
+-- catalogue, only clients completed in the fortnight before.
+--
+-- ---------------------------------------------------------------------------
+-- Two operational risks worth knowing before you rely on this
+-- ---------------------------------------------------------------------------
+-- 1. send_review_requests() and on_booking_status_change() both carry a
+--    HARDCODED legacy anon JWT in their Authorization header. It is the anon
+--    key, which is public by design, so this is not a leak - but if that
+--    legacy key is ever rotated or disabled, BOTH the review pipeline and the
+--    confirmation emails stop silently, with no error anywhere a human looks.
+--    Rotate that key and these two functions must be redeployed with it.
+-- 2. The row is stamped BEFORE Resend confirms. If Resend rejects the mail the
+--    row is already marked sent and will not retry. That trade is deliberate
+--    and explained above under "Why selection is in SQL". To re-send one
+--    deliberately, null review_request_sent_at for that row.
