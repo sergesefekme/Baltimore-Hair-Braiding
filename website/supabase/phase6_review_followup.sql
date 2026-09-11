@@ -1,0 +1,127 @@
+-- ===========================================================================
+-- Phase 6 — 48-hour Google review follow-up
+-- APPLIED 2026-09-11
+-- ===========================================================================
+--
+-- Migrations applied, in order:
+--   phase6_email_log
+--   phase6_review_wait_48h
+-- Plus Edge Function send-scheduled v5 -> v6.
+--
+-- MOST OF THIS ALREADY EXISTED. The brief asked for a review follow-up built
+-- on the existing Supabase + Resend architecture and said to reuse it rather
+-- than rebuild. The pipeline from Phase 5 already selected only completed
+-- appointments, already excluded cancelled and no-shows, already stamped
+-- review_request_sent_at in the same statement that claimed the row, and
+-- already went out through the existing Resend sender. Four things were
+-- genuinely missing or wrong, and only those four changed:
+--
+--   1. the wait was 24 hours, not 48
+--   2. the email copy was not the copy the brief specifies
+--   3. nothing re-checked the booking immediately before sending
+--   4. there was no email log at all
+--
+-- ---------------------------------------------------------------------------
+-- 1. THE WAIT: 24 -> 48 HOURS
+-- ---------------------------------------------------------------------------
+-- send_review_requests() now selects on
+--   completed_at <= now() - interval '48 hours'
+-- with the 14-day upper bound kept, so switching the review URL on does not
+-- mail the whole back catalogue at once.
+--
+-- The job runs daily at 14:15 UTC, so the REAL delivery window is 48-72h after
+-- completion, not exactly 48. That is deliberate. An hourly job would land the
+-- window at 48-49h but would also mail people at 3am; 14:00 UTC is a civil
+-- hour in Eastern time in both summer and winter. The daily cadence is the
+-- feature, and the brief's "wait 48 hours" is satisfied as a MINIMUM.
+--
+-- ---------------------------------------------------------------------------
+-- 2. THE EMAIL
+-- ---------------------------------------------------------------------------
+-- Subject and body are now the brief's, verbatim. The button is table-wrapped
+-- rather than a bare inline-block anchor: Outlook on Windows renders through
+-- Word, which drops display:inline-block, and an unwrapped button degrades
+-- there into a plain text link.
+--
+-- The email still does not gate. It asks everyone for an honest review.
+--
+-- ---------------------------------------------------------------------------
+-- 3. THE PRE-SEND RE-CHECK
+-- ---------------------------------------------------------------------------
+-- This was the real gap. send_review_requests() selects and stamps in one
+-- statement, then fires an ASYNC net.http_post. Between that stamp and the
+-- Edge Function running, a booking can be cancelled, reopened, have its email
+-- changed, or be deleted outright. Nothing checked.
+--
+-- The stamp is now treated as a CLAIM, not a verdict. send-scheduled re-reads
+-- the live row as service_role and re-tests every condition before sending:
+-- status still 'completed', a usable email address, 48h genuinely elapsed, and
+-- no prior SUCCESSFUL send in email_log. Each failure path returns
+-- "ok (skipped: <reason>)" rather than an error, because an ineligible booking
+-- is a correct outcome, not a fault.
+--
+-- When a booking is skipped for a reason that could later change, the claim is
+-- RELEASED, so a booking cancelled and then reopened is not silently excluded
+-- forever. "already sent" is the one skip that does not release it.
+--
+-- ---------------------------------------------------------------------------
+-- 4. THE LOG, AND WHY THE UNIQUE INDEX IS THE REAL GUARD
+-- ---------------------------------------------------------------------------
+-- public.email_log records booking_id, email_type, recipient, sent_at,
+-- provider_message_id (Resend's id) and status ('sent' | 'failed') with the
+-- error text on failure. Nothing else: no name, no style, no phone. The
+-- address is the minimum needed to answer "who was mailed".
+--
+-- booking_id carries NO foreign key, deliberately. This is an audit trail: if
+-- a booking is deleted the record of what was sent must survive it, and a FK
+-- would either cascade the log away or null the one column that identifies it.
+--
+-- RLS is ON with NO policies. anon and authenticated read and write nothing;
+-- only service_role, which bypasses RLS, touches it. The table holds customer
+-- email addresses and must never be reachable from a browser.
+--
+-- The duplicate guard people usually write is application logic. Here it is a
+-- PARTIAL UNIQUE INDEX:
+--
+--   create unique index email_log_one_success_per_booking
+--     on public.email_log (booking_id, email_type)
+--     where status = 'sent';
+--
+-- At most one SUCCESSFUL email of a type per booking, ever, enforced by the
+-- database. Failed rows are unconstrained, so a failure can be retried and
+-- every attempt keeps its own row. Two schedulers racing, a hand-fired retry,
+-- a replayed webhook - none of them can produce a second successful send,
+-- because the second INSERT is rejected rather than merely discouraged.
+--
+-- RETRY, AND WHY A FAILED SEND NO LONGER STRANDS A CLIENT
+-- Phase 5 stamped before sending and never retried: one Resend failure meant
+-- that client was never asked, silently. send-scheduled now clears
+-- review_request_sent_at when Resend rejects the mail, so the next daily tick
+-- picks the booking up again. The 'sent' row in the log is what prevents a
+-- duplicate, not the stamp - which is why clearing the stamp is safe.
+--
+-- ---------------------------------------------------------------------------
+-- TESTED 2026-09-11, against six ZZ-prefixed bookings, all since deleted
+-- ---------------------------------------------------------------------------
+--   pending            -> not claimed, not mailed
+--   confirmed          -> not claimed, not mailed
+--   cancelled  (completed_at 60h old on purpose) -> not claimed, not mailed
+--   no_show    (completed_at 60h old on purpose) -> not claimed, not mailed
+--   completed 36h ago  -> NOT mailed. This is the row that proves 24 -> 48:
+--                         under the old rule it would have gone out.
+--   completed 60h ago  -> mailed once, logged 'sent' with a Resend id
+--
+-- Second run immediately after: 0 sent.
+-- Direct invocation of send-scheduled against each ineligible booking returned
+-- "skipped: status is now cancelled / no_show / pending / confirmed",
+-- "skipped: only 36h since completion", "skipped: already sent", and
+-- "skipped: booking no longer exists" for a uuid that never existed.
+-- A second 'sent' row was rejected by the unique index; a 'failed' row for the
+-- same booking was accepted. A booking holding only a 'failed' row was picked
+-- up by the next run and mailed, ending with exactly one 'sent' row.
+--
+-- Booking form, salon notification and customer confirmation were re-tested
+-- after the schema change: notify-booking returned 200 "ok", which is the
+-- response that means BOTH emails were accepted by Resend.
+--
+-- The two real pending bookings in the table were never touched.
