@@ -1,0 +1,113 @@
+-- ===========================================================================
+-- H-1 — constrain the anonymous booking INSERT policy
+-- APPLIED 2026-09-11   migration: h1_constrain_anon_booking_insert
+-- ===========================================================================
+--
+-- BEFORE
+--   CREATE POLICY "anon can file a booking request"
+--     ON public.booking_requests
+--     AS PERMISSIVE FOR INSERT TO anon
+--     WITH CHECK (true);
+--
+-- AFTER
+--   ALTER POLICY "anon can file a booking request"
+--     ON public.booking_requests
+--     WITH CHECK (
+--       status = 'pending'
+--       AND completed_at IS NULL
+--       AND review_request_sent_at IS NULL
+--     );
+--
+-- ---------------------------------------------------------------------------
+-- What was wrong
+-- ---------------------------------------------------------------------------
+-- anon holds INSERT on all 28 columns of booking_requests, and the policy's
+-- WITH CHECK was literally `true`. The anon key is public by design - it ships
+-- in the browser bundle - so anyone could POST a row with arbitrary lifecycle
+-- values and an arbitrary email address.
+--
+-- TWO mail-abuse routes existed, not one. Both are closed by pinning status:
+--
+--   send_review_requests()        selects status = 'completed'
+--     -> insert status='completed' with completed_at 49h old, any email, and
+--        the 14:15 UTC job mails that stranger.
+--
+--   send_appointment_reminders()  selects status = 'confirmed'
+--     -> insert status='confirmed' with preferred_date = tomorrow, any email,
+--        and the 14:00 UTC job mails that stranger.
+--
+-- Either one spends the salon's verified sending domain on people who never
+-- contacted it: deliverability damage, Resend quota, and a route to being
+-- blocklisted. No data was ever readable - SELECT was and remains blocked.
+--
+-- `status` is the load-bearing condition. completed_at and
+-- review_request_sent_at are pinned as well so a row cannot arrive pre-aged or
+-- pre-stamped, which would matter the moment an admin later confirms it.
+--
+-- ALTER rather than DROP + CREATE, so the policy keeps its name and there is
+-- no instant where the table has no INSERT policy at all.
+--
+-- ---------------------------------------------------------------------------
+-- Why this could not break the booking form
+-- ---------------------------------------------------------------------------
+-- booking.js sends name, phone, email, style, preferred_date, preferred_time,
+-- notes and the attribution fields. It never sends status and never sends a
+-- lifecycle timestamp. status DEFAULTs to 'pending', and WITH CHECK is
+-- evaluated after defaults are applied, so an ordinary submission satisfies
+-- the new predicate unchanged. This was read from the source before the change
+-- and then proved by a real submission through the live form afterwards.
+--
+-- ---------------------------------------------------------------------------
+-- Columns anon can STILL set — reported, deliberately NOT fixed here
+-- ---------------------------------------------------------------------------
+-- The brief scoped this task to three columns and asked that anything else be
+-- reported rather than folded in. These remain settable by an anonymous
+-- insert:
+--
+--   confirmed_at, cancelled_at   Cosmetic. status is what every job selects
+--                                on, and status is now pinned to 'pending',
+--                                so a stray timestamp drives nothing.
+--   reminder_sent_at             Setting it would SUPPRESS a future reminder
+--                                for that booking rather than send one. A
+--                                nuisance, not an abuse vector.
+--   quoted_price                 Visible only to an admin, who sets the real
+--                                figure when confirming.
+--   service_id                   A bad uuid fails the foreign key; a valid one
+--                                only mislabels the service in the dashboard.
+--   created_at, updated_at       Back-dating would misorder the dashboard.
+--
+-- None of these can trigger an email while status must be 'pending'. Pinning
+-- them too would be the tidier end state and is a one-line extension of the
+-- same predicate, but it was left out because the brief said to stop at three
+-- and report the rest.
+--
+-- ---------------------------------------------------------------------------
+-- Tested 2026-09-11
+-- ---------------------------------------------------------------------------
+-- Blocked (42501), each isolated to the policy with Prefer: return=minimal:
+--   status='completed' + aged completed_at, completed_at alone,
+--   review_request_sent_at with a value, status='confirmed', 'no_show',
+--   'cancelled'.
+-- Accepted (201): the form-shaped payload, explicit nulls for the pinned
+--   columns, and explicit status='pending'.
+--
+-- A METHOD NOTE WORTH KEEPING. The first attack run used
+-- Prefer: return=representation and every attempt was rejected - but so was a
+-- fully LEGITIMATE control payload, because anon has no SELECT policy and
+-- PostgREST cannot return the inserted row. That flag rejects everything
+-- regardless of the policy, so the first run proved nothing. The run that
+-- counts used return=minimal, which is also what booking.js sends.
+--
+-- End to end after the change: a real submission through the live form stored
+-- a pending row and notify-booking returned 200 "ok" - the response that means
+-- BOTH the salon alert and the customer confirmation were accepted by Resend.
+-- send_review_requests() still sent and logged correctly.
+--
+-- anon SELECT returned [] on bookings, settings and email_log; anon INSERT
+-- into email_log was refused; anon UPDATE and DELETE against a disposable test
+-- row left it present and still 'pending', which is what the 204 responses
+-- from PostgREST actually mean - zero rows matched after RLS filtering.
+--
+-- Six ZZ-prefixed test rows and one email_log row were created and all were
+-- deleted afterwards. The two real pending bookings still have
+-- updated_at = created_at, so nothing ever wrote to them.
