@@ -123,6 +123,14 @@ SERVICES = [
             "Straight-back, side-parted, or a pattern of your choosing.",
             "Flat to the scalp, so they sit comfortably under a wig, wrap or helmet.",
         ],
+        # The one internal link into the stitch braids page. It was an orphan:
+        # live, in the sitemap, and reachable from nowhere. Cornrows is the
+        # honest place to link from, because stitch braids ARE cornrows with a
+        # different parting, so the sentence is useful rather than SEO filler.
+        related=(
+            'Looking for a sharper, more defined version of this style? '
+            'See <a href="/stitch-braids-ashburn-va/">Stitch Braids in Ashburn, VA</a>.'
+        ),
     ),
     dict(
         slug="stitch-braids-ashburn-va", gallery="stitch",
@@ -411,7 +419,7 @@ PAGE = """<!doctype html>
         <h2>About {name_lower}</h2>
         <p>{what}</p>
         <p><strong>Who it suits.</strong> {good_for}</p>
-        <ul class="ticks">{benefits}</ul>
+        <ul class="ticks">{benefits}</ul>{related}
         <p class="note">
           How long a style lasts depends on your hair and how it is cared for
           afterwards. We give you a realistic estimate for your hair at the
@@ -618,6 +626,10 @@ def build(s):
         hero_img=hero_img, hero_alt=esc(hero_alt),
         what=esc(s["what"]), good_for=esc(s["good_for"]),
         benefits=benefits, spec=spec, gallery=gallery, why=why, faq=faq_html,
+        # Raw HTML on purpose - it carries an anchor - and written here, not in
+        # the service dict, so a service without a `related` key renders nothing
+        # at all rather than an empty paragraph.
+        related=(chr(10) + f'        <p>{s["related"]}</p>' if s.get("related") else ""),
         form_slug=FORM_SLUG[s["form_value"]],
         name=esc(s["name"]),
         sticky_price=(f"From ${s['price']}" + (f" · {s['duration']}" if s["duration"] else ""))
